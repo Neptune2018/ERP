@@ -4,7 +4,7 @@ var Product = require('./product');
 var Material = require('./material');
 var Repertory = require('./repertory');
 
-// 创建 model
+// 创建 model 库存
 var Stock = db.define('stock', {
     style: {
         type: Sequelize.BOOLEAN // true为货品
@@ -36,6 +36,7 @@ var Stock = db.define('stock', {
 });
 
 Repertory.hasMany(Stock);
+Material.hasMany(Stock);
 
 // 前者将拥有后者的get/set/add方法,后者id是前者外键
 Stock.belongsTo(Product);

@@ -6,33 +6,63 @@ var User = require('../models').User;
 var Material = require('../models').Material;
 
 
-exports.findAllSupplier = function () {
-  return Supplier.findAll();
+exports.findAllSupplier = function (callback) {
+  Supplier.findAll().then(function(data){
+    callback(data);
+  });
 };
-exports.findSupplier = function (SupplierName) {
-  return Supplier.findAll({
+exports.findSupplierByName = function (SupplierName,callback) {
+  Supplier.findAll({
     where: {
       name: SupplierName
     }
+  }).then(function(data){
+    callback(data);
   });
 };
-exports.addSupplier = function (name, phone, person, remark) {
-  return Supplier.create({
+
+exports.findSupplierById = function (id,callback) {
+  Supplier.findAll({
+    where: {
+      id: id
+    }
+  }).then(function(data){
+    callback(data);
+  });
+};
+
+exports.addSupplier = function (name, phone, person, remark,callback) {
+  Supplier.create({
     name: name,
     phone: phone,
     person: person,
     remark: remark
-  });
+  }).then(function(data){
+    callback(data)
+  })
 };
-exports.deleteSupplier = function (SupplierName) {
-  return Supplier.destroy({
+exports.deleteSupplierByName = function (SupplierName,callback) {
+  Supplier.destroy({
     where: {
       name: SupplierName
     }
+  }).then(function(result){
+    callback(result)
   });
 };
-exports.updateSupplier = function (id, name, phone, person, remark) {
-  return Supplier.update({
+
+exports.deleteSupplierById = function (id,callback) {
+  Supplier.destroy({
+    where: {
+      id: id
+    }
+  }).then(function(result){
+    callback(result)
+  });
+};
+
+exports.updateSupplierById = function (id, name, phone, person, remark,callback) {
+  Supplier.update({
     name: name,
     phone: phone,
     person: person,
@@ -41,37 +71,59 @@ exports.updateSupplier = function (id, name, phone, person, remark) {
     where: {
       id: id
     }
+  }).then(function(result){
+    console.log(result)
+    callback(result)
   });
 };
 
-exports.findAllOfferList = function () {
-  var offerLists = OfferList.findAll({
+exports.updateSupplierByName = function (name1, name, phone, person, remark,callback) {
+  Supplier.update({
+    name: name,
+    phone: phone,
+    person: person,
+    remark: remark
+  }, {
+    where: {
+      name: name1
+    }
+  }).then(function(result){
+    console.log(result)
+    callback(result)
+  });
+};
+
+exports.findAllOfferList = function (callback) {
+  OfferList.findAll({
     include: [Supplier, User]
-  })
-  return offerLists;
+  }).then(function(data){
+    callback(data);
+  });
 }
-exports.findOfferListByID = function (offerList_id) {
-  var offerLists = OfferList.findAll({
+exports.findOfferListByID = function (offerList_id,callback) {
+  OfferList.findAll({
     include: [Supplier, User],
     where: {
       id: offerList_id
     }
-  })
-  return offerLists;
+  }).then(function(data){
+    callback(data);
+  });
 }
-exports.findAllOfferListBySupplier = function (supplier_id) {
-  var offerLists = OfferList.findAll({
+exports.findAllOfferListBySupplier = function (supplier_id,callback) {
+  OfferList.findAll({
     include: [{
       model: Supplier,
       where: {
         id: supplier_id
       }
     }, User]
-  })
-  return offerLists;
+  }).then(function(data){
+    callback(data);
+  });
 }
 // 添加报价单
-exports.addOfferList = function (name, from_user, to_user, time, materials) {
+exports.addOfferList = function (name, from_user, to_user, time, materials,callback) {
   var supplier = Supplier.findAll({
     where: {
       name: name
@@ -92,14 +144,12 @@ exports.addOfferList = function (name, from_user, to_user, time, materials) {
 
   var offerList = supplier.createOfferList({
     time: time
+  }).then(function(result){
+    callback(result)
   })
 
-  offerList.addUser(from_User, {
-    as: 'from_person'
-  })
-  offerList.addUser(to_User, {
-    as: 'to_person'
-  })
+  offerList.addFromPerson(from_User)
+  offerList.addToPerson(to_User)
 
   materials.array.forEach(element => {
     var material = Material.findById(element.id)
@@ -110,10 +160,10 @@ exports.addOfferList = function (name, from_user, to_user, time, materials) {
       total_price: element.total_price
     })
   });
-  return offerList;
+  
 };
 
-exports.updateOfferList = function (offerList_id, name, from_user, to_user, time, materials) {
+exports.updateOfferList = function (offerList_id, name, from_user, to_user, time, materials,callback) {
   var supplier = Supplier.findAll({
     where: {
       name: name
@@ -136,6 +186,16 @@ exports.updateOfferList = function (offerList_id, name, from_user, to_user, time
     id: offerList_id
   })
 
+  OfferList.update({
+    time: time
+  },{
+    where:{
+      id: offerList_id
+    }
+  }).then(function(result){
+    callback(result)
+  })
+
   offerList.setUser(from_User, {
     as: 'from_person'
   })
@@ -152,18 +212,21 @@ exports.updateOfferList = function (offerList_id, name, from_user, to_user, time
       total_price: element.total_price
     })
   });
-  return offerList;
+  
 };
-exports.deleteOfferList = function (offerList_id) {
+
+exports.deleteOfferList = function (offerList_id,callback) {
   var offerList = OfferList.findAll({
     id: offerList_id
   })
   var supplier = offerList.getSupplier();
-  supplier.removeOfferList(offerList)
+  supplier.removeOfferList(offerList).then(function(result){
+    callback(result)
+  })
 }
 
 
-exports.setMinOrder = function (supplier_name, material_id, quantity) {
+exports.setMinOrder = function (supplier_name, material_id, quantity,callback) {
   var supplier = Supplier.findAll({
     where: {
       name: supplier_name
@@ -176,5 +239,7 @@ exports.setMinOrder = function (supplier_name, material_id, quantity) {
   })
   supplier.setMaterials(material, {
     quantity: quantity
+  }).then(function(result){
+    callback(result)
   })
 }
