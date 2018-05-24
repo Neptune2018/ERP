@@ -3,7 +3,7 @@ var db = require('./index').DB;
 var Role = require('./role');
 var Feature = require('./feature');
 
-// 创建 model 权限
+// 角色和功能之间的关系
 var HasFeature = db.define('has_feature', {
     
     

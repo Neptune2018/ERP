@@ -3,19 +3,19 @@ var db = require('./index').DB;
 var OfferList = require('./offer_list');
 var Material = require('./material');
 
-// 创建 model 进货
+// 物料表和报价单之间的进货关系法
 var Offer = db.define('offer', {
     quantity: {
-        type: Sequelize.INTEGER // 指定值的类型
+        type: Sequelize.INTEGER // 数量
     },
     batch: {
-    	type: Sequelize.STRING
+    	type: Sequelize.STRING // 批次
     },
     price: {
-    	type: Sequelize.INTEGER
+    	type: Sequelize.INTEGER// 单价
     },
     total_price: {
-    	type: Sequelize.INTEGER
+    	type: Sequelize.INTEGER// 总价
     }
     // 没有指定 field，表中键名称则与对象键名相同，为 email
 }, {

@@ -2,19 +2,19 @@ var Sequelize = require('sequelize');
 var db = require('./index').DB;
 var MaterCate = require('./mater_cate');
 
-// 创建 model 物料
+// 物料表
 var Material = db.define('material', {
     name: {
-        type: Sequelize.STRING // 指定值的类型
+        type: Sequelize.STRING // 名称
     },
     status: {
-    	type: Sequelize.STRING
+    	type: Sequelize.STRING // 存在状态，“正常”或“停用”，用于假删除
     },
     property: {
-    	type: Sequelize.STRING
+    	type: Sequelize.STRING // 性质
     },
     safe_quantity: {
-    	type: Sequelize.INTEGER
+    	type: Sequelize.INTEGER// 安全库存量
     }
     // 没有指定 field，表中键名称则与对象键名相同，为 email
 }, {

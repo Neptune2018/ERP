@@ -4,10 +4,10 @@ var db = require('./index').DB;
 var User = require('./user');
 var Supplier = require('./supplier');
 
-// 创建 model 报价单
+// 报价单
 var OfferList = db.define('offer_list', {
     time: {
-        type: Sequelize.DATE 
+        type: Sequelize.DATE	// 报价时间
     }
     // 没有指定 field，表中键名称则与对象键名相同，为 email
 }, {
