@@ -2,13 +2,13 @@ var Sequelize = require('sequelize');
 var db = require('./index').DB;
 var User = require('./user');
 
-// 创建 model 工位
+// 工位
 var Station = db.define('station', {
     name: {
-        type: Sequelize.STRING 
+        type: Sequelize.STRING  // 名称
     },
     remark: {
-    	type: Sequelize.STRING
+    	type: Sequelize.STRING // 备注
     }
     // 没有指定 field，表中键名称则与对象键名相同，为 email
 }, {

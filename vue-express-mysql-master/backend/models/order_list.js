@@ -1,32 +1,32 @@
 var Sequelize = require('sequelize');
 var db = require('./index').DB;
 
-// 创建 model
+// 订单
 var OrderList = db.define('order_list', {
     status: {
-    	type: Sequelize.STRING
+    	type: Sequelize.STRING // 订单状态，“已备料”、“缺料”或“进行中”
     },
     start: {
-    	type: Sequelize.DATE
+    	type: Sequelize.DATE   // 开始时间
     },
     schedule: {
-        type: Sequelize.DATE    //预计完成时间
+        type: Sequelize.DATE    // 预计完成时间
     },
     end: {
-        type: Sequelize.DATE    //实际完成时间
+        type: Sequelize.DATE    // 实际完成时间
     },
     buyer: {
-    	type: Sequelize.STRING
+    	type: Sequelize.STRING // 甲方
     },
     phone: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING  // 甲方电话
     },
     email: {
-        type: Sequelize.STRING,
+        type: Sequelize.STRING, // 甲方邮箱
         isEmail: true
     },
     remark: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING  // 备注
     }
     // 没有指定 field，表中键名称则与对象键名相同，为 email
 }, {

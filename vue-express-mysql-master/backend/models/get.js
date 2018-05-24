@@ -3,10 +3,10 @@ var db = require('./index').DB;
 var GetList = require('./get_list');
 var Material = require('./material');
 
-// 创建 model 领退料
+// 物料表和领退料单之间的领退料关系
 var Get = db.define('get', {
     quantity: {
-        type: Sequelize.INTEGER // 指定值的类型
+        type: Sequelize.INTEGER // 数量
     }
     // 没有指定 field，表中键名称则与对象键名相同，为 email
 }, {
