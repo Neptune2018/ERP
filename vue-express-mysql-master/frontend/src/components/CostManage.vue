@@ -71,6 +71,10 @@ export default {
                 key: 'table_number'
             },
             {
+                title: '单位',
+                key: 'table_unit'
+            },
+            {
                 title: '总价',
                 key: 'table_total_price'
             },
