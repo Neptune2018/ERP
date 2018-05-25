@@ -4,37 +4,42 @@
         <Tab-pane label="货品">
             <div style = "display: inline-block;">
                 <div class="query">
-                    <label>编号</label><i-input :value.sync="number" placeholder="请输入编号" style="width: 70%"></i-input>
+                    <label class="top-label">编号</label><i-input :value.sync="number" placeholder="请输入编号" style="width: 70%"></i-input>
                 </div>
                 <div class="query">
-                    <label>名称</label><i-input :value.sync="name" placeholder="请输入名称" style="width: 70%"></i-input>
+                    <label class="top-label">名称</label><i-input :value.sync="name" placeholder="请输入名称" style="width: 70%"></i-input>
                 </div>
                 <div class="query">
-                    <label>批次</label><i-input :value.sync="batch" placeholder="请输入批次" style="width: 70%"></i-input>
+                    <label class="top-label">批次</label><i-input :value.sync="batch" placeholder="请输入批次" style="width: 70%"></i-input>
                 </div>
                 <div class="query">
-                    <label>仓库</label><i-input :value.sync="warehouse" placeholder="请输入仓库" style="width: 70%"></i-input>
+                    <label class="top-label">仓库</label><i-input :value.sync="warehouse" placeholder="请输入仓库" style="width: 70%"></i-input>
                 </div>
                 <div class="query">
-                    <i-button type="ghost" icon="ios-search" shape="circle" @click="search()">搜索</i-button>
+                    <i-button class="cost-module-btn search" type="ghost" icon="ios-search" shape="circle" @click="search()">搜索</i-button>
                 </div>
                 <div class="query">
-                    <i-button type="ghost" shape="circle" @click="search()">总价计算</i-button>
+                    <i-button class="cost-module-btn calculate" type="ghost" shape="circle" @click="calculate()">总价计算</i-button> 
                 </div>
             </div> 
             <div style = "margin-top: 20px">
-                <i-table border :height="400" :columns="columns7" :data="table_data"></i-table>
+                <i-table @on-selection-change='selectionClick' border :height="400" :columns="columns7" :data="table_data"></i-table>
             </div>
+
+            <!-- <Modal title="账目合计">
+                <p>所选项的金额合计为：{{sum_money}}千元</p>
+            </Modal> -->
         </Tab-pane>
         <Tab-pane label="物料" style="height: 100%">
             
         </Tab-pane>
-    </Tabs>
+    </Tabs>          
 </div>
+
 </template>
 
 <script>
-
+import { Modal } from 'iview'
 export default {
   name: 'CostManage',
   data () {
@@ -47,7 +52,7 @@ export default {
             {
                 type: 'selection',
                 width: 60,
-                align: 'center'
+                align: 'center',
             },
             {
                 title: '货品编号',
@@ -76,7 +81,9 @@ export default {
         ],
         table_data: [
 
-        ]
+        ],
+        sum_money: 0,
+        modal1: false
     }
   },
  //这两个map是vuex的部分
@@ -97,9 +104,23 @@ export default {
       })
     },
     search() {
-        this.table_data.push({table_product_number:'1511458',table_name:'测试啊'})  
-    }
-
+        this.table_data.push({table_product_number:'1511458',table_name:'测试啊',table_total_price:'5'})  
+    },
+    calculate() {
+        this.$Modal.info(
+            {
+                title: '已选账目合计',
+                content: '您所选项目总计金额为' + this.sum_money + '千元'
+            }
+        )
+    },
+    selectionClick(arr){
+        this.sum_money = 0
+        for (var i=0; i<arr.length; i++)
+        {
+            this.sum_money += parseInt(arr[i]["table_total_price"])
+        }
+    },
   }
 }
 </script>
@@ -112,4 +133,25 @@ export default {
     margin-right: 2%;
     display: inline-block;
 }
+
+.cost-module-btn {
+    color: white;
+    background-color: #4169E1;
+    border-color: #4169E1;
+}
+
+.cost-module-btn:hover {
+    color: white;
+    background-color: #4169E1;
+    border-color: #4169E1;
+}
+
+.search {
+    margin-left:50%;
+}
+
+.top-label {
+    margin-right:5%;
+}
+
 </style>
