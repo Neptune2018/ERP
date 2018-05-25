@@ -4,33 +4,29 @@
         <Tab-pane label="货品">
             <div style = "display: inline-block;">
                 <div class="query">
-                    <label class="top-label">编号</label><i-input :value.sync="number" placeholder="请输入编号" style="width: 70%"></i-input>
+                    <label class="top-label">编号</label><i-input :value.sync="product_number" placeholder="请输入编号" style="width: 70%"></i-input>
                 </div>
                 <div class="query">
-                    <label class="top-label">名称</label><i-input :value.sync="name" placeholder="请输入名称" style="width: 70%"></i-input>
+                    <label class="top-label">名称</label><i-input :value.sync="product_name" placeholder="请输入名称" style="width: 70%"></i-input>
                 </div>
                 <div class="query">
-                    <label class="top-label">批次</label><i-input :value.sync="batch" placeholder="请输入批次" style="width: 70%"></i-input>
+                    <label class="top-label">批次</label><i-input :value.sync="product_batch" placeholder="请输入批次" style="width: 70%"></i-input>
                 </div>
                 <div class="query">
-                    <label class="top-label">仓库</label><i-input :value.sync="warehouse" placeholder="请输入仓库" style="width: 70%"></i-input>
+                    <label class="top-label">仓库</label><i-input :value.sync="product_warehouse" placeholder="请输入仓库" style="width: 70%"></i-input>
                 </div>
                 <div class="query">
-                    <i-button class="cost-module-btn search" type="ghost" icon="ios-search" shape="circle" @click="search()">搜索</i-button>
+                    <i-button class="cost-module-btn search" type="ghost" icon="ios-search" shape="circle" @click="product_search()">搜索</i-button>
                 </div>
                 <div class="query">
-                    <i-button class="cost-module-btn calculate" type="ghost" shape="circle" @click="calculate()">总价计算</i-button> 
+                    <i-button class="cost-module-btn calculate" type="ghost" shape="circle" @click="product_calculate()">总价计算</i-button> 
                 </div>
             </div> 
             <div style = "margin-top: 20px">
-                <i-table @on-selection-change='selectionClick' border :height="400" :columns="columns7" :data="table_data"></i-table>
+                <i-table @on-selection-change='product_selectionClick' border :height="400" :columns="product_columns7" :data="product_table_data"></i-table>
             </div>
-
-            <!-- <Modal title="账目合计">
-                <p>所选项的金额合计为：{{sum_money}}千元</p>
-            </Modal> -->
         </Tab-pane>
-        <Tab-pane label="物料" style="height: 100%">
+        <Tab-pane label="物料">
             
         </Tab-pane>
     </Tabs>          
@@ -44,11 +40,11 @@ export default {
   name: 'CostManage',
   data () {
     return {
-        number: '',
-        name: '',
-        batch: '',
-        warehouse: '',
-        columns7: [
+        product_number: '',
+        product_name: '',
+        product_batch: '',
+        product_warehouse: '',
+        product_columns7: [
             {
                 type: 'selection',
                 width: 60,
@@ -56,38 +52,37 @@ export default {
             },
             {
                 title: '货品编号',
-                key: 'table_product_number'
+                key: 'product_table_product_number'
             },
             {
                 title: '货品名称',
-                key: 'table_name'
+                key: 'product_table_name'
             },
             {
                 title: '批次',
-                key: 'table_batch'
+                key: 'product_table_batch'
             },
             {
                 title: '数量',
-                key: 'table_number'
+                key: 'product_table_number'
             },
             {
                 title: '单位',
-                key: 'table_unit'
+                key: 'product_table_unit'
             },
             {
-                title: '总价',
-                key: 'table_total_price'
+                title: '总价(千元)',
+                key: 'product_table_total_price'
             },
             {
                 title: '仓库',
-                key: 'table_warehouse'
+                key: 'product_table_warehouse'
             }
         ],
-        table_data: [
+        product_table_data: [
 
         ],
-        sum_money: 0,
-        modal1: false
+        product_sum_money: 0,
     }
   },
  //这两个map是vuex的部分
@@ -107,22 +102,22 @@ export default {
           alert("ajax failure")
       })
     },
-    search() {
-        this.table_data.push({table_product_number:'1511458',table_name:'测试啊',table_total_price:'5'})  
+    product_search() {
+        this.product_table_data.push({product_table_product_number:'1511458',product_table_name:'测试啊',product_table_total_price:'5'})  
     },
-    calculate() {
+    product_calculate() {
         this.$Modal.info(
             {
                 title: '已选账目合计',
-                content: '您所选项目总计金额为' + this.sum_money + '千元'
+                content: '您所选项目总计金额为' + this.product_sum_money + '千元'
             }
         )
     },
-    selectionClick(arr){
-        this.sum_money = 0
+    product_selectionClick(arr){
+        this.product_sum_money = 0
         for (var i=0; i<arr.length; i++)
         {
-            this.sum_money += parseInt(arr[i]["table_total_price"])
+            this.product_sum_money += parseInt(arr[i]["product_table_total_price"])
         }
     },
   }
