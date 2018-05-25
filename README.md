@@ -2,6 +2,8 @@
 
 用于展示光电码盘生产管理系统的开发工作
 
+博客链接：<a ref="https://mrlchen.github.io">https://mrlchen.github.io</a>
+
 大组名：Neptune
 
 由以下小组组成：
