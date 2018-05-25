@@ -2,22 +2,22 @@ var Sequelize = require('sequelize');
 var db = require('./index').DB;
 var ProductCate = require('./product_cate');
 
-// 创建 model
+// 货品表
 var Product = db.define('product', {
     name: {
-        type: Sequelize.STRING // 指定值的类型
+        type: Sequelize.STRING // 名称
     },
     status: {
-    	type: Sequelize.STRING
+    	type: Sequelize.STRING // 存在状态，“正常”或“停用”，用于假删除
     },
     price: {
-    	type: Sequelize.INTEGER
+    	type: Sequelize.INTEGER// 单价
     },
     add_time: {
-        type: Sequelize.DATE
+        type: Sequelize.DATE    // 添加时间
     },
     remark: {
-    	type: Sequelize.STRING
+    	type: Sequelize.STRING // 备注
     }
     // 没有指定 field，表中键名称则与对象键名相同，为 email
 }, {

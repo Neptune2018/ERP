@@ -1,10 +1,10 @@
 var Sequelize = require('sequelize');
 var db = require('./index').DB;
 
-// 创建 model
+// 货品类别
 var ProductCate = db.define('product_cate', {
     name: {
-        type: Sequelize.STRING // 指定值的类型
+        type: Sequelize.STRING // 类别名称
     }
     // 没有指定 field，表中键名称则与对象键名相同，为 email
 }, {

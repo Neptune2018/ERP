@@ -3,7 +3,7 @@ var db = require('./index').DB;
 var Supplier = require('./supplier');
 var Material = require('./material');
 
-// 创建 model 
+// 物料表和供应商表之间的供货关系
 var MinOrder = db.define('min_order', {
     quantity: {
         type: Sequelize.INTEGER // 起订点
