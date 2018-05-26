@@ -26,7 +26,7 @@
                 <i-table @on-selection-change='matrial_selectionClick' border :height="400" :columns="matrial_columns7" :data="matrial_table_data"></i-table>
             </div>  
         </Tab-pane>   
-    </Tabs>          
+    </Tabs>       
 </div>
 
 </template>
@@ -79,6 +79,7 @@ export default {
 
         ],
         matrial_sum_money: 0,
+        sqlSearch:''
     }
   },
  //这两个map是vuex的部分
@@ -99,7 +100,9 @@ export default {
       })
     },
     matrial_search() {
+        console.log(this.testdata)
         this.matrial_table_data.push({matrial_table_matrial_number:'1511458',matrial_table_name:'测试啊',matrial_table_number:'6',matrial_table_unit:'千个',matrial_table_price:'5'})  
+        sqlSearch="select"
     },
     matrial_calculate() {
         this.$Modal.info(
@@ -123,6 +126,20 @@ export default {
             }
         }
     },
+    onload(){
+      this.$http({
+          url: '/costmoduleonloadmtr',
+          method: 'GET',
+      }).then(function (res) {
+          this.matrial_table_data=res.body[0]
+        
+      }, function () {
+          alert("ajax failure")
+      })
+    },   
+  },
+  created () {
+      this.onload()
   }
 }
 </script>
