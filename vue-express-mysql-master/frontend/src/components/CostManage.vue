@@ -71,8 +71,8 @@ export default {
                 key: 'product_table_unit'
             },
             {
-                title: '总价(千元)',
-                key: 'product_table_total_price'
+                title: '单价(元)',
+                key: 'product_table_price'
             },
             {
                 title: '仓库',
@@ -103,13 +103,13 @@ export default {
       })
     },
     product_search() {
-        this.product_table_data.push({product_table_product_number:'1511458',product_table_name:'测试啊',product_table_total_price:'5'})  
+        this.product_table_data.push({product_table_product_number:'1511458',product_table_name:'测试啊',product_table_number:'6',product_table_unit:'千个',product_table_price:'5'})  
     },
     product_calculate() {
         this.$Modal.info(
             {
                 title: '已选账目合计',
-                content: '您所选项目总计金额为' + this.product_sum_money + '千元'
+                content: '您所选项目总计金额为' + this.product_sum_money + '元'
             }
         )
     },
@@ -117,7 +117,14 @@ export default {
         this.product_sum_money = 0
         for (var i=0; i<arr.length; i++)
         {
-            this.product_sum_money += parseInt(arr[i]["product_table_total_price"])
+            if (arr[i]["product_table_unit"] == "千个")
+            {
+                this.product_sum_money += parseInt(arr[i]["product_table_price"]) * parseInt(arr[i]["product_table_number"]) * 1000
+            }
+            else if (arr[i]["product_table_unit"] == "个")
+            {
+                this.product_sum_money += parseInt(arr[i]["product_table_price"]) * parseInt(arr[i]["product_table_number"])
+            }
         }
     },
   }
