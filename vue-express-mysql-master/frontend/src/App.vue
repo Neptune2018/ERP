@@ -31,7 +31,8 @@
                 <Icon type='social-usd' :size='iconSize'></Icon>
                 <span class='main-text'>成本管理</span>
               </template>
-              <Menu-item name='costmanage'>成本管理</Menu-item>
+              <Menu-item name='costmanage_product'>货品管理</Menu-item>
+              <Menu-item name='costmanage_matrial'>物料管理</Menu-item>
             </Submenu>
             <Submenu name='warehouse'>
               <template slot='title'>
@@ -141,9 +142,12 @@ export default {
       }else if(name === 'category'){
         this.bigPos = 'BOM信息维护'
         this.samllPos = '类别信息管理'
-      }else if(name === 'costmanage'){
+      }else if(name === 'costmanage_product'){
         this.bigPos = '成本管理'
-        this.samllPos = '成本管理'
+        this.samllPos = '货品管理'
+      }else if(name === 'costmanage_matrial'){
+        this.bigPos = '成本管理'
+        this.samllPos = '物料管理'
       }else if(name === 'ImportWare'){
         this.bigPos = '仓库管理'
         this.samllPos = '入库管理'

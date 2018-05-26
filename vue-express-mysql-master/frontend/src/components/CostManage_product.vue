@@ -1,8 +1,8 @@
 <template>
 <div style="height: 500px;">
     <Tabs type="card">
-        <Tab-pane label="货品">
-            <div style = "display: inline-block;">
+        <Tab-pane label="货品库存信息">
+             <div style = "display: inline-block">
                 <div class="query">
                     <label class="top-label">编号</label><i-input :value.sync="product_number" placeholder="请输入编号" style="width: 70%"></i-input>
                 </div>
@@ -24,10 +24,7 @@
             </div> 
             <div style = "margin-top: 20px">
                 <i-table @on-selection-change='product_selectionClick' border :height="400" :columns="product_columns7" :data="product_table_data"></i-table>
-            </div>
-        </Tab-pane>
-        <Tab-pane label="物料">
-            
+            </div>  
         </Tab-pane>
     </Tabs>          
 </div>
@@ -35,9 +32,8 @@
 </template>
 
 <script>
-import { Modal } from 'iview'
 export default {
-  name: 'CostManage',
+  name: 'CostManage_product',
   data () {
     return {
         product_number: '',

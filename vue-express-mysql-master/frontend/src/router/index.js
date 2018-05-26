@@ -2,7 +2,9 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import HelloWorld from '@/components/HelloWorld'
 import SecondPage from '@/components/SecondPage'
-import CostManage from '@/components/CostManage'
+import CostManageProduct from '@/components/CostManage_product'
+import CostManageMatrial from '@/components/CostManage_matrial'
+
 Vue.use(Router)
 
 export default new Router({
@@ -18,9 +20,14 @@ export default new Router({
       component: SecondPage
     },
     {
-      path: '/costmanage',
-      name: 'CostManage',
-      component: CostManage
+      path: '/costmanage_product',
+      name: 'CostManageProduct',
+      component: CostManageProduct
+    },
+    {
+      path: '/costmanage_matrial',
+      name: 'CostManageMatrial',
+      component: CostManageMatrial
     }
   ]
 })
