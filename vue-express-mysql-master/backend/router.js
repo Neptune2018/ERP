@@ -23,9 +23,11 @@ router.get('/deleteOfferList',purchase.deleteOfferList);
 router.get('/setMinOrder',purchase.setMinOrder);
 
 router.get('/getMaterials',purchase.getMaterials);
+router.get('/getAllMaterials',purchase.getAllMaterials);
 router.get('/getMaterialsBySupplier',purchase.getMaterialsBySupplier);
 router.get('/setSafeQuantity',purchase.setSafeQuantity);
 router.get('/getStarve',purchase.getStarve);
+router.get('/getAllStarve',purchase.getAllStarve);
 
 
 module.exports = router;

@@ -1,127 +1,198 @@
 <template>
-    <div>
-    <div class="row">
-        <table class="table">
-            <caption>安全库存</caption>
-            <thead>
-            <tr>
-                <th>序号</th>
-                <th>名称</th>
-                <th>性质</th>
-                <th>安全库存</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr v-show="!tabelEmpty" v-for="item in dataList" :key='item.title'>
-                <td>{{item.id}}</td>
-                <td>{{item.name}}</td>
-                <td>{{item.property}}</td>
-                <td>{{item.safe_quantity}}</td>
-            </tr>
-            <tr v-show="tabelEmpty" class="empty">
-                <td colspan="5">没有匹配的记录</td>
-            </tr>
-            </tbody>
-        </table>
-    </div>
-    <Pagebar :page-model="pageModel" @refresh='refresh'></Pagebar>
+    <div style="height: 500px;">
+        <div class="content">
+            <div class="query">
+                <label class="top-label">编号</label>
+                <i-input v-model="id" placeholder="请输入编号" style="width: 70%"></i-input>
+            </div>
+            <div class="query">
+                <label class="top-label">名称</label>
+                <i-input v-model="name" placeholder="请输入名称" style="width: 70%"></i-input>
+            </div>
+            <div class="query">
+                <label class="top-label">性质</label>
+                <i-input v-model="property" placeholder="请输入性质" style="width: 70%"></i-input>
+            </div>
+            <div class="query">
+                <label class="top-label">分类</label>
+                <i-input v-model="category" placeholder="请输入分类" style="width: 70%"></i-input>
+            </div>
+            <div class="query">
+                <i-button class="purchase-module-btn search" type="ghost" icon="ios-search" shape="circle" @click="search()">搜索</i-button>
+            </div>
+            
+        </div>
+        <div class="content">
+            <div class="query"  style="width: 20%">
+                <label class="top-label">安全库存</label>
+                <i-input v-model="quantity" placeholder="请输入安全库存" style="width: 70%"></i-input>
+            </div>
+            <div class="query">
+                <i-button class="purchase-module-btn calculate" type="ghost" shape="circle" @click="setquantity()">设置安全库存</i-button>
+            </div>
+        </div>
+        <div style="margin-top: 20px">
+            <i-table @on-selection-change='selectionClick' border :height="400" :columns="columns" :data="table_data"></i-table>
+        </div>
     </div>
 </template>
 <script>
-    import Pagebar from '../components/table-pagebar.vue'
-    export default {//这里是官方的写法，默认导出，ES6
-        name: 'SafeStock',
-        components: {
-            Pagebar
+import Pagebar from '../components/table-pagebar.vue'
+export default {
+  //这里是官方的写法，默认导出，ES6
+  name: 'SafeStock',
+  components: {
+    Pagebar
+  },
+  data() {
+    return {
+      dataList: [],
+      id: '',
+      name: '',
+      category: '',
+      property: '',
+      table_data: [],
+      quantity: '',
+      columns: [
+        {
+          type: 'selection',
+          width: 60,
+          align: 'center'
         },
-        data () {
-            return {
-                allArticle: "",
-                dataList: [],
-                pageModel: {
-                    url: '/getMaterials',
-                    method: 'GET',
-                    menu: [5, 10, 20]
-                },
-            }
+        {
+          title: '物料编号',
+          key: 'id'
         },
-        computed: {
-            tabelEmpty: function () {
-                if (this.dataList) {
-                    return false;
-                } else {
-                    return true;
-                }
-            }
+        {
+          title: '物料名称',
+          key: 'name'
         },
-        methods:{
-            refresh: function(data){
-                this.dataList = data;
-            }
+        {
+          title: '性质',
+          key: 'property'
+        },
+        {
+          title: '分类',
+          key: 'mater_cate.category'
+        },
+        {
+          title: '安全库存',
+          key: 'safe_quantity'
         }
+        // {
+        //   title: '单价(元)',
+        //   key: 'price'
+        // }
+      ]
     }
+  },
+  created() {
+    this.$http({
+      url: '/getAllMaterials',
+      method: 'GET'
+    }).then(
+      function(res) {
+        this.$Message.success('获取数据成功')
+        this.table_data = res.body.data
+        // 返回总记录
+        //this.$router.push({path: '/hello', query:{data: res.body}})
+      },
+      function() {
+        this.$Message.error('获取数据失败')
+      }
+    )
+  },
+  computed: {},
+  methods: {
+    search: function() {
+      this.$http({
+        url: '/getAllMaterials',
+        method: 'GET',
+        params: {
+          id: this.id,
+          name: this.name,
+          property: this.property,
+          category: this.category
+        }
+      }).then(
+        function(res) {
+            this.$Message.success('搜索成功')
+          this.table_data = res.body.data
+          // 返回总记录
+          //this.$router.push({path: '/hello', query:{data: res.body}})
+        },
+        function() {
+          this.$Message.error('搜索失败')
+        }
+      )
+    },
+    selectionClick(arr) {
+      this.dataList = []
+      for (var i = 0; i < arr.length; i++) {
+        this.dataList.push(arr[i]['id'])
+      }
+    },
+    setquantity: function() {
+      if (this.dataList.length != 0) {
+        if (this.quantity) {
+          this.$http({
+            url: '/setSafeQuantity',
+            method: 'GET',
+            params: {
+              id: this.dataList,
+              quantity: this.quantity
+            }
+          }).then(
+            function(res) {
+                this.$Message.success('设置成功')
+              this.table_data = res.body.data
+              // 返回总记录
+              //this.$router.push({path: '/hello', query:{data: res.body}})
+            },
+            function() {
+                this.$Message.error('获取数据失败')
+            }
+          )
+        } else {
+            
+            this.$Message.warning('安全库存不能为空')
+        }
+      } else {
+          this.$Message.warning('请选择需要更改安全库存的物料')
+      }
+    }
+  }
+}
 </script>
-<style>
-    body, table {
-        font-size: 12px;
-    }
+<style scoped>
+.content {
+    width: 100%;
+  display: inline-block;
+  margin-top: 15px;
+}
+.query {
+  margin-left: 2%;
+  margin-right: 2%;
+  display: inline-block;
+}
 
-    table {
-        table-layout: fixed;
-        empty-cells: show;
-        border-collapse: collapse;
-        width: 100%;
-        margin: 10px 0;
-    }
+.purchase-module-btn {
+  color: white;
+  background-color: #4169e1;
+  border-color: #4169e1;
+}
 
-    td {
-        height: 30px;
-    }
+.purchase-module-btn:hover {
+  color: white;
+  background-color: #4169e1;
+  border-color: #4169e1;
+}
 
-    div.row {
-        margin-left: 15px;
-        margin-right: 15px;
-    }
+.search {
+  margin-left: 50%;
+}
 
-    h1, h2, h3 {
-        font-size: 12px;
-        margin: 0;
-        padding: 0;
-    }
-
-    .table {
-        border: 1px solid #ddd;
-        background: #fff;
-    }
-
-    .table thead tr {
-        background: #eee;
-    }
-
-    .table th {
-        background-repeat: repeat-x;
-        height: 30px;
-        text-align: left;
-        vertical-align: middle;
-    }
-
-    .table caption {
-        height: 35px;
-        text-align:center;
-        font-size: 20px;
-        background-color:#ddd;
-    }
-    .table tr.empty {
-        text-align: center;
-    }
-
-    .table td, .table th {
-        border: 1px solid #ddd;
-        padding: 0 1em 0;
-    }
-
-    .table tr:nth-child(odd) td {
-        background-color: #f5f5f5;
-
-    }
+.top-label {
+  margin-right: 5%;
+}
 </style>

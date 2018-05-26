@@ -128,7 +128,7 @@ exports.addOfferList = function(req,res){
 }
 
 exports.deleteOfferList = function(req,res){
-    console.log(req.session.sess)
+    console.log(req.session.sess);
     req.session.sess = 'yes';
     var params = url.parse(req.url, true).query;
     Purchase.deleteOfferList(params.id,function(data){
@@ -140,7 +140,7 @@ exports.deleteOfferList = function(req,res){
 }
 
 exports.updateOfferList = function(req,res){
-    console.log(req.session.sess)
+    console.log(req.session.sess);
     req.session.sess = 'yes';
     var params = url.parse(req.url, true).query;
     Purchase.updateOfferList(params.id,params.name,params.from_user,params.body.to_user,params.time,params.materials,function(){
@@ -163,10 +163,19 @@ exports.setMinOrder = function(req, res){
 }
 
 exports.getMaterials = function(req, res){
-    console.log(req.session.sess)
+    console.log(req.session.sess);
     req.session.sess = 'yes';
     var params = url.parse(req.url, true).query;
     Material.findAllMaterial(+params.limit,+params.page,function(data) {
+		res.send(data)
+	});
+}
+
+exports.getAllMaterials = function(req, res){
+    console.log(req.session.sess);
+    req.session.sess = 'yes';
+    var params = url.parse(req.url, true).query;
+    Material.findAllMaterial(params.id,params.name,params.property,params.category,function(data) {
 		res.send(data)
 	});
 }
@@ -184,7 +193,6 @@ exports.getStarve = function(req, res){
     console.log(req.session.sess);
     req.session.sess = 'yes';
     var params = url.parse(req.url, true).query;
-    console.log(params)
     countPerPage = params.limit;
     currentPage = params.page;
     Material.findStarve(function(data) {
@@ -210,12 +218,33 @@ exports.getStarve = function(req, res){
 	});
 };
 
+exports.getAllStarve = function(req, res){
+    console.log(req.session.sess);
+    req.session.sess = 'yes';
+    var params = url.parse(req.url, true).query;
+    Material.findStarve(params.id,params.name,params.property,params.category,function(data) {
+        Material.findNOStarve(params.id,params.name,params.property,params.category,function(result){
+            var temp = data.data;
+            for(i=0;i<result.count;i++){
+                result.data[i].sum_quantity = 0;
+                temp.push(result.data[i]);
+            }
+            results = {
+                count: data.count+result.count,
+                data: temp
+            };
+            res.send(results);
+        });
+		
+	});
+};
+
 exports.setSafeQuantity = function(req, res){
     console.log(req.session.sess);
     req.session.sess = 'yes';
     var params = url.parse(req.url, true).query;
-    Material.setSafeQuantity(params.id,params.quantity,function(data){
-        Material.findAllMaterial(function(data) {
+    Material.setSafeQuantity(params['id[]'],params.quantity,function(data){
+        Material.findAllMaterial(null,null,null,null,function(data) {
             res.send(data);
         });
     });
