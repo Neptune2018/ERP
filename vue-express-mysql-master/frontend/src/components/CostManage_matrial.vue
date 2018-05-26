@@ -4,16 +4,16 @@
          <Tab-pane label="物料库存信息">
              <div style = "display: inline-block">
                 <div class="query">
-                    <label class="top-label">编号</label><i-input :value.sync="matrial_number" placeholder="请输入编号" style="width: 70%"></i-input>
+                    <label class="top-label">编号</label><i-input v-model="matrial_number" placeholder="请输入编号" style="width: 70%"></i-input>
                 </div>
                 <div class="query">
-                    <label class="top-label">名称</label><i-input :value.sync="matrial_name" placeholder="请输入名称" style="width: 70%"></i-input>
+                    <label class="top-label">名称</label><i-input v-model="matrial_name" placeholder="请输入名称" style="width: 70%"></i-input>
                 </div>
                 <div class="query">
-                    <label class="top-label">批次</label><i-input :value.sync="matrial_batch" placeholder="请输入批次" style="width: 70%"></i-input>
+                    <label class="top-label">批次</label><i-input v-model="matrial_batch" placeholder="请输入批次" style="width: 70%"></i-input>
                 </div>
                 <div class="query">
-                    <label class="top-label">仓库</label><i-input :value.sync="matrial_warehouse" placeholder="请输入仓库" style="width: 70%"></i-input>
+                    <label class="top-label">仓库</label><i-input v-model="matrial_warehouse" placeholder="请输入仓库" style="width: 70%"></i-input>
                 </div>
                 <div class="query">
                     <i-button class="cost-module-btn search" type="ghost" icon="ios-search" shape="circle" @click="matrial_search()">搜索</i-button>
@@ -87,22 +87,36 @@ export default {
 
   },
   methods: {
-    test(){
-      this.$http({
-          url: '/test',
-          method: 'GET',
-      }).then(function (res) {
-          console.log(res.body);
-          this.returnData = res.body;
-          //this.$router.push({path: '/hello', query:{data: res.body}})
-      }, function () {
-          alert("ajax failure")
-      })
-    },
     matrial_search() {
-        console.log(this.testdata)
-        this.matrial_table_data.push({matrial_table_matrial_number:'1511458',matrial_table_name:'测试啊',matrial_table_number:'6',matrial_table_unit:'千个',matrial_table_price:'5'})  
-        sqlSearch="select"
+        this.sqlSearch=''
+        this.sqlSearch="select stock.materialId as matrial_table_matrial_number,material.name as matrial_table_name,offer.price as matrial_table_price,stock.batch as matrial_table_batch,stock.remain as matrial_table_number,stock.unit as matrial_table_unit,stock.repertoryId as matrial_table_warehouse from stocks as stock left outer join offers as offer on stock.batch=offer.batch and stock.materialId=offer.materialId left outer join materials as material on stock.materialId=material.id WHERE stock.style=0"
+        if(this.matrial_number!=''){
+            this.sqlSearch+=" and stock.materialId="
+            this.sqlSearch+=this.matrial_number
+        }
+        if(this.matrial_name!=''){
+            this.sqlSearch+=" and material.name='"
+            this.sqlSearch+=this.matrial_name
+            this.sqlSearch+="'"
+        }
+        if(this.matrial_batch!=''){
+            this.sqlSearch+=" and stock.batch='"
+            this.sqlSearch+=this.matrial_batch
+            this.sqlSearch+="'"
+        }
+        if(this.matrial_warehouse!=''){
+            this.sqlSearch+=" and stock.repertoryId="
+            this.sqlSearch+=this.matrial_warehouse
+        }
+        this.$http({
+            url: '/cmmaterialquery?sql='+this.sqlSearch,
+            method: 'GET',
+        }).then(function (res) {
+            console.log(res.body)
+            this.matrial_table_data=res.body[0]
+        }, function () {
+            alert("ajax failure")
+        })
     },
     matrial_calculate() {
         this.$Modal.info(
