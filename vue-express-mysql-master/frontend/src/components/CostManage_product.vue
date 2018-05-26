@@ -4,16 +4,16 @@
         <Tab-pane label="货品库存信息">
              <div style = "display: inline-block">
                 <div class="query">
-                    <label class="top-label">编号</label><i-input :value.sync="product_number" placeholder="请输入编号" style="width: 70%"></i-input>
+                    <label class="top-label">编号</label><i-input v-model="product_number" placeholder="请输入编号" style="width: 70%"></i-input>
                 </div>
                 <div class="query">
-                    <label class="top-label">名称</label><i-input :value.sync="product_name" placeholder="请输入名称" style="width: 70%"></i-input>
+                    <label class="top-label">名称</label><i-input v-model="product_name" placeholder="请输入名称" style="width: 70%"></i-input>
                 </div>
                 <div class="query">
-                    <label class="top-label">批次</label><i-input :value.sync="product_batch" placeholder="请输入批次" style="width: 70%"></i-input>
+                    <label class="top-label">批次</label><i-input v-model="product_batch" placeholder="请输入批次" style="width: 70%"></i-input>
                 </div>
                 <div class="query">
-                    <label class="top-label">仓库</label><i-input :value.sync="product_warehouse" placeholder="请输入仓库" style="width: 70%"></i-input>
+                    <label class="top-label">仓库</label><i-input v-model="product_warehouse" placeholder="请输入仓库" style="width: 70%"></i-input>
                 </div>
                 <div class="query">
                     <i-button class="cost-module-btn search" type="ghost" icon="ios-search" shape="circle" @click="product_search()">搜索</i-button>
@@ -79,6 +79,7 @@ export default {
 
         ],
         product_sum_money: 0,
+        sqlSearch:'',
     }
   },
  //这两个map是vuex的部分
@@ -86,20 +87,41 @@ export default {
 
   },
   methods: {
-    test(){
-      this.$http({
-          url: '/test',
-          method: 'GET',
-      }).then(function (res) {
-          console.log(res.body);
-          this.returnData = res.body;
-          //this.$router.push({path: '/hello', query:{data: res.body}})
-      }, function () {
-          alert("ajax failure")
-      })
-    },
     product_search() {
-        this.product_table_data.push({product_table_product_number:'1511458',product_table_name:'测试啊',product_table_number:'6',product_table_unit:'千个',product_table_price:'5'})  
+        this.sqlSearch=''
+        this.sqlSearch="select product.id as product_table_product_number,product.name as product_table_name,product.price as product_table_price,stock.batch as product_table_batch,stock.remain as product_table_number,stock.unit as product_table_unit,stock.repertoryId as product_table_warehouse from stocks as stock left outer join products as product on stock.productId=product.id where stock.style=1"
+        if(this.product_number!=''){
+            this.sqlSearch+=" and product.id="
+            this.sqlSearch+=this.product_number
+            console.log(this.sqlSearch)
+        }
+        if(this.product_name!=''){
+            this.sqlSearch+=" and product.name='"
+            this.sqlSearch+=this.product_name
+            this.sqlSearch+="'"
+            console.log(this.sqlSearch)
+        }
+        if(this.product_batch!=''){
+            this.sqlSearch+=" and stock.batch='"
+            this.sqlSearch+=this.product_batch
+            this.sqlSearch+="'"
+            console.log(this.sqlSearch)
+        }
+        if(this.product_warehouse!=''){
+            this.sqlSearch+=" and stock.repertoryId="
+            this.sqlSearch+=this.product_warehouse
+            console.log(this.sqlSearch)
+        }
+
+        this.$http({
+            url: '/cmproductquery?sql='+this.sqlSearch,
+            method: 'GET',
+        }).then(function (res) {
+            console.log(res.body)
+            this.product_table_data=res.body[0]
+        }, function () {
+            alert("ajax failure")
+        })
     },
     product_calculate() {
         this.$Modal.info(
@@ -123,7 +145,23 @@ export default {
             }
         }
     },
+    onload(){
+      this.$http({
+          url: '/costmoduleonload',
+          method: 'GET',
+      }).then(function (res) {
+          this.product_table_data=res.body[0]
+        
+      }, function () {
+          alert("ajax failure")
+      })
+    },   
+  },
+  created () {
+      this.onload()
   }
+
+
 }
 </script>
 
