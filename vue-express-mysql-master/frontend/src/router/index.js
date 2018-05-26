@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import HelloWorld from '@/components/HelloWorld'
 import SecondPage from '@/components/SecondPage'
 import ThresholdWarning from '@/components/ThresholdWarning'
+import IOList from '@/components/IOList'
 Vue.use(Router)
 
 export default new Router({
@@ -18,9 +19,14 @@ export default new Router({
       component: SecondPage
     },
     {
-      path: '/starving',
-      name: 'ThresholdWarning',
-      component: ThresholdWarning
+          path: '/inventory',
+          name: 'IOList',
+          component: IOList
+    },
+    {
+          path: '/inventory/stocks',
+          name: 'ThresholdWarning',
+          component: ThresholdWarning
     }
   ]
 })
