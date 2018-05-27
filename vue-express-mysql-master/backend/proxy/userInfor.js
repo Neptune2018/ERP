@@ -3,14 +3,14 @@ var Admin = require('../models').Admin;
 
 
 // 通过用户名查找用户
-exports.showUser = function(dosomething) {
-    User.findAll({where: {name: '用户14'}}).then(function(data){
+exports.showUser = function(id, dosomething) {
+    User.findAll({where: {id: id}}).then(function(data){
     	dosomething(data);
     });
 };
 
 // 更新用户信息
-exports.updateUser = function(data) {
+exports.updateUser = function(id, data) {
 	User.update({
 		'name': data.name,
 		'phone': data.phone,
@@ -18,19 +18,19 @@ exports.updateUser = function(data) {
 		'job': data.job
 	},
 	{
-		where: {name: '用户14'}
+		where: {id: id}
 	});
 }
 
 // 修改密码
-exports.changePass = function(indata, dosomething) {
-	Admin.findAll({where: {password: indata.oldPass}}).then(function(data){
+exports.changePass = function(id, indata, dosomething) {
+	Admin.findAll({where: {id: id, password: indata.oldPass}}).then(function(data){
     	dosomething(data);
     });
 	Admin.update({
 		'password': indata.newPass
 	},
 	{
-		where: {password: indata.oldPass}
+		where: {id: id, password: indata.oldPass}
 	});
 }

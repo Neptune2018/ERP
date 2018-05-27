@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import HelloWorld from '@/components/HelloWorld'
 import SecondPage from '@/components/SecondPage'
 import UserInfor from '@/components/UserInfor'
+import Signin from '@/components/Signin'
 
 Vue.use(Router)
 
@@ -22,6 +23,11 @@ export default new Router({
       path: '/userInfor',
       name: 'UserInfor',
       component: UserInfor
-    }
+    },
+    {
+      path: '/signin',
+      name: 'Signin',
+      component: Signin
+    },
   ]
 })
