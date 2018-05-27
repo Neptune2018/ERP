@@ -4,9 +4,9 @@ var models = require('../models')
 //在当前文件夹中 采用命令 node role_feature.js就能把权限数据插入到数据表中
 
 const buildRole = async function(){
-	await models.Feature.destroy();
-	await models.Role.destroy();
-	await models.hasFeature.destroy();
+	await models.Feature.destroy({where:{}});
+	await models.Role.destroy({where:{}});
+	await models.HasFeature.destroy({where:{}});
 
 	var cost = await models.Feature.create({
 		'name': 'Cost',
