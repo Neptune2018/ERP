@@ -13,9 +13,7 @@ exports.addTest = function() {
 // 通过用户名查找用户
 exports.findAll = function(dosomething) {
     Test.findAll({
-    'where': {
-        'name': 'asdsadas'
-    }
+
 }).then(function(tests){
     	dosomething(tests);
     });

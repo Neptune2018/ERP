@@ -12,13 +12,22 @@ exports.listallMater_cates = function(req, res) {
 	})
 }
 
-
-//列出该父类下的所有物料分类
-exports.listallMater_catesbyfather = function(req, res){
+//列出指定父分类下的所有子分类
+exports.listallMater_catesbyMaterCateID = function(req, res){
     console.log(req.session.sess)
     req.session.sess = 'yes';
     var params = url.parse(req.url, true).query;
     Mater_cate = Mater_cate.listallMater_catesbyfather(params.materCateId,function(data) {
+		res.send(data)
+	});
+}
+
+//列出指定父分类下的所有物料
+exports.listallMaterbyMaterCateID = function(req, res){
+    console.log(req.session.sess)
+    req.session.sess = 'yes';
+    var params = url.parse(req.url, true).query;
+    Mater_cate = Mater_cate.listallMaterbyMaterCateID(params.materCateId,function(data) {
 		res.send(data)
 	});
 }
