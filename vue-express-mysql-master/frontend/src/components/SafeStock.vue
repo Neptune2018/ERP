@@ -37,13 +37,9 @@
     </div>
 </template>
 <script>
-import Pagebar from '../components/table-pagebar.vue'
 export default {
   //这里是官方的写法，默认导出，ES6
   name: 'SafeStock',
-  components: {
-    Pagebar
-  },
   data() {
     return {
       dataList: [],
