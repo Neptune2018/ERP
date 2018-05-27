@@ -1,9 +1,15 @@
 <template>
   <div>
-    <p>库存</p>
-    <Table strip height="450" :columns="columns0" :data="data0"></Table>
-    <p>库存预警</p>
-    <Table strip height="200" :columns="columns1" :data="data2"></Table>
+    <Tabs type="card">
+        <Tab-pane label="库存">
+            <Table strip height="230" :columns="columns0" :data="data0"></Table>
+        </Tab-pane>
+    </Tabs>
+    <Tabs type="card" style="margin-top:10px;">
+        <Tab-pane label="库存预警">           
+            <Table strip height="132" :columns="columns1" :data="data2"></Table>
+        </Tab-pane>
+    </Tabs > 
     <Button @click="back()">返回</Button>
   </div>
 </template>

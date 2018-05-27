@@ -1,9 +1,15 @@
 <template>
   <div>
-    <p>仓库基本信息</p>
-    <Table strip height="200" :columns="columns1" :data="data0"></Table>
-    <p>出入库信息</p>
-    <Table strip height="450" :columns="columns0" :data="data2"></Table>
+    <Tabs type="card">
+        <Tab-pane label="仓库基本信息">
+            <Table strip height="100" :columns="columns1" :data="data0"></Table>
+        </Tab-pane>
+    </Tabs>
+    <Tabs type="card" style="margin-top:10px;">
+        <Tab-pane label="出入库信息">           
+            <Table strip height="262" :columns="columns0" :data="data2"></Table>
+        </Tab-pane>
+    </Tabs >    
     <Button @click="change2Stocks()">仓库库存</Button>
   </div>
 </template>
