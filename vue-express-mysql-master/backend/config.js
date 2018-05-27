@@ -1,4 +1,4 @@
-var path = require('path');
+﻿var path = require('path');
 
 var config = {
   // debug 为 true 时，用于本地调试
@@ -16,8 +16,8 @@ var config = {
   db: {
     host: 'localhost',
     dialect: 'mysql',
-    user: 'wdyiwdwd',
-    password: '',
+    user: 'TotPil',
+    password: 'RESTAURANT',
     database: 'development',
     pool: {
       max: 5,    //最大连接数
