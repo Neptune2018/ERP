@@ -1,11 +1,11 @@
-var path = require('path');
+﻿var path = require('path');
 
 var config = {
   // debug 为 true 时，用于本地调试
   debug: true,
 
   name: '企业级应用开发', // 名字
-  description: '', // 描述
+  description: '125', // 描述
   keywords: 'nodejs, node, express, connect',
 
   static: '../frontend/dist', // 静态文件存储域名
@@ -16,8 +16,8 @@ var config = {
   db: {
     host: 'localhost',
     dialect: 'mysql',
-    user: 'wdyiwdwd',
-    password: '',
+    user: 'TotPil',
+    password: 'RESTAURANT',
     database: 'development',
     pool: {
       max: 5,    //最大连接数

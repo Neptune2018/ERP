@@ -2,13 +2,13 @@ var Sequelize = require('sequelize');
 var db = require('./index').DB;
 var User = require('./user');
 
-// 出入库单
+// 创建 model
 var IOList = db.define('io_list', {
     time: {
-        type: Sequelize.DATE    // 时间
+        type: Sequelize.DATE 
     },
     style: {
-        type: Sequelize.BOOLEAN // 区别是出还是入，true为出库
+        type: Sequelize.BOOLEAN // true为出库
     }
     // 没有指定 field，表中键名称则与对象键名相同，为 email
 }, {
