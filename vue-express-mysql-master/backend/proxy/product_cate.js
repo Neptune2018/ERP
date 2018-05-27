@@ -2,6 +2,7 @@ var ProductCate = require('../models').ProductCate;
 var Product = require('../models').Product;
 
 
+
 //添加，需要两个参数，类别名和父类别名
 exports.addProduct_cate = function (name,productCateId,callback) {
   Supplier.create({
@@ -11,6 +12,7 @@ exports.addProduct_cate = function (name,productCateId,callback) {
     callback(data)
   })
 };
+
 
 // 查找没有父类的物料分类,也就是最高层分类
 exports.listallProduct_cates = function(callback) {

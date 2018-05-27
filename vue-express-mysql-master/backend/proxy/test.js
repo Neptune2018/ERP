@@ -12,7 +12,9 @@ exports.addTest = function() {
 
 // 通过用户名查找用户
 exports.findAll = function(dosomething) {
-    Test.findAll().then(function(tests){
+    Test.findAll({
+
+}).then(function(tests){
     	dosomething(tests);
     });
 };

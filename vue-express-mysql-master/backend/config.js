@@ -5,7 +5,7 @@ var config = {
   debug: true,
 
   name: '企业级应用开发', // 名字
-  description: '', // 描述
+  description: '125', // 描述
   keywords: 'nodejs, node, express, connect',
 
   static: '../frontend/dist', // 静态文件存储域名

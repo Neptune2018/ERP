@@ -34,12 +34,14 @@ exports.listallBOM_productbyID = function(req, res){
 	});
 }
 
+
 //列出指定父分类下的所有货品,参数:productCateId，返回（货品的）(id,name,price,remark)编号名称价格备注
 exports.listallProductbyProductCateID = function(req, res){
     console.log(req.session.sess)
     req.session.sess = 'yes';
     var params = url.parse(req.url, true).query;
     Product_cate.listallProductbyProductCateID(params.productCateId,function(data) {
+
 		res.send(data)
 	});
 }
