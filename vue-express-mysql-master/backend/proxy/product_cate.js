@@ -1,12 +1,12 @@
-var MaterCate = require('../models').MaterCate;
-var Material = require('../models').Material;
+var ProductCate = require('../models').ProductCate;
+var Product = require('../models').Product;
 
 
 // 查找没有父类的物料分类,也就是最高层分类
-exports.listallMater_cates = function(callback) {
-    MaterCate.findAll({
+exports.listallProduct_cates = function(callback) {
+    ProductCate.findAll({
     'where': {
-        'materCateId': null
+        'productCateId': null
     }
 }).then(
         function(result){
@@ -17,10 +17,10 @@ exports.listallMater_cates = function(callback) {
 
 
 // 列出指定父分类下的所有子分类
-exports.listallMater_catesbyMaterCateID = function (materCateId,callback) {
+exports.listallProduct_catesbyMaterCateID = function (productCateId,callback) {
   MaterCate.findAll({
     'where': {
-        'materCateId': materCateId
+        'productCateId': productCateId
     }
   }).then(function(result){
     console.log(result)
@@ -29,12 +29,12 @@ exports.listallMater_catesbyMaterCateID = function (materCateId,callback) {
 };
 
 // 列出指定父分类下的所有物料
-exports.listallMaterbyMaterCateID = function (materCateId,callback) {
-  Material.findAll({
+exports.listallProductbyProductCateID = function (productCateId,callback) {
+  Product.findAll({
     include: [{
-      model: MaterCate,
+      model: Product,
       where: {
-        id: materCateId
+        id: productCateId
       }
     }]
   }).then(function(data){
