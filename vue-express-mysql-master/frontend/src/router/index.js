@@ -4,6 +4,8 @@ import HelloWorld from '@/components/HelloWorld'
 import SecondPage from '@/components/SecondPage'
 import Group from '@/components/Group'
 import ParticularizeGroup from '@/components/ParticularizeGroup'
+import UserInfor from '@/components/UserInfor'
+import Signin from '@/components/Signin'
 
 Vue.use(Router)
 
@@ -28,6 +30,16 @@ export default new Router({
       path: '/group/ParticularizeGroup',
       name: 'ParticularizeGroup',
       component: ParticularizeGroup
-    }
+    },
+    {
+      path: '/userInfor',
+      name: 'UserInfor',
+      component: UserInfor
+    },
+    {
+      path: '/signin',
+      name: 'Signin',
+      component: Signin
+    },
   ]
 })
