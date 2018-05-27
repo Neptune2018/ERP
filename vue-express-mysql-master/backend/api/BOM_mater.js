@@ -45,3 +45,27 @@ exports.listallBOM_materbyname = function(req, res){
 	});
 }
 
+//删除，参数id，注意返回的是listallBOM_mater也就是查找函数的结果，不是成功失败
+exports.deleteBOM_materById = function(req, res){
+    console.log(req.session.sess)
+    req.session.sess = 'yes';
+    var params = url.parse(req.url, true).query;
+    BOM_mater.deleteBOM_materById(params.id,function(data){
+        BOM_mater.listallBOM_mater(function(data) {
+            res.send(data)
+        });
+    });
+}
+
+
+//修改，需要参数(id,name,property,materCateId),其中按id确定是哪个。返回修改后的结果
+exports.updateBOM_materById = function(req,res){
+    console.log(req.session.sess);
+    req.session.sess = 'yes';
+    var params = url.parse(req.url, true).query;
+    BOM_mater.updateBOM_materById(params.id,params.name,params.property,params.materCateId,function(){
+        BOM_mater.findBOM_materByID(params.id,function(data) {
+            res.send(data)
+        });
+    });
+}

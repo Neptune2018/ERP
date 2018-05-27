@@ -59,7 +59,32 @@ exports.listallBOM_materbyname = function (name,callback) {
   });
 };
 
+exports.deleteBOM_materById = function (id,callback) {
+  BOM_mater.destroy({
+    where: {
+      id: id
+    }
+  }).then(function(result){
+    callback(result)
+  });
+};
 
+
+exports.updateBOM_materById = function (id,name,property,materCateId,callback) {
+  Supplier.update({
+    id: id,
+    name: name,
+    property: property,
+    materCateId: materCateId,
+  }, {
+    where: {
+      id: id
+    }
+  }).then(function(result){
+    console.log(result)
+    callback(result)
+  });
+};
 
 
 

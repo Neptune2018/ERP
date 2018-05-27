@@ -48,3 +48,29 @@ exports.listallMaterbyMaterCateID = function(req, res){
 	});
 }
 
+
+//删除，参数id，注意返回的是listallProduct_cates也就是查找函数的结果，不是成功失败
+//只能删除目前的分类，并不能连带所有子分类一起删，之后再改
+exports.deleteMater_cateById = function(req, res){
+    console.log(req.session.sess)
+    req.session.sess = 'yes';
+    var params = url.parse(req.url, true).query;
+    Mater_cate.deleteMater_cateById(params.id,function(data){
+        Mater_cate.listallMater_cates(function(data) {
+            res.send(data)
+        });
+    });
+}
+
+
+//修改，需要参数(id,name,materCateId),其中按id确定是哪个。返回修改后的结果
+exports.updateMater_cateById = function(req,res){
+    console.log(req.session.sess);
+    req.session.sess = 'yes';
+    var params = url.parse(req.url, true).query;
+    Mater_cate.updateMater_cateById(params.id,params.name,params.materCateId,function(){
+        Mater_cate.listallMater_catesbyMaterCateID(params.id,function(data) {
+            res.send(data)
+        });
+    });
+}

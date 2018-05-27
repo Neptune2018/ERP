@@ -46,3 +46,28 @@ exports.listallProductbyProductCateID = function(req, res){
 	});
 }
 
+
+//删除，参数id，注意返回的是listallProduct_cates也就是查找函数的结果，不是成功失败
+//只能删除目前的分类，并不能连带所有子分类一起删，之后再改
+exports.deleteProduct_cateById = function(req, res){
+    console.log(req.session.sess)
+    req.session.sess = 'yes';
+    var params = url.parse(req.url, true).query;
+    Product_cate.deleteProduct_cateById(params.id,function(data){
+        Product_cate.listallProduct_cates(function(data) {
+            res.send(data)
+        });
+    });
+}
+
+//修改，需要参数(id,name,productCateId),其中按id确定是哪个。返回修改后的结果
+exports.updateProduct_cateById = function(req,res){
+    console.log(req.session.sess);
+    req.session.sess = 'yes';
+    var params = url.parse(req.url, true).query;
+    Product_cate.updateProduct_cateById(params.id,params.name,params.productCateId,function(){
+        Product_cate.listallProductbyProductCateID(params.id,function(data) {
+            res.send(data)
+        });
+    });
+}

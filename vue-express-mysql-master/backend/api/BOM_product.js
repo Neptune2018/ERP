@@ -45,3 +45,27 @@ exports.listallBOM_productbyname = function(req, res){
 	});
 }
 
+
+//删除，参数id，注意返回的是listallBOM_product也就是查找函数的结果，不是成功失败
+exports.deleteBOM_productById = function(req, res){
+    console.log(req.session.sess)
+    req.session.sess = 'yes';
+    var params = url.parse(req.url, true).query;
+    BOM_product.deleteBOM_productById(params.id,function(data){
+        BOM_product.listallBOM_product(function(data) {
+            res.send(data)
+        });
+    });
+}
+
+//修改，需要参数(id,name,price,remark,productCateId),其中按id确定是哪个。返回修改后的结果
+exports.updateBOM_productById = function(req,res){
+    console.log(req.session.sess);
+    req.session.sess = 'yes';
+    var params = url.parse(req.url, true).query;
+    BOM_product.updateBOM_productById(params.id,params.name,params.price,params.remark,params.productCateId,function(){
+        BOM_product.findBOM_productByID(params.id,function(data) {
+            res.send(data)
+        });
+    });
+}

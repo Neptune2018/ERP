@@ -5,7 +5,7 @@ var Product = require('../models').Product;
 
 //添加，需要两个参数，类别名和父类别名
 exports.addProduct_cate = function (name,productCateId,callback) {
-  Supplier.create({
+  ProductCate.create({
     name: name,
     productCateId: productCateId
   }).then(function(data){
@@ -30,7 +30,7 @@ exports.listallProduct_cates = function(callback) {
 
 // 列出指定父分类下的所有子分类
 exports.listallProduct_catesbyMaterCateID = function (productCateId,callback) {
-  MaterCate.findAll({
+  ProductCate.findAll({
     'where': {
         'productCateId': productCateId
     }
@@ -55,6 +55,30 @@ exports.listallProductbyProductCateID = function (productCateId,callback) {
 }
 
 
+exports.deleteProduct_cateById = function (id,callback) {
+  ProductCate.destroy({
+    where: {
+      id: id
+    }
+  }).then(function(result){
+    callback(result)
+  });
+};
 
+
+exports.updateProduct_cateById = function (id,name,productCateId,callback) {
+  ProductCate.update({
+    id: id,
+    name: name,
+    productCateId: productCateId,
+  }, {
+    where: {
+      id: id
+    }
+  }).then(function(result){
+    console.log(result)
+    callback(result)
+  });
+};
 
 

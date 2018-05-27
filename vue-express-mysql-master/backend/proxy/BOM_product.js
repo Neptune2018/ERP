@@ -59,7 +59,22 @@ exports.listallBOM_product = function (name,callback) {
 };
 
 
-
+exports.updateBOM_productById = function (id,name,price,remark,productCateId,callback) {
+  Supplier.update({
+    id: id,
+    name: name,
+    price: price,
+    remark: remark,
+    productCateId: productCateId,
+  }, {
+    where: {
+      id: id
+    }
+  }).then(function(result){
+    console.log(result)
+    callback(result)
+  });
+};
 
 
 

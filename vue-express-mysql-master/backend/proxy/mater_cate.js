@@ -6,7 +6,7 @@ var Material = require('../models').Material;
 
 
 exports.addMater_cate = function (name,materCateId,callback) {
-  Supplier.create({
+  MaterCate.create({
     name: name,
     materCateId: materCateId
   }).then(function(data){
@@ -57,6 +57,29 @@ exports.listallMaterbyMaterCateID = function (materCateId,callback) {
 }
 
 
+exports.deleteMater_cateById = function (id,callback) {
+  MaterCate.destroy({
+    where: {
+      id: id
+    }
+  }).then(function(result){
+    callback(result)
+  });
+};
 
 
+exports.updateMater_cateById = function (id,name,materCateId,callback) {
+  MaterCate.update({
+    id: id,
+    name: name,
+    materCateId: materCateId,
+  }, {
+    where: {
+      id: id
+    }
+  }).then(function(result){
+    console.log(result)
+    callback(result)
+  });
+};
 
