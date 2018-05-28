@@ -16,8 +16,44 @@
       </div>
       <div style="width: 35%;float: left;margin: 0.5% 1% ">
         <row>
-          <i-button class="oper" type="primary">新增物料</i-button>
-          <i-button class="oper" type="primary">修改物料信息</i-button>
+          <i-button class="oper" type="primary" @click="material_add=true">新增物料</i-button>
+          <Modal
+         v-model="material_add"
+        title="新增物料"
+        @on-ok="ok"
+        @on-cancel="cancel">
+        <div class="q">
+            <label class="model1">物料编号</label><i-input v-model="add_mnumber" placeholder="请输入编号" style="width: 60%"></i-input>
+          </div>
+          <div class="q">
+            <label class="model1">物料名称</label><i-input v-model="add_mname" placeholder="请输入物料名称" style="width: 60%"></i-input>
+          </div>
+          <div class="q">
+            <label class="model1">物料类别</label><i-input v-model="add_mstatus" placeholder="请输入物料类别" style="width: 60%"></i-input>
+          </div>
+           <div class="q">
+            <label class="model1">物料性质</label><i-input v-model="add_mproperty" placeholder="请输入物料性质" style="width: 60%"></i-input>
+          </div>
+    </Modal>
+          <i-button class="oper" type="primary" @click="material_modify=true">修改物料信息</i-button>
+           <Modal
+         v-model="material_modify"
+        title="修改物料信息"
+        @on-ok="ok"
+        @on-cancel="cancel">
+        <div class="q">
+            <label class="model2">物料编号</label><i-input v-model="modify_mnumber" placeholder="请输入编号" style="width: 60%"></i-input>
+          </div>
+          <div class="q">
+            <label class="model2">物料名称</label><i-input v-model="modify_mname" placeholder="请输入物料名称" style="width: 60%"></i-input>
+          </div>
+          <div class="q">
+            <label class="model2">物料类别</label><i-input v-model="modify_mstatus" placeholder="请输入物料类别" style="width: 60%"></i-input>
+          </div>
+           <div class="q">
+            <label class="model2">物料性质</label><i-input v-model="modify_mproperty" placeholder="请输入物料性质" style="width: 60%"></i-input>
+          </div>
+    </Modal>
           <i-button class="oper" type="primary">打印</i-button>
         </row>
         <row style="margin-top: 1%">
@@ -46,6 +82,12 @@
     data () {
       //一定要有return！！
       return{
+        material_add: false,
+        material_modify: false,
+        material_number: '',
+        material_name: '',
+        product_name: '',
+        table_data: '',
         material_columns1: [
           {
             type: 'selection',
@@ -104,10 +146,24 @@
 
 
         ],
-
-
       }
-    },
+    }, 
+    created() {
+    this.$http({
+      url: '/getMaterials',
+      method: 'GET'
+    }).then(
+      function(res) {
+        this.$Message.success('获取数据成功')
+        this.table_data = res.body.data
+        // 返回总记录
+        //this.$router.push({path: '/hello', query:{data: res.body}})
+      },
+      function() {
+        this.$Message.error('获取数据失败')
+      }
+    )
+  },
     methods: {
       handleSelectAll (status) {
         this.$refs.selection.selectAll(status);
@@ -149,5 +205,13 @@
 
   .top-label {
     margin-right:5%;
+  }
+   .q {
+    width: 100%;
+    margin-top: 5%;
+    margin-left: 15%;
+    margin-right: 15%;
+    display: inline-block;
+    vertical-align: middle;
   }
 </style>
