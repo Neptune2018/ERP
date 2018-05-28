@@ -93,7 +93,7 @@ export default {
   methods: {
     matrial_search() {
         this.sqlSearch=''
-        this.sqlSearch="select stock.materialId as matrial_table_matrial_number,material.name as matrial_table_name,offer.price as matrial_table_price,stock.batch as matrial_table_batch,stock.remain as matrial_table_number,stock.unit as matrial_table_unit,stock.repertoryId as matrial_table_warehouse,suppliers.name as matrial_table_supplier from stocks as stock left outer join offers as offer on stock.batch=offer.batch and stock.materialId=offer.materialId left outer join materials as material on stock.materialId=material.id left outer join offer_lists on offer.offerListId=offer_lists.id left outer join suppliers on offer_lists.supplierId=suppliers.id WHERE stock.style=0"
+        this.sqlSearch="select stock.materialId as matrial_table_matrial_number,material.name as matrial_table_name,offer.price as matrial_table_price,stock.batch as matrial_table_batch,stock.remain as matrial_table_number,stock.unit as matrial_table_unit,stock.repertoryId as matrial_table_warehouse,suppliers.name as matrial_table_supplier from stocks as stock left outer join offers as offer on stock.batch=offer.batch and stock.materialId=offer.materialId left outer join materials as material on stock.materialId=material.id left outer join offer_lists on offer.offerListId=offer_lists.id left outer join suppliers on offer_lists.supplierId=suppliers.id WHERE stock.style=false"
         if(this.matrial_number!=''){
             this.sqlSearch+=" and stock.materialId="
             this.sqlSearch+=this.matrial_number
