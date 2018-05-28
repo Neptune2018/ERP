@@ -30,10 +30,10 @@ exports.listallMater_cates = function(callback) {
 
 
 // 列出指定父分类下的所有子分类
-exports.listallMater_catesbyMaterCateID = function (materCateId,callback) {
+exports.listallMater_catesbyMater_Catename = function (productCateId,callback) {
   MaterCate.findAll({
     'where': {
-        'materCateId': materCateId
+        'name': name
     }
   }).then(function(result){
     console.log(result)
@@ -42,13 +42,12 @@ exports.listallMater_catesbyMaterCateID = function (materCateId,callback) {
 };
 
 // 列出指定父分类下的所有物料
-exports.listallMaterbyMaterCateID = function (materCateId,callback) {
+exports.listallMaterbyMater_Catename = function (name,callback) {
   Material.findAll({
-    'attributes': ['id', 'name','property'],
     include: [{
       model: MaterCate,
       where: {
-        id: materCateId
+        name: name
       }
     }]
   }).then(function(data){

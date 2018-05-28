@@ -85,6 +85,19 @@ exports.updateBOM_materById = function (id,name,property,materCateId,callback) {
     callback(result)
   });
 };
+exports.listallBOM_materbyIdname = function (Id,name,callback) {
+  BOM_mater.findAll({
+    'attributes': ['id', 'name','property'],
+    'where': {
+        'Id': Id,
+        'name': name,
+        'status': 0
+    }
+  }).then(function(result){
+    console.log(result)
+    callback(result)
+  });
+};
 
 
 

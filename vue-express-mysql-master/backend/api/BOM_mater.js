@@ -2,6 +2,7 @@ var config = require('../config');
 var fs = require('fs');
 var path = require('path');
 var BOM_mater = require('../proxy').BOM_mater;
+var url = require('url');
 
 
 //添加，参数:（id,name,property,materCateId）物料编号名称属性和类别名，会返回listallBOM_mater（下面函数）的查找结果而非成功失败
@@ -25,24 +26,34 @@ exports.listallBOM_mater = function(req, res) {
 	})
 }
 
-//根据编号查询。参数Id,返回同上
-exports.listallBOM_productbyID = function(req, res){
+exports.queryBOM_mater = function(req, res){
     console.log(req.session.sess)
     req.session.sess = 'yes';
     var params = url.parse(req.url, true).query;
-    BOM_mater.listallBOM_materbyID(params.Id,function(data) {
-		res.send(data)
-	});
-}
+    if (params.Id == null){
+        if (params.name == null){
+            res.send(null)
+        }
+        else{
+            BOM_mater.listallBOM_materbyname(params.name,function(data) {
+                res.send(data)
+            });
+        }
+    }
+    else{
+        if (params.name == null){
+            BOM_mater.listallBOM_materbyId(params.Id,function(data) {
+                res.send(data)
+            });
+        }
+        else{
+            BOM_mater.listallBOM_materbyIdname(params.Id,params.name,function(data) {
+                res.send(data)
+            });
+        }
+    }
 
-//根据名称查询。参数name,返回同上
-exports.listallBOM_materbyname = function(req, res){
-    console.log(req.session.sess)
-    req.session.sess = 'yes';
-    var params = url.parse(req.url, true).query;
-    BOM_mater.listallBOM_materbyname(params.name,function(data) {
-		res.send(data)
-	});
+    
 }
 
 //删除，参数id，注意返回的是listallBOM_mater也就是查找函数的结果，不是成功失败

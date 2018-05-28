@@ -46,7 +46,7 @@
             <label class="model2">货品名称</label><i-input v-model="modify_name" placeholder="请输入货品名称" style="width: 60%"></i-input>
           </div>
           <div class="q">
-            <label class="model2">货品类别</label></label><i-input v-model="modify_property" placeholder="类别" style="width: 60%"></i-input>
+            <label class="model2">货品类别</label><i-input v-model="modify_property" placeholder="类别" style="width: 60%"></i-input>
           </div>
     </Modal>
         <i-button class="oper" type="primary">打印</i-button>
@@ -54,14 +54,14 @@
       <row style="margin-top: 1%">
         <i-button class="oper" type="primary" @click="handleSelectAll(true)">全选</i-button>
         <i-button class="oper" type="primary" @click="handleSelectAll(false)">全清</i-button>
-      <i-button class="oper" type="primary">删除</i-button>
+      <i-button class="oper" type="primary" @click="product_delete()">删除</i-button>
       <i-button class="oper" type="primary">导出</i-button>
       </row>
     </div>
     </div>
         <div style = "margin-top: 10px">
-          <i-table border :height="200" :columns="columns1" :data="data1"></i-table>
-          <i-table ref="selection" border :height="200" :columns="columns2" :data="data2"></i-table>
+          <i-table highlight-row  nmmmmmmmmm class='show' border  :width='200' :columns="columns1" :data="data1"  @on-current-change="handleRowChange"></i-table>
+          <i-table class='show' ref="selection" border :width='700' :columns="columns2" :data="data2"></i-table>
         </div>
   </div>
 </template>
@@ -77,6 +77,51 @@
       Button,
       Slider,
       ICol},
+    created() {
+        this.$http({
+          url: '/getProducts',
+          method: 'GET'
+        }).then(
+          function(res) {
+            this.table_data = res.body.data
+            console.log(res.body)          
+            for(var i=0;i<res.body.length;i++){
+            this.data2.push({
+              num: i+1,
+              id: res.body[i].id,
+              name: res.body[i].name,
+              add_time: '2018-5-27',
+              productCateId:'X'
+            })
+            }
+            this.$Message.success('获取数据成功')
+            // 返回总记录
+            //this.$router.push({path: '/hello', query:{data: res.body}})
+          },
+          function() {
+            this.$Message.error('获取数据失败')
+          }
+        )
+        this.$http({
+          url: '/getProductcates',
+          method: 'GET'
+        }).then(
+          function(res) {
+            console.log(res.body)          
+            for(var i=0;i<res.body.length;i++){
+            this.data1.push({
+              sort: res.body[i].name
+            })
+            }
+            this.$Message.success('获取数据成功')
+            // 返回总记录
+            //this.$router.push({path: '/hello', query:{data: res.body}})
+          },
+          function() {
+            this.$Message.error('获取数据失败')
+          }
+        )
+      }, 
     name: 'Goods',
     data () {
       
@@ -85,9 +130,22 @@
         product_number: '',
         product_name: '',
         material_name: '',
-        table_data: '',
+        table_data: [],
         product_add : false,
         product_modify:false,
+        columns1:[
+          {
+            type:'index',
+            width:60,
+            align:'center'
+          },
+          {
+            title:'分类情况',
+            key:'sort'
+          }
+        ],
+        data1:[
+        ],
         columns2: [
           {
             type: 'selection',
@@ -118,62 +176,61 @@
             key: 'productCateId'
           }
         ],
-        data2:[
-          {
-            num:'1',
-            id:'23232',
-            name:'田斯予',
-            add_time:'2018-5-27',
-            productCateId:'X'
-
-          },
-          {
-            num:'2',
-            id:'66666666',
-            name:'田斯予快做',
-            add_time:'2018-5-27',
-            productCateId:'Y'
-
-          },
-       
-
-        ],
+        data2:[],
       }
     },
-    created() {
-    this.$http({
-      url: '/getProducts',
-      method: 'GET'
-    }).then(
-      function(res) {
-        this.$Message.success('获取数据成功')
-        this.table_data = res.body.data
-        // 返回总记录
-        //this.$router.push({path: '/hello', query:{data: res.body}})
-      },
-      function() {
-        this.$Message.error('获取数据失败')
-      }
-    )
-  }, 
     methods: {
 
       handleSelectAll (status) {
         this.$refs.selection.selectAll(status);
       },
-      product_search() {
-        
+       handleRowChange(currentRow, oldCurrentRow){
+         console.log(currentRow)
+        this.data2=[]        
+        this.$http({
+            url: '/cateProduct',
+            method: 'GET',
+            params:{
+              name: currentRow.sort
+            }
+        }).then(function (res) {
+            console.log(res.body)           
+            for(var i=0;i<res.body.length;i++){
+            this.data2.push({
+              num: i+1,
+              id: res.body[i].id,
+              name: res.body[i].name,
+              add_time: '2018-5-27',
+              productCateId:'X'
+            })
+            }
+        }, function () {
+            alert("ajax failure")
+        })
+    },
+      product_delete(){
 
+      },
+      product_search() {  
+        this.data2=[]        
         this.$http({
             url: '/productSearch',
             method: 'GET',
             params:{
-              product_number: this.product_number,
-              product_name: this.product_name
+              Id: this.product_number,
+              name: this.product_name
             }
         }).then(function (res) {
-            console.log(res.body)            
-            this.table_data = res.body.data
+            console.log(res.body)           
+            for(var i=0;i<res.body.length;i++){
+            this.data2.push({
+              num: i+1,
+              id: res.body[i].id,
+              name: res.body[i].name,
+              add_time: '2018-5-27',
+              productCateId:'X'
+            })
+            }
         }, function () {
             alert("ajax failure")
         })
@@ -202,10 +259,10 @@
     background-color: #e6e6e6;
   }
 
-  .cost-module-btn:hover {
-    color: white;
-    background-color: #4169E1;
-    border-color: #4169E1;
+  .show{
+    height: 200px;
+    float: left;
+    margin: 1% 1%
   }
 
   .search {
