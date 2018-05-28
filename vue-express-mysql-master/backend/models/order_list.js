@@ -35,7 +35,7 @@ var OrderList = db.define('order_list', {
     // 如果指定的表名称本就是复数形式则不变
     freezeTableName: false
 });
-
+OrderList.belongsTo(User, {as: 'manager'});
 // 创建表
 // User.sync() 会创建表并且返回一个Promise对象
 // 如果 force = true 则会把存在的表（如果users表已存在）先销毁再创建表
