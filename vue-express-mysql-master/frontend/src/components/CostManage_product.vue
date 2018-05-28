@@ -89,7 +89,7 @@ export default {
   methods: {
     product_search() {
         this.sqlSearch=''
-        this.sqlSearch="select product.id as product_table_product_number,product.name as product_table_name,product.price as product_table_price,stock.batch as product_table_batch,stock.remain as product_table_number,stock.unit as product_table_unit,stock.repertoryId as product_table_warehouse from stocks as stock left outer join products as product on stock.productId=product.id where stock.style=1"
+        this.sqlSearch="select product.id as product_table_product_number,product.name as product_table_name,product.price as product_table_price,stock.batch as product_table_batch,stock.remain as product_table_number,stock.unit as product_table_unit,stock.repertoryId as product_table_warehouse from stocks as stock left outer join products as product on stock.productId=product.id where stock.style=true"
         if(this.product_number!=''){
             this.sqlSearch+=" and product.id="
             this.sqlSearch+=this.product_number
