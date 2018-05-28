@@ -8,3 +8,6 @@ exports.CMMaterialQuery =require('./cmmaterialquery')
 exports.GetGroup = require('./getgroup');
 exports.UserInfor = require('./userInfor');
 exports.User = require('./user');
+exports.Material = require('./material');
+exports.Purchase = require('./purchase');
+exports.Product = require('./product');

@@ -7,7 +7,7 @@
           <img src='./assets/logo.png' style='height:50px'>
         </div>
            <div class='layout-ceiling-main'>
-          <a href='../documentation/'>帮助中心</a>
+          <Button type='text' @click='help'>帮助中心</Button>
           <Button type='text' @click='logout'>登出</Button>
         </div>    
       </div>
@@ -119,6 +119,12 @@ export default {
         this.spanLeft = 5
         this.spanRight = 19
       }
+    },
+    /**
+      * @description 帮助中心接口
+      */
+    help () {
+     
     },
     /**
       * @description 登出接口
@@ -250,6 +256,7 @@ export default {
 .main-menu-left {
   background: #464c5b;
   height:fill-available;
+  width: 15%;
 }
 
 .main-header {
@@ -292,6 +299,7 @@ export default {
 
 .ivu-btn-text {
     color: #8f9fad;
+    font-size: 14px;
     background-color: transparent;
     border-color: transparent;
 }

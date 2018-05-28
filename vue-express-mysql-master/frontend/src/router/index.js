@@ -8,6 +8,7 @@ import Group from '@/components/Group'
 import ParticularizeGroup from '@/components/ParticularizeGroup'
 import UserInfor from '@/components/UserInfor'
 import Signin from '@/components/Signin'
+import Generate from '@/components/Generate'
 
 Vue.use(Router)
 
@@ -52,6 +53,11 @@ export default new Router({
       path: '/signin',
       name: 'Signin',
       component: Signin
+    },
+    {
+      path: '/generate',
+      name: 'Generate',
+      component: Generate
     }
   ]
 })

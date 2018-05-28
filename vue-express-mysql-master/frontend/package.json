@@ -19,7 +19,7 @@
     "clean-webpack-plugin": "^0.1.19",
     "eventsource-polyfill": "^0.9.6",
     "gulp": "^3.9.1",
-    "iview": "^2.14.0-rc.1",
+    "iview": "^2.14.0",
     "less": "^3.0.4",
     "less-loader": "^4.1.0",
     "vue": "^2.5.2",
