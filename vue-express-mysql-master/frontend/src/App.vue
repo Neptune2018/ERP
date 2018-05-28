@@ -64,7 +64,7 @@
                 <Icon type='android-person' :size='iconSize'></Icon>
                 <span class='main-text'>个人信息管理</span>
               </template>
-              <Menu-item name='operator'>操作员</Menu-item>
+              <Menu-item name='userInfor'>个人信息</Menu-item>
               <Menu-item name='group'>分组</Menu-item>
             </Submenu>
           </Menu>
@@ -169,9 +169,9 @@ export default {
       }else if(name === 'state'){
         this.bigPos = '生产管理'
         this.samllPos = '订单状态查询'
-      }else if(name === 'operator'){
+      }else if(name === 'userInfor'){
         this.bigPos = '个人信息管理'
-        this.samllPos = '操作员'
+        this.samllPos = '个人信息'
       }else if(name === 'group'){
         this.bigPos = '个人信息管理'
         this.samllPos = '分组'

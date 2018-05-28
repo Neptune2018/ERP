@@ -4,6 +4,10 @@ import HelloWorld from '@/components/HelloWorld'
 import SecondPage from '@/components/SecondPage'
 import CostManageProduct from '@/components/CostManage_product'
 import CostManageMatrial from '@/components/CostManage_matrial'
+import Group from '@/components/Group'
+import ParticularizeGroup from '@/components/ParticularizeGroup'
+import UserInfor from '@/components/UserInfor'
+import Signin from '@/components/Signin'
 
 Vue.use(Router)
 
@@ -28,6 +32,26 @@ export default new Router({
       path: '/costmanage_matrial',
       name: 'CostManageMatrial',
       component: CostManageMatrial
+    },
+    {
+      path: '/group',
+      name: 'Group',
+      component: Group
+    },
+    {
+      path: '/group/ParticularizeGroup',
+      name: 'ParticularizeGroup',
+      component: ParticularizeGroup
+    },
+    {
+      path: '/userInfor',
+      name: 'UserInfor',
+      component: UserInfor
+    },
+    {
+      path: '/signin',
+      name: 'Signin',
+      component: Signin
     }
   ]
 })

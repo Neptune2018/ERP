@@ -21,6 +21,8 @@ var Admin = db.define('admin', {
 // 前者将拥有后者的get/set/add方法,后者id是前者外键
 Admin.belongsTo(User);
 
+User.hasOne(Admin);
+
 // 创建表
 // User.sync() 会创建表并且返回一个Promise对象
 // 如果 force = true 则会把存在的表（如果users表已存在）先销毁再创建表

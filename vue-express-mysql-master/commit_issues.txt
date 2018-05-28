@@ -1,0 +1,8 @@
+commit message格式：
+“大写字母姓名首字母缩写，信息（小写的动宾结构），#issue号”
+如“GYG,add docs,#1”
+
+
+issue title
+“动宾结构英文，大写字母姓名首字母缩写”
+如“Add docs,GYG”
