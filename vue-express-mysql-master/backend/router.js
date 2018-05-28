@@ -5,6 +5,7 @@ var costmoduleonloadmtr = require('./api/costmoduleonloadmtrapi');
 var cmproductquery = require('./api/cmproductqueryapi')
 var cmmaterialquery = require('./api/cmmaterialqueryapi')
 
+var purchase = require('./api/purchaseapi');
 var router = express.Router();
 
 router.get('/test', test.testapi)
@@ -39,6 +40,31 @@ router.get('/deleteProduct', product.deleteProduct);
 router.get('/addGetList', product.addGetList);
 router.get('/confirmOrderList', product.confirmOrderList);
 router.get('/findProductQuan', product.findProductQuan);
+
+
+router.get('/addSupplier',purchase.addSupplier);
+router.get('/getSupplier',purchase.getSupplier);
+router.get('/getSupplierByName',purchase.getSupplierByName);
+router.get('/getSupplierById',purchase.getSupplierById);
+router.get('/deleteSupplierByName',purchase.deleteSupplierByName);
+router.get('/updateSupplierByName',purchase.updateSupplierByName);
+router.get('/deleteSupplierById',purchase.deleteSupplierById);
+router.get('/updateSupplierById',purchase.updateSupplierById);
+
+router.get('/getOfferList',purchase.getOfferList);
+router.get('/getOfferListById',purchase.getOfferListById);
+router.get('/getOfferListBySupplier',purchase.getOfferListBySupplier);
+router.get('/addOfferList',purchase.addOfferList);
+router.get('/updateOfferList',purchase.updateOfferList);
+router.get('/deleteOfferList',purchase.deleteOfferList);
+router.get('/setMinOrder',purchase.setMinOrder);
+
+router.get('/getMaterials',purchase.getMaterials);
+router.get('/getAllMaterials',purchase.getAllMaterials);
+router.get('/getMaterialsBySupplier',purchase.getMaterialsBySupplier);
+router.get('/setSafeQuantity',purchase.setSafeQuantity);
+router.get('/getStarve',purchase.getStarve);
+router.get('/getAllStarve',purchase.getAllStarve);
 
 
 module.exports = router;

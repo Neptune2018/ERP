@@ -9,11 +9,11 @@
            <div class='layout-ceiling-main'>
           <Button type='text' @click='help'>帮助中心</Button>
           <Button type='text' @click='logout'>登出</Button>
-        </div>    
+        </div>
       </div>
     </div>
     <!-- Main -->
-    <div class='main' :class="{'main-hide-text': spanLeft < 5}">
+    <div class='main' :class="{'main-hide-text': spanLeft < 4}">
       <Row type='flex'>
         <i-col :span="spanLeft" class='main-menu-left'>
           <Menu active-name='outline' theme='dark' width='auto' @on-select='select'>
@@ -50,6 +50,7 @@
               </template>
               <Menu-item name='starving'>缺料浏览</Menu-item>
               <Menu-item name='supplier'>供应商管理</Menu-item>
+              <Menu-item name='safeStock'>安全库存</Menu-item>
             </Submenu>
             <Submenu name='production'>
               <template slot='title'>
@@ -93,8 +94,8 @@ export default {
   },
   data () {
     return {
-      spanLeft: 5,
-      spanRight: 19,
+      spanLeft: 4,
+      spanRight: 20,
       bigPos:null,
       samllPos:null
     }
@@ -104,7 +105,7 @@ export default {
       * @description 图标大小，有大图标与小图标两种显示
       */
     iconSize () {
-      return this.spanLeft === 5 ? 14 : 24
+      return this.spanLeft === 4 ? 14 : 24
     }
   },
   methods: {
@@ -112,12 +113,12 @@ export default {
       * @description 点击图标切换大小图标并能显示或隐藏标题
       */
     toggleClick () {
-      if (this.spanLeft === 5) {
+      if (this.spanLeft === 4) {
         this.spanLeft = 2
         this.spanRight = 22
       } else {
-        this.spanLeft = 5
-        this.spanRight = 19
+        this.spanLeft = 4
+        this.spanRight = 20
       }
     },
     /**
@@ -169,6 +170,9 @@ export default {
       }else if(name === 'supplier'){
         this.bigPos = '采购辅助管理'
         this.samllPos = '供应商管理'
+      }else if(name === 'safeStock'){
+        this.bigPos = '采购辅助管理'
+        this.samllPos = '安全库存'
       }else if(name === 'generate'){
         this.bigPos = '生产管理'
         this.samllPos = '生成订单' 
@@ -256,7 +260,6 @@ export default {
 .main-menu-left {
   background: #464c5b;
   height:fill-available;
-  width: 15%;
 }
 
 .main-header {

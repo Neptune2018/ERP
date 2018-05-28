@@ -1,5 +1,5 @@
-import Vue from 'vue'
-import Router from 'vue-router'
+import Vue from 'vue';
+import Router from 'vue-router';
 import HelloWorld from '@/components/HelloWorld'
 import SecondPage from '@/components/SecondPage'
 import CostManageProduct from '@/components/CostManage_product'
@@ -9,6 +9,8 @@ import ParticularizeGroup from '@/components/ParticularizeGroup'
 import UserInfor from '@/components/UserInfor'
 import Signin from '@/components/Signin'
 import Generate from '@/components/Generate'
+import MatrialLack from '@/components/MatrialLack'
+import SafeStock from '@/components/SafeStock'
 
 Vue.use(Router)
 
@@ -58,6 +60,15 @@ export default new Router({
       path: '/generate',
       name: 'Generate',
       component: Generate
+    },
+    {
+      path: '/starving',
+      name: 'MatrialLack',
+      component: MatrialLack
+    },{
+      path: '/safeStock',
+      name: 'SafeStock',
+      component: SafeStock
     }
   ]
 })
