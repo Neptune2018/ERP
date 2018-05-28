@@ -24,13 +24,13 @@ exports.updateUser = function(id, data) {
 
 // 修改密码
 exports.changePass = function(id, indata, dosomething) {
-	Admin.findAll({where: {id: id, password: indata.oldPass}}).then(function(data){
+	Admin.findAll({where: {userId: id, password: indata.oldPass}}).then(function(data){
     	dosomething(data);
     });
 	Admin.update({
 		'password': indata.newPass
 	},
 	{
-		where: {id: id, password: indata.oldPass}
+		where: {userId: id, password: indata.oldPass}
 	});
 }

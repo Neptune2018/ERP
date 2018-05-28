@@ -1,5 +1,6 @@
 var Sequelize = require('sequelize');
 var db = require('./index').DB;
+var User  = require('./user');
 
 // 订单
 var OrderList = db.define('order_list', {

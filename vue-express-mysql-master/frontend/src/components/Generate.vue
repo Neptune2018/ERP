@@ -168,7 +168,7 @@ export default {
   },
   data () {
     return {
-        user: 'wenbin'
+        user: 'wenbin',
         addProductNoList: [
                     {
                         value: 'New York',
