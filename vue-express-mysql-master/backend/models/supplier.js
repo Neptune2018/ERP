@@ -1,7 +1,7 @@
 var Sequelize = require('sequelize');
 var db = require('./index').DB;
 
-// 创建 model
+// 供应商
 var Supplier = db.define('supplier', {
     name: {
         type: Sequelize.STRING // 指定值的类型

@@ -1,13 +1,13 @@
 var Sequelize = require('sequelize');
 var db = require('./index').DB;
 
-// 创建 model
+// 角色表
 var Role = db.define('role', {
     name: {
-        type: Sequelize.STRING // 指定值的类型
+        type: Sequelize.STRING // 角色名称
     },
     describe: {
-    	type: Sequelize.STRING
+    	type: Sequelize.STRING // 角色描述
     }
     // 没有指定 field，表中键名称则与对象键名相同，为 email
 }, {

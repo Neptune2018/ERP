@@ -3,10 +3,10 @@ var db = require('./index').DB;
 var Product = require('./product');
 var OrderList = require('./order_list');
 
-// 创建 model
+// 货品表与订单表间的订购关系
 var Buy = db.define('buy', {
     quantity: {
-        type: Sequelize.INTEGER // 指定值的类型
+        type: Sequelize.INTEGER // 数量
     }
     // 没有指定 field，表中键名称则与对象键名相同，为 email
 }, {

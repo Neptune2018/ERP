@@ -1,6 +1,5 @@
 var express = require('express');
 var test = require('./api/testapi');
-<<<<<<< HEAD
 var costmoduleonload = require('./api/costmoduleonloadapi');
 var costmoduleonloadmtr = require('./api/costmoduleonloadmtrapi');
 var cmproductquery = require('./api/cmproductqueryapi')
@@ -14,7 +13,6 @@ router.get('/costmoduleonloadmtr', costmoduleonloadmtr.onloadapi)
 router.get('/cmproductquery', cmproductquery.searchapi)
 router.get('/cmmaterialquery', cmmaterialquery.searchapi)
 
-=======
 
 var getgroup=require('./api/getgroupapi');
 
@@ -31,6 +29,5 @@ router.post('/signin', user.signin);
 router.get('/getgrouponloadapi', getgroup.onloadapi)
 router.get('/getsinglegrouponloadapi', getgroup.singleonloadapi)
 router.post('/searchuserapi', getgroup.searchuserapi)
->>>>>>> 2d8ab54777be5febe758576119ad54d748645278
 
 module.exports = router;
