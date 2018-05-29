@@ -2,6 +2,9 @@ import Vue from 'vue';
 import Router from 'vue-router';
 import HelloWorld from '@/components/HelloWorld'
 import SecondPage from '@/components/SecondPage'
+import Goods from '@/components/Goods'
+import Material from '@/components/Material'
+
 import CostManageProduct from '@/components/CostManage_product'
 import CostManageMatrial from '@/components/CostManage_matrial'
 import Group from '@/components/Group'
@@ -25,6 +28,16 @@ export default new Router({
       path: '/second',
       name: 'SecondPage',
       component: SecondPage
+    },
+    {
+      path: '/goods',
+      name: 'Goods',
+      component: Goods
+    },
+    {
+      path: '/material',
+      name: 'Material',
+      component: Material
     },
     {
       path: '/costmanage_product',

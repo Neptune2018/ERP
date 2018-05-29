@@ -1,3 +1,4 @@
+//领退料单
 var Sequelize = require('sequelize');
 var db = require('./index').DB;
 var User = require('./user');
@@ -5,13 +6,13 @@ var OrderList = require('./order_list');
 var Station = require('./station');
 var Repertory = require('./repertory');
 
-// 领退料单
+// 创建 model
 var GetList = db.define('get_list', {
     time: {
-        type: Sequelize.DATE    // 领退料时间 
+        type: Sequelize.DATE 
     },
     style: {
-    	type: Sequelize.BOOLEAN	// 区分是领是退，true为领
+    	type: Sequelize.BOOLEAN	//true为领
     },
     // 没有指定 field，表中键名称则与对象键名相同，为 email
 }, {
