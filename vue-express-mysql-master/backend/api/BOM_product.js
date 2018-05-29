@@ -10,7 +10,7 @@ exports.addBOM_product = function(req, res) {
 	console.log(req.session.sess)
     req.session.sess = 'yes';
     var params = url.parse(req.url, true).query;
-    BOM_product.addBOM_product(params.id,params.name,params.price,params.remark,params.materCateId,function(data){
+    BOM_product.addBOM_product(params.id,params.name,params.price,params.remark,params.productCateId,function(data){
         BOM_product.listallBOM_product(function(data) {
             res.send(data)
         });
@@ -71,12 +71,13 @@ exports.deleteBOM_productById = function(req, res){
 }
 
 //修改，需要参数(id,name,price,remark,productCateId),其中按id确定是哪个。返回修改后的结果
-exports.updateBOM_productById = function(req,res){
+
+exports.updateBOM_productByid = function(req,res){
     console.log(req.session.sess);
     req.session.sess = 'yes';
     var params = url.parse(req.url, true).query;
     BOM_product.updateBOM_productById(params.id,params.name,params.price,params.remark,params.productCateId,function(){
-        BOM_product.findBOM_productByID(params.id,function(data) {
+        BOM_product.listallBOM_product(function(data) {
             res.send(data)
         });
     });

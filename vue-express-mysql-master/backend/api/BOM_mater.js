@@ -70,12 +70,12 @@ exports.deleteBOM_materById = function(req, res){
 
 
 //修改，需要参数(id,name,property,materCateId),其中按id确定是哪个。返回修改后的结果
-exports.updateBOM_materById = function(req,res){
+exports.updateBOM_materByid = function(req,res){
     console.log(req.session.sess);
     req.session.sess = 'yes';
     var params = url.parse(req.url, true).query;
-    BOM_mater.updateBOM_materById(params.id,params.name,params.property,params.materCateId,function(){
-        BOM_mater.findBOM_materByID(params.id,function(data) {
+    BOM_mater.updateBOM_materByid(params.id,params.name,params.property,params.materCateId,function(){
+        BOM_mater.listallBOM_mater(function(data) {
             res.send(data)
         });
     });

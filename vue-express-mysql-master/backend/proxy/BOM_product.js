@@ -3,14 +3,14 @@ var Product = require('../models').Product;
 
 
 //添加函数,函数:
-exports.addBOM_product = function (id,name,price,remark,materCateId,callback) {
-  Supplier.create({
+exports.addBOM_product = function (id,name,price,remark,productCateId,callback) {
+  Product.create({
     id: id,
     name: name,
     status: 0,
     price: price,
     remark: remark,
-    materCateId: materCateId
+    productCateId: productCateId
   }).then(function(data){
     callback(data)
   })
@@ -20,7 +20,7 @@ exports.addBOM_product = function (id,name,price,remark,materCateId,callback) {
 // 查找没有父类的物料分类,也就是最高层分类
 exports.listallBOM_product = function(callback) {
     BOM_product.findAll({
-    'attributes': ['id', 'name','price','remark'],
+    'attributes': ['id', 'name','price','remark','productCateId'],
     'where': {
         'status': 0
     }
@@ -33,7 +33,7 @@ exports.listallBOM_product = function(callback) {
 
 exports.listallBOM_productbyIdname = function (Id,name,callback) {
   BOM_product.findAll({
-    'attributes': ['id', 'name','price','remark'],
+    'attributes': ['id', 'name','price','remark','productCateId'],
     'where': {
         'Id': Id,
         'name': name,
@@ -72,12 +72,11 @@ exports.listallBOM_productbyname = function (name,callback) {
 
 
 exports.updateBOM_productById = function (id,name,price,remark,productCateId,callback) {
-  Supplier.update({
-    id: id,
+  BOM_product.update({
     name: name,
     price: price,
     remark: remark,
-    productCateId: productCateId,
+    productCateId: productCateId
   }, {
     where: {
       id: id
@@ -88,5 +87,13 @@ exports.updateBOM_productById = function (id,name,price,remark,productCateId,cal
   });
 };
 
-
+exports.deleteBOM_productById = function (id,callback) {
+  BOM_product.destroy({
+    where: {
+      id: id
+    }
+  }).then(function(result){
+    callback(result)
+  });
+};
 

@@ -20,7 +20,7 @@
     <Modal
         v-model="product_add"
         title="新增货品"
-        @on-ok="ok"
+        @on-ok="add_productok"
         @on-cancel="cancel">
         <div class="q">
             <label class="model1">货品编号</label><i-input v-model="add_number" placeholder="请输入货号" style="width: 60%"></i-input>
@@ -29,15 +29,20 @@
             <label class="model1">货品名称</label><i-input v-model="add_name" placeholder="请输入货品名称" style="width: 60%"></i-input>
           </div>
           <div class="q">
-            <label class="model1">货品类别</label></label><i-input v-model="add_property" placeholder="类别" style="width: 60%"></i-input>
+            <label class="model1">货品价格</label><i-input v-model="add_price" placeholder="请输入货品价格" style="width: 60%"></i-input>
           </div>
-
+          <div class="q">
+            <label class="model1">货品备注</label><i-input v-model="add_remark" placeholder="请输入货品备注" style="width: 60%"></i-input>
+          </div>
+          <div class="q">
+            <label class="model1">货品分类</label><i-input v-model="add_productcateid" placeholder="请输入货品分类" style="width: 60%"></i-input>
+          </div>
     </Modal>
       <i-button class="oper" type="primary" @click="product_modify = true">修改货品信息</i-button>
       <Modal
          v-model="product_modify"
         title="修改货品信息"
-        @on-ok="ok"
+        @on-ok="modify_productok"
         @on-cancel="cancel">
         <div class="q">
             <label class="model2">货品编号</label><i-input v-model="modify_number" placeholder="请输入货号" style="width: 60%"></i-input>
@@ -46,7 +51,13 @@
             <label class="model2">货品名称</label><i-input v-model="modify_name" placeholder="请输入货品名称" style="width: 60%"></i-input>
           </div>
           <div class="q">
-            <label class="model2">货品类别</label><i-input v-model="modify_property" placeholder="类别" style="width: 60%"></i-input>
+            <label class="model2">货品价格</label><i-input v-model="modify_price" placeholder="请输入货品价格" style="width: 60%"></i-input>
+          </div>
+           <div class="q">
+            <label class="model2">货品备注</label><i-input v-model="modify_remark" placeholder="请输入货品备注" style="width: 60%"></i-input>
+          </div>
+           <div class="q">
+            <label class="model2">货品分类</label><i-input v-model="modify_productcateid" placeholder="请输入货品分类" style="width: 60%"></i-input>
           </div>
     </Modal>
         <i-button class="oper" type="primary">打印</i-button>
@@ -61,7 +72,7 @@
     </div>
         <div style = "margin-top: 10px">
           <i-table highlight-row  nmmmmmmmmm class='show' border  :width='200' :columns="columns1" :data="data1"  @on-current-change="handleRowChange"></i-table>
-          <i-table class='show' ref="selection" border :width='700' :columns="columns2" :data="data2"></i-table>
+          <i-table @on-selection-change='matrial_selectionClick' class='show' ref="selection" border :width='700' :columns="columns2" :data="data2"></i-table>
         </div>
   </div>
 </template>
@@ -91,7 +102,7 @@
               id: res.body[i].id,
               name: res.body[i].name,
               add_time: '2018-5-27',
-              productCateId:'X'
+              productCateId: res.body[i].productCateId
             })
             }
             this.$Message.success('获取数据成功')
@@ -110,7 +121,8 @@
             console.log(res.body)          
             for(var i=0;i<res.body.length;i++){
             this.data1.push({
-              sort: res.body[i].name
+              sort: res.body[i].name,
+              sortid: res.body[i].id
             })
             }
             this.$Message.success('获取数据成功')
@@ -127,6 +139,17 @@
       
       //一定要有return！！
       return{
+        select:'',
+        modify_number:'',
+        modify_name:'',
+        modify_price:'',
+        modify_remark:'',
+        modify_productcateid:'',
+        add_number:'',
+        add_name:'',
+        add_price:'',
+        add_remark:'',
+        add_productcateid:'',
         product_number: '',
         product_name: '',
         material_name: '',
@@ -139,6 +162,8 @@
             width:60,
             align:'center'
           },
+          {title:'分类编号',
+            key:'sortid'},
           {
             title:'分类情况',
             key:'sort'
@@ -201,16 +226,102 @@
               id: res.body[i].id,
               name: res.body[i].name,
               add_time: '2018-5-27',
-              productCateId:'X'
+              productCateId: res.body[i].productCateId
             })
             }
         }, function () {
             alert("ajax failure")
         })
     },
-      product_delete(){
-
+    matrial_selectionClick(arr)
+    {
+      this.select=arr
       },
+      add_productok(){
+        this.data2=[]      
+        this.$http({
+            url: '/addProduct',
+            method: 'GET',
+            params:{
+              id: this.add_number,
+              name: this.add_name,
+              price: this.add_price,
+              remark: this.add_remark,
+              productCateId: this.add_productcateid
+            }
+        }).then(function (res) {
+            console.log(res.body)           
+            for(var i=0;i<res.body.length;i++){
+            this.data2.push({
+              num: i+1,
+              id: res.body[i].id,
+              name: res.body[i].name,
+              add_time: '2018-5-27',
+              productCateId: res.body[i].productCateId
+            })
+            }
+        }, function () {
+            alert("ajax failure")
+        })
+      },
+      product_delete(){
+        this.data2=[]
+        var k=0  
+        var deletecount=this.select.length
+        for(var j=0;j<deletecount;j++){  
+        this.$http({
+            url: '/deleteProduct',
+            method: 'GET',
+            params:{
+              id: this.select[j].id,
+            }
+        }).then(function (res) {
+            console.log(res.body)   
+            console.log(k++)
+            if(k==deletecount-1){       
+            for(var i=0;i<res.body.length;i++){ 
+            this.data2.push({
+              num: i+1,
+              id: res.body[i].id,
+              name: res.body[i].name,
+              add_time: '2018-5-27',
+              productCateId: res.body[i].productCateId
+            })
+            }}
+        }, function () {
+            alert("ajax failure")
+        })
+        }
+        },
+      modify_productok(){
+        
+        this.data2=[]      
+        this.$http({
+            url: '/modifyProduct',
+            method: 'GET',
+            params:{
+              id: this.modify_number,
+              name: this.modify_name,
+              price: this.modify_price,
+              remark: this.modify_remark,
+              productCateId: this.modify_productcateid
+            }
+        }).then(function (res) {
+            console.log(res.body)           
+            for(var i=0;i<res.body.length;i++){
+            this.data2.push({
+              num: i+1,
+              id: res.body[i].id,
+              name: res.body[i].name,
+              add_time: '2018-5-27',
+              productCateId: res.body[i].productCateId
+            })
+            }
+        }, function () {
+            alert("ajax failure")
+        })
+        
+        },
       product_search() {  
         this.data2=[]        
         this.$http({
@@ -228,7 +339,7 @@
               id: res.body[i].id,
               name: res.body[i].name,
               add_time: '2018-5-27',
-              productCateId:'X'
+              productCateId: res.body[i].productCateId
             })
             }
         }, function () {
@@ -260,7 +371,7 @@
   }
 
   .show{
-    height: 200px;
+    height: 800px;
     float: left;
     margin: 1% 1%
   }

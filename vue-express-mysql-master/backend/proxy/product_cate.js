@@ -66,9 +66,9 @@ exports.deleteProduct_cateById = function (id,callback) {
 };
 
 
-exports.updateProduct_cateById = function (id,name,productCateId,callback) {
+
+exports.updateProduct_cateByid = function (id,name,productCateId,callback) {
   ProductCate.update({
-    id: id,
     name: name,
     productCateId: productCateId,
   }, {

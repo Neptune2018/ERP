@@ -67,7 +67,7 @@ exports.deleteMater_cateById = function (id,callback) {
 };
 
 
-exports.updateMater_cateById = function (id,name,materCateId,callback) {
+exports.updateMater_cateByid = function (id,name,materCateId,callback) {
   MaterCate.update({
     id: id,
     name: name,
@@ -81,4 +81,3 @@ exports.updateMater_cateById = function (id,name,materCateId,callback) {
     callback(result)
   });
 };
-

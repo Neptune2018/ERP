@@ -62,12 +62,12 @@ exports.deleteProduct_cateById = function(req, res){
 }
 
 //修改，需要参数(id,name,productCateId),其中按id确定是哪个。返回修改后的结果
-exports.updateProduct_cateById = function(req,res){
+exports.updateProduct_cateByid = function(req,res){
     console.log(req.session.sess);
     req.session.sess = 'yes';
     var params = url.parse(req.url, true).query;
-    Product_cate.updateProduct_cateById(params.id,params.name,params.productCateId,function(){
-        Product_cate.listallProductbyProductCateID(params.id,function(data) {
+    Product_cate.updateProduct_cateByid(params.id,params.name,params.productCateId,function(){
+        Product_cate.listallProduct_cate(function(data) {
             res.send(data)
         });
     });

@@ -64,12 +64,12 @@ exports.deleteMater_cateById = function(req, res){
 
 
 //修改，需要参数(id,name,materCateId),其中按id确定是哪个。返回修改后的结果
-exports.updateMater_cateById = function(req,res){
+exports.updateMater_cateByid = function(req,res){
     console.log(req.session.sess);
     req.session.sess = 'yes';
     var params = url.parse(req.url, true).query;
-    Mater_cate.updateMater_cateById(params.id,params.name,params.materCateId,function(){
-        Mater_cate.listallMater_catesbyMaterCateID(params.id,function(data) {
+    Mater_cate.updateMater_cateByid(params.id,params.name,params.materCateId,function(){
+        Mater_cate.listallMater_cate(function(data) {
             res.send(data)
         });
     });
