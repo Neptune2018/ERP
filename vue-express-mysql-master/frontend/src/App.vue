@@ -7,13 +7,13 @@
           <img src='./assets/logo.png' style='height:50px'>
         </div>
            <div class='layout-ceiling-main'>
-          <a href='../documentation/'>帮助中心</a>
+          <Button type='text' @click='help'>帮助中心</Button>
           <Button type='text' @click='logout'>登出</Button>
-        </div>    
+        </div>
       </div>
     </div>
     <!-- Main -->
-    <div class='main' :class="{'main-hide-text': spanLeft < 5}">
+    <div class='main' :class="{'main-hide-text': spanLeft < 4}">
       <Row type='flex'>
         <i-col :span="spanLeft" class='main-menu-left'>
           <Menu active-name='outline' theme='dark' width='auto' @on-select='select'>
@@ -31,7 +31,8 @@
                 <Icon type='social-usd' :size='iconSize'></Icon>
                 <span class='main-text'>成本管理</span>
               </template>
-              <Menu-item name='costmanage'>成本管理</Menu-item>
+              <Menu-item name='costmanage_product'>货品管理</Menu-item>
+              <Menu-item name='costmanage_matrial'>物料管理</Menu-item>
             </Submenu>
             <Submenu name='warehouse'>
               <template slot='title'>
@@ -49,6 +50,7 @@
               </template>
               <Menu-item name='starving'>缺料浏览</Menu-item>
               <Menu-item name='supplier'>供应商管理</Menu-item>
+              <Menu-item name='safeStock'>安全库存</Menu-item>
             </Submenu>
             <Submenu name='production'>
               <template slot='title'>
@@ -63,7 +65,7 @@
                 <Icon type='android-person' :size='iconSize'></Icon>
                 <span class='main-text'>个人信息管理</span>
               </template>
-              <Menu-item name='operator'>操作员</Menu-item>
+              <Menu-item name='userInfor'>个人信息</Menu-item>
               <Menu-item name='group'>分组</Menu-item>
             </Submenu>
           </Menu>
@@ -92,8 +94,8 @@ export default {
   },
   data () {
     return {
-      spanLeft: 5,
-      spanRight: 19,
+      spanLeft: 4,
+      spanRight: 20,
       bigPos:null,
       samllPos:null
     }
@@ -103,7 +105,7 @@ export default {
       * @description 图标大小，有大图标与小图标两种显示
       */
     iconSize () {
-      return this.spanLeft === 5 ? 14 : 24
+      return this.spanLeft === 4 ? 14 : 24
     }
   },
   methods: {
@@ -111,13 +113,19 @@ export default {
       * @description 点击图标切换大小图标并能显示或隐藏标题
       */
     toggleClick () {
-      if (this.spanLeft === 5) {
+      if (this.spanLeft === 4) {
         this.spanLeft = 2
         this.spanRight = 22
       } else {
-        this.spanLeft = 5
-        this.spanRight = 19
+        this.spanLeft = 4
+        this.spanRight = 20
       }
+    },
+    /**
+      * @description 帮助中心接口
+      */
+    help () {
+     
     },
     /**
       * @description 登出接口
@@ -141,9 +149,12 @@ export default {
       }else if(name === 'category'){
         this.bigPos = 'BOM信息维护'
         this.samllPos = '类别信息管理'
-      }else if(name === 'costmanage'){
+      }else if(name === 'costmanage_product'){
         this.bigPos = '成本管理'
-        this.samllPos = '成本管理'
+        this.samllPos = '货品管理'
+      }else if(name === 'costmanage_matrial'){
+        this.bigPos = '成本管理'
+        this.samllPos = '物料管理'
       }else if(name === 'ImportWare'){
         this.bigPos = '仓库管理'
         this.samllPos = '入库管理'
@@ -159,15 +170,18 @@ export default {
       }else if(name === 'supplier'){
         this.bigPos = '采购辅助管理'
         this.samllPos = '供应商管理'
+      }else if(name === 'safeStock'){
+        this.bigPos = '采购辅助管理'
+        this.samllPos = '安全库存'
       }else if(name === 'generate'){
         this.bigPos = '生产管理'
         this.samllPos = '生成订单' 
       }else if(name === 'state'){
         this.bigPos = '生产管理'
         this.samllPos = '订单状态查询'
-      }else if(name === 'operator'){
+      }else if(name === 'userInfor'){
         this.bigPos = '个人信息管理'
-        this.samllPos = '操作员'
+        this.samllPos = '个人信息'
       }else if(name === 'group'){
         this.bigPos = '个人信息管理'
         this.samllPos = '分组'
@@ -288,6 +302,7 @@ export default {
 
 .ivu-btn-text {
     color: #8f9fad;
+    font-size: 14px;
     background-color: transparent;
     border-color: transparent;
 }

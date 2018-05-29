@@ -36,6 +36,7 @@ var Stock = db.define('stock', {
 });
 
 Repertory.hasMany(Stock);
+Material.hasMany(Stock);
 
 // 前者将拥有后者的get/set/add方法,后者id是前者外键
 Stock.belongsTo(Product);
