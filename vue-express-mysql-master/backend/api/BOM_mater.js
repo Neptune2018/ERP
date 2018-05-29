@@ -11,7 +11,7 @@ exports.addBOM_mater = function(req, res) {
     req.session.sess = 'yes';
     var params = url.parse(req.url, true).query;
     BOM_mater.addBOM_mater(params.id,params.name,params.property,params.materCateId,function(data){
-        Mater_cate.listallBOM_mater(function(data) {
+        BOM_mater.listallBOM_mater(function(data) {
             res.send(data)
         });
     });
@@ -30,26 +30,27 @@ exports.queryBOM_mater = function(req, res){
     console.log(req.session.sess)
     req.session.sess = 'yes';
     var params = url.parse(req.url, true).query;
-    if (params.Id == null){
-        if (params.name == null){
-            res.send(null)
+    if (params.Id){
+        if (params.name){
+            BOM_mater.listallBOM_materbyIdname(params.Id,params.name,function(data) {
+                res.send(data)
+            });
+            
         }
         else{
-            BOM_mater.listallBOM_materbyname(params.name,function(data) {
+            BOM_mater.listallBOM_materbyID(params.Id,function(data) {
                 res.send(data)
             });
         }
     }
     else{
-        if (params.name == null){
-            BOM_mater.listallBOM_materbyId(params.Id,function(data) {
+        if (params.name){
+            BOM_mater.listallBOM_materbyname(params.name,function(data) {
                 res.send(data)
             });
         }
         else{
-            BOM_mater.listallBOM_materbyIdname(params.Id,params.name,function(data) {
-                res.send(data)
-            });
+            res.send(null)
         }
     }
 
@@ -74,7 +75,7 @@ exports.updateBOM_materByid = function(req,res){
     console.log(req.session.sess);
     req.session.sess = 'yes';
     var params = url.parse(req.url, true).query;
-    BOM_mater.updateBOM_materByid(params.id,params.name,params.property,params.materCateId,function(){
+    BOM_mater.updateBOM_materById(params.id,params.name,params.property,params.materCateId,function(){
         BOM_mater.listallBOM_mater(function(data) {
             res.send(data)
         });

@@ -4,7 +4,7 @@ var Material = require('../models').Material;
 
 //添加函数
 exports.addBOM_mater = function (id,name,property,materCateId,callback) {
-  Supplier.create({
+  Material.create({
     id: id,
     name: name,
     status: 0,
@@ -18,8 +18,8 @@ exports.addBOM_mater = function (id,name,property,materCateId,callback) {
 
 // 查找没有父类的物料分类,也就是最高层分类
 exports.listallBOM_mater = function(callback) {
-    BOM_mater.findAll({
-    'attributes': ['id', 'name','property'],
+  Material.findAll({
+    'attributes': ['id', 'name','property','materCateId'],
     'where': {
         'status': 0
     }
@@ -33,8 +33,8 @@ exports.listallBOM_mater = function(callback) {
 
 // 列出指定父分类下的所有子分类
 exports.listallBOM_materbyID = function (Id,callback) {
-  BOM_mater.findAll({
-    'attributes': ['id', 'name','property','productCateId'],
+  Material.findAll({
+    'attributes': ['id', 'name','property','materCateId'],
     'where': {
         'id': Id,
         'status': 0
@@ -47,8 +47,8 @@ exports.listallBOM_materbyID = function (Id,callback) {
 
 // 列出指定父分类下的所有子分类
 exports.listallBOM_materbyname = function (name,callback) {
-  BOM_mater.findAll({
-    'attributes': ['id', 'name','property','productCateId'],
+  Material.findAll({
+    'attributes': ['id', 'name','property','materCateId'],
     'where': {
         'name': name,
         'status': 0
@@ -60,7 +60,7 @@ exports.listallBOM_materbyname = function (name,callback) {
 };
 
 exports.deleteBOM_materById = function (id,callback) {
-  BOM_mater.destroy({
+  Material.destroy({
     where: {
       id: id
     }
@@ -70,7 +70,7 @@ exports.deleteBOM_materById = function (id,callback) {
 };
 
 exports.updateBOM_materById = function (id,name,property,materCateId,callback) {
-  BOM_mater.update({
+  Material.update({
     name: name,
     property: property,
     materCateId: materCateId,
@@ -84,8 +84,8 @@ exports.updateBOM_materById = function (id,name,property,materCateId,callback) {
   });
 };
 exports.listallBOM_materbyIdname = function (Id,name,callback) {
-  BOM_mater.findAll({
-    'attributes': ['id', 'name','property','productCateId'],
+  Material.findAll({
+    'attributes': ['id', 'name','property','materCateId'],
     'where': {
         'Id': Id,
         'name': name,
