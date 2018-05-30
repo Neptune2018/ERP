@@ -15,7 +15,7 @@ const CMdata = async function(){
 
     
     var product1 = await models.Product.create({
-		'name': 'h1',
+		'name': '货品1',
         'status': '',
         'price': 1000,
         'add_time': 2012-06-12,
@@ -23,7 +23,7 @@ const CMdata = async function(){
     });
 
     var product2 = await models.Product.create({
-		'name': 'h2',
+		'name': '货品2',
         'status': '',
         'price': 1000,
         'add_time': 2012-06-12,
@@ -31,7 +31,7 @@ const CMdata = async function(){
     });
 
     var product3 = await models.Product.create({
-		'name': 'h3',
+		'name': '货品3',
         'status': '',
         'price': 1000,
         'add_time': 2012-06-12,
@@ -42,7 +42,7 @@ const CMdata = async function(){
 		'style': true,
         'status': '',
         'remain': 1,
-        'unit': 'thousand',
+        'unit': '千个',
         'batch': 'B1',
     });
     
@@ -50,7 +50,7 @@ const CMdata = async function(){
 		'style': true,
         'status': '',
         'remain': 2,
-        'unit': 'thousand',
+        'unit': '千个',
         'batch': 'B2',
     });
 
@@ -58,26 +58,26 @@ const CMdata = async function(){
 		'style': true,
         'status': '',
         'remain': 3,
-        'unit': 'thousand',
+        'unit': '个',
         'batch': 'B2',
     });
 
     var material1 = await models.Material.create({
-		'name': 'mat1',
+		'name': '物料1',
         'status': '',
         'property': '',
         'safe_quantity': 4,
     });
 
     var material2 = await models.Material.create({
-		'name': 'mat2',
+		'name': '物料2',
         'status': '',
         'property': '',
         'safe_quantity': 6,
     });
 
     var material3 = await models.Material.create({
-		'name': 'mat3',
+		'name': '物料3',
         'status': '',
         'property': '',
         'safe_quantity': 6,
@@ -87,7 +87,7 @@ const CMdata = async function(){
 		'style': false,
         'status': '',
         'remain': 1,
-        'unit': 'thousand',
+        'unit': '个',
         'batch': 'B1',
     });
     
@@ -95,7 +95,7 @@ const CMdata = async function(){
 		'style': false,
         'status': '',
         'remain': 2,
-        'unit': 'thousand',
+        'unit': '千个',
         'batch': 'B2',
     });
 
@@ -103,24 +103,24 @@ const CMdata = async function(){
 		'style': false,
         'status': '',
         'remain': 3,
-        'unit': 'thousand',
+        'unit': '千个',
         'batch': 'B2',
     });
 
     var repertory1 = await models.Repertory.create({
-        'name': 'cang1'
+        'name': '仓库1'
     });
 
     var repertory2 = await models.Repertory.create({
-        'name': 'cang2'
+        'name': '仓库2'
     });
 
     var supplier1 = await models.Supplier.create({
-        'name': 'gong1'
+        'name': '供应商1'
     });
 
     var supplier2 = await models.Supplier.create({
-        'name': 'gong2'
+        'name': '供应商2'
     });
 
     var offerlist1 = await models.OfferList.create({
