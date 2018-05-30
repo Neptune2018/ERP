@@ -47,6 +47,7 @@ router.get('/cmmaterialquery', cmmaterialquery.searchapi)
 
 
 var getgroup=require('./api/getgroupapi');
+var ModifyUserINFO=require('./api/modifyUserInfoapi');
 
 var userInfor = require('./api/userInfor');
 var user = require('./api/user');
@@ -61,6 +62,7 @@ router.post('/signin', user.signin);
 router.get('/getgrouponloadapi', getgroup.onloadapi)
 router.get('/getsinglegrouponloadapi', getgroup.singleonloadapi)
 router.post('/searchuserapi', getgroup.searchuserapi)
+router.post('/modifyUINFObyadmin', ModifyUserINFO.updateUserapi)
 var product = require('./api/productapi');
 
 
