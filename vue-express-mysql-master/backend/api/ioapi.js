@@ -42,5 +42,6 @@ exports.wareAvail = function(req,res){
     },req.body.id,req.body.name)
 }
 exports.insertIO = function(req,res){
-    IO.insertIO(res.body)
+    IO.insertIO(req.body)
+    res.send("success")
 }

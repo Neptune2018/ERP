@@ -93,9 +93,12 @@ export default {
         batch:this.formItem.batch
       }
       this.$http.post('/insertWare',info).then(function (res) {
-        console.log(res)
+        console.log(res.body)
+        if(res.body == "success"){
+          alert("入库成功")
+        }
       }, function () {
-          alert("ajax failure")
+          alert("入库失败")
       }) 
     },
     searchWarehouse(){
