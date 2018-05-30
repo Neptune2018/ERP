@@ -4,22 +4,22 @@ var Product = require('./product');
 var Material = require('./material');
 var IOList = require('./io_list');
 
-// 出入库信息
+// 创建 model
 var IOItem = db.define('io_item', {
     style: {
-        type: Sequelize.BOOLEAN // 区分是货品还是物料，true为货品
+        type: Sequelize.BOOLEAN // true为货品
     },
     place: {
-        type: Sequelize.INTEGER // 库位
+        type: Sequelize.INTEGER
     },
     quantity: {
-        type: Sequelize.INTEGER // 数量
+        type: Sequelize.INTEGER
     },
     unit: {
-        type: Sequelize.STRING  // 单位
+        type: Sequelize.STRING
     },
     batch: {
-        type: Sequelize.STRING  // 批次
+        type: Sequelize.STRING
     }
     // 没有指定 field，表中键名称则与对象键名相同，为 email
 }, {
