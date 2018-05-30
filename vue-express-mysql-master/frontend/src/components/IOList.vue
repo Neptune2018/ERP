@@ -1,15 +1,9 @@
 <template>
   <div>
-    <Tabs type="card">
-        <Tab-pane label="仓库基本信息">
-            <Table strip height="100" :columns="columns1" :data="data0"></Table>
-        </Tab-pane>
-    </Tabs>
-    <Tabs type="card" style="margin-top:10px;">
-        <Tab-pane label="出入库信息">           
-            <Table strip height="262" :columns="columns0" :data="data2"></Table>
-        </Tab-pane>
-    </Tabs >    
+    <p>仓库基本信息</p>
+    <Table strip height="200" :columns="columns1" :data="data0"></Table>
+    <p>出入库信息</p>
+    <Table strip height="450" :columns="columns0" :data="data2"></Table>
     <Button @click="change2Stocks()">仓库库存</Button>
   </div>
 </template>
@@ -122,7 +116,7 @@
           show(index){
             this.$Modal.info({
               title: '详细信息',
-              content: `序号: ${this.data0[index].num}<br>操作类型:${this.data0[index].style}<br>物料名称:${this.data0[index].name}<br>数量:${this.data0[index].quantity}<br>更新日期:${this.data0[index].updatedAt}<br>出入库编号:${this.data0[index].ioListId}<br>货物编号:${this.data0[index].goodsId}<br>负责人from:${this.data0[index].fromName}<br>负责人to:${this.data0[index].toName}`
+              content: `序号: ${this.data2[index].num}<br>操作类型:${this.data2[index].style}<br>物料名称:${this.data2[index].name}<br>数量:${this.data2[index].quantity}<br>更新日期:${this.data2[index].updatedAt}<br>出入库编号:${this.data2[index].ioListId}<br>货物编号:${this.data2[index].goodsId}<br>负责人from:${this.data2[index].fromName}<br>负责人to:${this.data2[index].toName}`
             })
           },
             change2Stocks() {
