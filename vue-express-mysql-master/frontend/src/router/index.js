@@ -15,6 +15,10 @@ import Generate from '@/components/Generate'
 import MatrialLack from '@/components/MatrialLack'
 import SafeStock from '@/components/SafeStock'
 
+import ThresholdWarning from '@/components/ThresholdWarning'
+import ImportWare from '@/components/ImportWare'
+import ExportWare from '@/components/ExportWare'
+import IOList from '@/components/IOList'
 Vue.use(Router)
 
 export default new Router({
@@ -82,6 +86,25 @@ export default new Router({
       path: '/safeStock',
       name: 'SafeStock',
       component: SafeStock
+    },
+    {
+      path:'/ImportWare',
+      name: 'ImportWare',
+      component: ImportWare
+    },
+    {
+      path:'/ExportWare',
+      name: 'ExportWare',
+      component: ExportWare},
+    {
+          path: '/inventory',
+          name: 'IOList',
+          component: IOList
+    },
+    {
+          path: '/inventory/stocks',
+          name: 'ThresholdWarning',
+          component: ThresholdWarning
     }
   ]
 })

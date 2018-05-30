@@ -32,6 +32,12 @@ var cmproductquery = require('./api/cmproductqueryapi')
 var cmmaterialquery = require('./api/cmmaterialqueryapi')
 
 var purchase = require('./api/purchaseapi');
+var threshold_warning = require('./api/threshold_warning_api');
+var io_events = require('./api/ioapi')
+var router = express.Router();
+var stocks = require('./api/stocksapi');
+var stations = require('./api/stationsapi');
+var iorecord = require('./api/iorecordapi');
 
 router.get('/test', test.testapi)
 router.get('/costmoduleonload', costmoduleonload.onloadapi)
@@ -41,6 +47,7 @@ router.get('/cmmaterialquery', cmmaterialquery.searchapi)
 
 
 var getgroup=require('./api/getgroupapi');
+var ModifyUserINFO=require('./api/modifyUserInfoapi');
 
 var userInfor = require('./api/userInfor');
 var user = require('./api/user');
@@ -55,6 +62,7 @@ router.post('/signin', user.signin);
 router.get('/getgrouponloadapi', getgroup.onloadapi)
 router.get('/getsinglegrouponloadapi', getgroup.singleonloadapi)
 router.post('/searchuserapi', getgroup.searchuserapi)
+router.post('/modifyUINFObyadmin', ModifyUserINFO.updateUserapi)
 var product = require('./api/productapi');
 
 
@@ -92,4 +100,14 @@ router.get('/getStarve',purchase.getStarve);
 router.get('/getAllStarve',purchase.getAllStarve);
 
 
+module.exports = router;
+router.get('/threshold_warning', threshold_warning.ThresholdWarning)
+router.get('/getRepertory',io_events.getRepertory)
+router.post('/stockAvail',io_events.stockAvail)
+router.post('/placeAvail',io_events.placeAvail)
+router.post('/wareAvail',io_events.wareAvail)
+router.post('/insertWare',io_events.insertIO)
+router.get('/stocks', stocks.Stocks)
+router.get('/stations', stations.Stations)
+router.get('/iorecord', iorecord.IORecord)
 module.exports = router;
