@@ -2,7 +2,7 @@ var Sequelize = require('sequelize');
 var db = require('./index').DB;
 var Role = require('./role');
 
-// 用户
+// 创建 model
 var User = db.define('user', {
     name: {
         type: Sequelize.STRING // 指定值的类型

@@ -4,28 +4,28 @@ var Product = require('./product');
 var Material = require('./material');
 var Repertory = require('./repertory');
 
-// 库存信息表
+// 创建 model
 var Stock = db.define('stock', {
     style: {
-        type: Sequelize.BOOLEAN // 区分货品或物料，true为货品
+        type: Sequelize.BOOLEAN // true为货品
     },
     status: {
-    	type: Sequelize.STRING //保留字段，先没用
+    	type: Sequelize.STRING
     },
     place: {
-    	type: Sequelize.INTEGER    // 存放库位
+    	type: Sequelize.INTEGER
     },
     remain: {
-        type: Sequelize.INTEGER // 剩余数量
+        type: Sequelize.INTEGER
     },
     occupancy: {
-        type: Sequelize.INTEGER // 虚拟占用量
+        type: Sequelize.INTEGER
     },
     unit: {
-    	type: Sequelize.STRING // 单位
+    	type: Sequelize.STRING
     },
     batch: {
-        type: Sequelize.STRING  // 批次
+        type: Sequelize.STRING
     }
     // 没有指定 field，表中键名称则与对象键名相同，为 email
 }, {

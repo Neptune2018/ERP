@@ -2,10 +2,10 @@
 var db = require('./index').DB;
 var User = require('./user');
 
-// 身份认证表
+// 创建 model
 var Admin = db.define('admin', {
     password: {
-        type: Sequelize.STRING // 密码
+        type: Sequelize.STRING // 指定值的类型
     }
     // 没有指定 field，表中键名称则与对象键名相同，为 email
 }, {

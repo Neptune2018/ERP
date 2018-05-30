@@ -1,16 +1,16 @@
 var Sequelize = require('sequelize');
 var db = require('./index').DB;
 
-// 仓库表
+// 创建 model
 var Repertory = db.define('repertory', {
     name: {
-        type: Sequelize.STRING // 仓库名称
+        type: Sequelize.STRING // 指定值的类型
     },
     max: {
-    	type: Sequelize.INTEGER    // 最大库存量
+    	type: Sequelize.INTEGER
     },
     remark: {
-    	type: Sequelize.STRING // 备注
+    	type: Sequelize.STRING
     }
     // 没有指定 field，表中键名称则与对象键名相同，为 email
 }, {
