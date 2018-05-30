@@ -18,19 +18,23 @@ const productControl = async function(){
         'name': 'proCate2'
     })
 
-    var product1 = productCate1.createProduct({
+    var product1 = await models.Product.create({
         'name': 'product1',
         'status': 'status1',
         'price': 1000,
         'remark': 'remark1'
     })
 
-    var product2 = productCate2.createProduct({
+    await productCate1.addProduct(product1)
+
+    var product2 = await models.Product.create({
         'name': 'product2',
         'status': 'status2',
         'price': 1000,
         'remark': 'remark2'
     })
+
+    await productCate2.addProduct(product2)
 
     var materCate1 = await models.MaterCate.create({
         'name': 'materCate1'
@@ -40,58 +44,78 @@ const productControl = async function(){
         'name': 'materCate2'
     })
 
-    var material1 = materCate1.createMaterial({
+    var material1 = await models.Material.create({
         'name': 'material1'
     })
 
-    var material2 = materCate1.createMaterial({
+    await materCate1.addMaterial(material1)
+
+    var material2 = await models.Material.create({
         'name': 'material2'
     })
 
-    var material3 = materCate1.createMaterial({
+    await materCate1.addMaterial(material2)
+
+    var material3 = await models.Material.create({
         'name': 'material3'
     })
 
-    var material4 = materCate2.createMaterial({
+    await materCate1.addMaterial(material3)
+
+    var material4 = await models.Material.create({
         'name': 'material4'
     })
 
-    var material5 = materCate2.createMaterial({
+    await materCate2.addMaterial(material4)    
+
+    var material5 = await models.Material.create({
         'name': 'material5'
     })
 
-    var material6 = materCate2.createMaterial({
+    await materCate2.addMaterial(material5)
+
+    var material6 = await models.Material.create({
         'name': 'material6'
     })
 
-    var stock1 = material1.createStock({
+    await materCate2.addMaterial(material6)
+
+    var stock1 = await models.Stock.create({
         'remain': 50,
         'occupancy': 0
     })
 
-    var stock2 = material2.createStock({
+    await material1.addStock(stock1);
+
+    var stock2 = await models.Stock.create({
         'remain': 50,
         'occupancy': 0
     })
 
-    var stock3 = material3.createStock({
+    await material2.addStock(stock2);
+
+    var stock3 = await models.Stock.create({
         'remain': 50,
         'occupancy': 0
     })
 
-    var stock4 = material4.createStock({
+    await material3.addStock(stock3);
+
+    var stock4 = await models.Stock.create({
         'remain': 50,
         'occupancy': 0
     })
 
-    var stock5 = material5.createStock({
+    await material4.addStock(stock4);
+
+    var stock5 = await models.Stock.create({
         'remain': 50,
         'occupancy': 0
     })
 
-    await product1.addMaterial(material1, {
-        'quantity': 10
-    });
+    await material5.addStock(stock5);
+
+    await product1.addMaterial(material1, {'quantity': 10});
 
     await product1.addMaterial(material2, {
         'quantity': 10
