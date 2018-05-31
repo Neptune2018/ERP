@@ -15,8 +15,9 @@
         <i-button class="search" type="ghost" icon="ios-search" shape="circle" @click="material_search()">搜索</i-button>
       </div>
       <div style="width: 35%;float: left;margin: 0.5% 1% ">
-        <row>
-          <i-button class="oper" type="primary" @click="material_add=true">新增物料</i-button>
+        <table cellspacing="10">
+          <tr>
+          <td><i-button class="oper" type="primary" @click="material_add=true">新增物料</i-button></td>
           <Modal
          v-model="material_add"
         title="新增物料"
@@ -35,7 +36,7 @@
             <label class="model1">物料分类</label><i-input v-model="add_mmaterialcateid" placeholder="请输入物料类别" style="width: 60%"></i-input>
           </div>
     </Modal>
-          <i-button class="oper" type="primary" @click="material_modify=true">修改物料信息</i-button>
+            <td><i-button class="oper" type="primary" @click="material_modify=true">修改物料信息</i-button></td>
            <Modal
          v-model="material_modify"
         title="修改物料信息"
@@ -54,18 +55,25 @@
             <label class="model2">物料分类</label><i-input v-model="modify_mmaterialcateid" placeholder="请输入物料类别" style="width: 60%"></i-input>
           </div>
     </Modal>
-          <i-button class="oper" type="primary">打印</i-button>
-        </row>
-        <row style="margin-top: 1%">
-          <i-button class="oper" type="primary" @click="handleSelectAll(true)">全选</i-button>
-          <i-button class="oper" type="primary" @click="handleSelectAll(false)">全清</i-button>
-          <i-button class="oper" type="primary" @click="material_delete()">删除</i-button>
-          <i-button class="oper" type="primary">导出</i-button>
-        </row>
+            <td></td>
+            <td><i-button class="oper" type="primary">打印</i-button></td>
+          </tr>
+          <tr>
+            <td><i-button class="oper" type="primary" @click="handleSelectAll(true)">全选</i-button></td>
+            <td><i-button class="oper" type="primary" @click="handleSelectAll(false)">全清</i-button></td>
+            <td><i-button class="oper" type="primary" @click="material_delete()">删除</i-button></td>
+            <td><i-button class="oper" type="primary">导出</i-button></td>
+          </tr>
+        </table>
       </div>
     </div>
-    <div style = "margin-top: 20px">
-      <i-table  @on-selection-change='matrial_selectionClick' class="show" ref="selection" border  :columns="material_columns1" :data="material_data1"></i-table>
+    <div>
+      <div class="show" style="width: 25%">
+        <i-table highlight-row  border  :height="400" :columns="material_columns0" :data="material_data0"  @on-current-change="handleRowChange"></i-table>
+      </div>
+      <div class="show" style="width: 70%">
+        <i-table  @on-selection-change='matrial_selectionClick' class="show" ref="selection" border :height="400" :columns="material_columns1" :data="material_data1"></i-table>
+      </div>
     </div>
   </div>
 </template>
@@ -84,7 +92,7 @@
           method: 'GET'
         }).then(
           function(res) {
-            console.log(res.body)          
+            console.log(res.body)
             for(var i=0;i<res.body.length;i++){
             this.material_data1.push({
               num: i+1,
@@ -101,7 +109,7 @@
             this.$Message.error('获取数据失败')
           }
         )
-      }, 
+      },
     name: 'Material',
     data () {
       //一定要有return！！
@@ -121,6 +129,22 @@
         material_name: '',
         product_name: '',
         table_data: '',
+        material_columns0:[
+          {
+            type:'index',
+            width:60,
+            align:'center'
+          },
+          {title:'分类编号',
+            key:'sortid'},
+          {
+            title:'分类情况',
+            key:'sort'
+          }
+        ],
+        material_data0:[
+
+        ],
         material_columns1: [
           {
             type: 'selection',
@@ -144,7 +168,6 @@
           },
           {
             title: '物料数量',
-//            数量在数据库中值不知道
             key: 'amount',
             sortable:'true'
           },
@@ -154,13 +177,12 @@
           },
           {
             title:'物料分类',
-//            同上
             key:'matercateid'
           }
         ],
         material_data1:[],
       }
-    }, 
+    },
     methods: {
       matrial_selectionClick(arr)
     {
@@ -168,9 +190,9 @@
       },
       material_delete(){
         this.material_data1=[]
-        var k=0  
+        var k=0
         var deletecount=this.select.length
-        for(var j=0;j<deletecount;j++){  
+        for(var j=0;j<deletecount;j++){
         this.$http({
             url: '/deleteMaterial',
             method: 'GET',
@@ -178,10 +200,10 @@
               id: this.select[j].id,
             }
         }).then(function (res) {
-            console.log(res.body)   
+            console.log(res.body)
             console.log(k++)
-            if(k==deletecount-1){       
-            for(var i=0;i<res.body.length;i++){ 
+            if(k==deletecount-1){
+            for(var i=0;i<res.body.length;i++){
             this.material_data1.push({
               num: i+1,
               name: res.body[i].name,
@@ -197,7 +219,7 @@
         }
         },
       material_modifyok(){
-        this.material_data1=[]      
+        this.material_data1=[]
         this.$http({
             url: '/modifyMaterial',
             method: 'GET',
@@ -208,7 +230,7 @@
               materCateId: this.modify_mmaterialcateid,
             }
         }).then(function (res) {
-            console.log(res.body)           
+            console.log(res.body)
             for(var i=0;i<res.body.length;i++){
             this.material_data1.push({
               num: i+1,
@@ -224,7 +246,7 @@
         })
       },
       material_addok(){
-      this.material_data1=[]      
+      this.material_data1=[]
         this.$http({
             url: '/addMaterial',
             method: 'GET',
@@ -235,7 +257,7 @@
               materCateId: this.add_mmaterialcateid,
             }
         }).then(function (res) {
-            console.log(res.body)           
+            console.log(res.body)
             for(var i=0;i<res.body.length;i++){
             this.material_data1.push({
               num: i+1,
@@ -250,8 +272,8 @@
             alert("ajax failure")
         })
       },
-      material_search() {  
-        this.material_data1=[]       
+      material_search() {
+        this.material_data1=[]
         this.$http({
             url: '/materialSearch',
             method: 'GET',
@@ -260,7 +282,7 @@
               name: this.material_name
             }
         }).then(function (res) {
-            console.log(res.body)           
+            console.log(res.body)
             for(var i=0;i<res.body.length;i++){
             this.material_data1.push({
               num: i+1,
@@ -302,8 +324,9 @@
     background-color: #e6e6e6;
   }
   .show{
-    margin: 1% 1%;
-    height:800px;
+    display: inline-block;
+    margin-left:  1%;
+    height:300px;
   }
 
   .search {
