@@ -10,7 +10,7 @@ exports.addSupplier = function(req, res) {
     req.session.sess = 'yes';
     var params = url.parse(req.url, true).query;
     Purchase.addSupplier(params.name,params.phone,params.person,params.remark,function(data){
-        Purchase.findAllSupplier(function(data) {
+        Purchase.findAllSupplier(null,null,null,function(data) {
             res.send(data)
         });
     });
@@ -21,7 +21,7 @@ exports.getSupplier = function(req, res){
     console.log(req.session.sess)
     req.session.sess = 'yes';
     var params = url.parse(req.url, true).query;
-    suppliers = Purchase.findAllSupplier(function(data) {
+    suppliers = Purchase.findAllSupplier(params.id,params.name,params.person,function(data) {
 		res.send(data)
 	});
 }
@@ -49,7 +49,7 @@ exports.deleteSupplierByName = function(req, res){
     req.session.sess = 'yes';
     var params = url.parse(req.url, true).query;
     Purchase.deleteSupplierByName(params.name,function(data){
-        suppliers = Purchase.findAllSupplier(function(data) {
+        suppliers = Purchase.findAllSupplier(null,null,null,function(data) {
             res.send(data)
         });
     });
@@ -59,8 +59,8 @@ exports.deleteSupplierById = function(req, res){
     console.log(req.session.sess)
     req.session.sess = 'yes';
     var params = url.parse(req.url, true).query;
-    Purchase.deleteSupplierById(params.id,function(data){
-        suppliers = Purchase.findAllSupplier(function(data) {
+    Purchase.deleteSupplierById(params['id[]'],function(data){
+        suppliers = Purchase.findAllSupplier(null,null,null,function(data) {
             res.send(data)
         });
     });
@@ -71,7 +71,7 @@ exports.updateSupplierByName = function(req, res){
     req.session.sess = 'yes';
     var params = url.parse(req.url, true).query;
     Purchase.updateSupplierByName(params.from_name,params.name,params.phone,params.person,params.remark,function(data){
-        suppliers = Purchase.findAllSupplier(function(data) {
+        suppliers = Purchase.findAllSupplier(null,null,null,function(data) {
             res.send(data)
         });
     });
@@ -82,7 +82,7 @@ exports.updateSupplierById = function(req, res){
     req.session.sess = 'yes';
     var params = url.parse(req.url, true).query;
     Purchase.updateSupplierById(params.id,params.name,params.phone,params.person,params.remark,function(data){
-        suppliers = Purchase.findAllSupplier(function(data) {
+        suppliers = Purchase.findAllSupplier(null,null,null,function(data) {
             res.send(data)
         });
     });

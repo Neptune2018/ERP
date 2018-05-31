@@ -4,11 +4,25 @@ var Supplier = require('../models').Supplier;
 var OfferList = require('../models').OfferList;
 var User = require('../models').User;
 var Material = require('../models').Material;
+var Sequelize = require('sequelize');
 
 
-exports.findAllSupplier = function (callback) {
-  Supplier.findAll().then(function(data){
+exports.findAllSupplier = function (id,name,person,callback) {
+  var where = "1 = 1 ";
+    if(id){
+        where += "and supplier.id =" + id; 
+    }
+    if(name){
+        where += " and supplier.name like '%" + name+"%'"; 
+    }
+    if(person){
+        where += " and supplier.person like '%" + person+"%'"; 
+    }
+  Supplier.findAll({
+    where:Sequelize.literal(where)
+  }).then(function(data){
     callback(data);
+
   });
 };
 exports.findSupplierByName = function (SupplierName,callback) {

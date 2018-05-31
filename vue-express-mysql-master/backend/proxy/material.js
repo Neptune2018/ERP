@@ -22,22 +22,22 @@ exports.findAllMaterial = function (countPerPage,currentPage,callback) {
     });
 }
 
-exports.findAllMaterials = function (callback) {
-    Material.findAndCountAll({
-        include:[{
-            model: MaterCate,
-            required: false,
-            attributes: [['name','category']],
-        }], 
-        raw:true
-    }).then(function(result){
-        results = {
-            data: result.rows,
-            count: result.count
-        }
-        callback(results)
-    });
-}
+// exports.findAllMaterials = function (callback) {
+//     Material.findAndCountAll({
+//         include:[{
+//             model: MaterCate,
+//             required: false,
+//             attributes: [['name','category']],
+//         }], 
+//         raw:true
+//     }).then(function(result){
+//         results = {
+//             data: result.rows,
+//             count: result.count
+//         }
+//         callback(results)
+//     });
+// }
 
 exports.findAllMaterial = function (id,name,property,category,callback) {
     var where = "material.status = '正常'";

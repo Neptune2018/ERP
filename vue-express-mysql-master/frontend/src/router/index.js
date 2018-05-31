@@ -11,6 +11,7 @@ import Signin from '@/components/Signin'
 import Generate from '@/components/Generate'
 import MatrialLack from '@/components/MatrialLack'
 import SafeStock from '@/components/SafeStock'
+import Supplier from '@/components/SupplierMange'
 
 Vue.use(Router)
 
@@ -69,6 +70,10 @@ export default new Router({
       path: '/safeStock',
       name: 'SafeStock',
       component: SafeStock
+    },{
+      path: '/supplier',
+      name: 'supplier',
+      component: Supplier
     }
   ]
 })
