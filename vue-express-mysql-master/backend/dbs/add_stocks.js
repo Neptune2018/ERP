@@ -87,3 +87,5 @@ const addMaterials = async function(){
     'batch': '456789'
   });
 }
+
+addMaterials();

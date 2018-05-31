@@ -33,3 +33,5 @@ const addMaterials = async function(){
   });
 
 }
+
+addMaterials();

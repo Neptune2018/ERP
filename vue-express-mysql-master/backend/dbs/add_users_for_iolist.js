@@ -18,3 +18,5 @@ const addMaterials = async function(){
     'name': 'Christin'
   });
 }
+
+addMaterials();

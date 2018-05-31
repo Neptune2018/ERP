@@ -5,12 +5,12 @@ var models = require('../models')
 //仓库，库存记录，操作用户，角色权限信息
 const insert  = async function(){
     
-    await models.Role.destroy({where:{}});
+    /* await models.Role.destroy({where:{}});
     await models.User.destroy({where:{}});
     await models.Stock.destroy({where:{}});
     await models.Repertory.destroy({where:{}});
     await models.IOItem.destroy({where:{}});
-    await models.IOList.destroy({where:{}});
+    await models.IOList.destroy({where:{}}); */
 
 	var buyer = await models.Role.create({
 		'name': 'Buyer',
@@ -34,7 +34,7 @@ const insert  = async function(){
         'max':30
     });
     var stock = await models.Stock.create({
-        'id':1,
+        //'id':1,
         'style':1,
         'place': 241,
         'remain': 50,

@@ -2,13 +2,13 @@ var models = require('../models')
 
 
 const productControl = async function(){
-    await models.ProductCate.destroy({where:{}});
+    /* await models.ProductCate.destroy({where:{}});
     await models.Buy.destroy({where:{}});
     await models.Product.destroy({where:{}});
     await models.Material.destroy({where:{}});
     await models.MaterCate.destroy({where:{}});
     await models.Consist.destroy({where:{}});
-    await models.Stock.destroy({where:{}});
+    await models.Stock.destroy({where:{}}); */
 
     var productCate1 = await models.ProductCate.create({
         'name': 'proCate1'

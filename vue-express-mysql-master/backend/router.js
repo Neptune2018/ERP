@@ -33,8 +33,7 @@ var cmmaterialquery = require('./api/cmmaterialqueryapi')
 
 var purchase = require('./api/purchaseapi');
 var threshold_warning = require('./api/threshold_warning_api');
-var io_events = require('./api/ioapi')
-var router = express.Router();
+var io_events = require('./api/ioapi');
 var stocks = require('./api/stocksapi');
 var stations = require('./api/stationsapi');
 var iorecord = require('./api/iorecordapi');

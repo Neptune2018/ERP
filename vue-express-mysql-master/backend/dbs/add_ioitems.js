@@ -30,3 +30,5 @@ const addMaterials = async function(){
     'materialId':246
   });
 }
+
+addMaterials();

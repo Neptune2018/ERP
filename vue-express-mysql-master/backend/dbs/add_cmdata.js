@@ -4,13 +4,13 @@ var models = require('../models')
 //在当前文件夹中 采用命令 node add_cmdata.js就能把成本管理相关数据插入到数据表中
 
 const CMdata = async function(){
-    await models.Product.destroy({where:{}});
+    /* await models.Product.destroy({where:{}});
     await models.Material.destroy({where:{}});
     await models.Offer.destroy({where:{}});
     await models.OfferList.destroy({where:{}});
     await models.Supplier.destroy({where:{}});
     await models.Stock.destroy({where:{}});
-    await models.Repertory.destroy({where:{}});
+    await models.Repertory.destroy({where:{}}); */
 
 
     
@@ -124,6 +124,7 @@ const CMdata = async function(){
     });
 
     var offerlist1 = await models.OfferList.create({
+        'time': new Date('2018-5-30 12:00:00')
     });
 
     await offerlist1.addMaterial(material1, {'quantity': 4,'batch':'B1','price':1000});
