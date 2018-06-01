@@ -2,6 +2,7 @@ var Supplier = require('../models').Supplier;
 var User = require('../models').User;
 var Material = require('../models').Material;
 var Sequelize = require('sequelize');
+var db = require('../models/index').DB;
 
 exports.findAllSupplier = function (id,name,person,callback) {
     var where = "1 = 1 ";
@@ -115,7 +116,10 @@ exports.addMaterialsToSupplier = async function(id, material_id, quantity, callb
   supplier = await Supplier.findById(id)
   material = await Material.findById(material_id)
   supplier.addMaterial(material, { 'quantity': quantity}).then(function(result){
-    callback(result)
+    var sql = "update min_orders set quantity = "+quantity + " where materialId = "+ material_id + " and supplierId = " + id + ";"
+    db.query(sql).then(function(data){
+      callback(data)
+  })
   })
 }
 
@@ -128,11 +132,8 @@ exports.removeMaterialsFromSupplier = async function(id, material_id,callback){
 }
 
 exports.setMinOrder = async function (supplier_id, material_id, quantity,callback) {
-  var supplier = await Supplier.findById(supplier_id)
-  var material = await Material.findById(material_id)
-  supplier.setMaterials(material, {
-    quantity: quantity
-  }).then(function(result){
-    callback(result)
-  })
+  var sqlquery1="update suppliers,min_orders,materials set min_orders.quantity = "+ quantity +" WHERE min_orders.materialId = materials.id and min_orders.supplierId = suppliers.id and suppliers.id = "+ supplier_id +" and materials.id = "+ material_id + ";"
+    db.query(sqlquery1).then(function(data){
+        callback(data)
+    })
 }

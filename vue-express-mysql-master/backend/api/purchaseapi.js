@@ -88,11 +88,19 @@ exports.getAllMaterials = function(req, res){
 	});
 }
 
+exports.getAllMaterialsId = function(req, res){
+    console.log(req.session.sess);
+    req.session.sess = 'yes';
+    var params = url.parse(req.url, true).query;
+    Material.findAllMaterialsId(function(data) {
+        res.send(JSON.stringify(data));
+    });
+}
 exports.getMaterialsBySupplier = function(req, res){
     console.log(req.session.sess);
     req.session.sess = 'yes';
     var params = url.parse(req.url, true).query;
-    Material.findMaterialBySupplier(params.id, function(data) {
+    Material.findMaterialBySupplier(params.id,params.materialid,params.name,params.category, function(data) {
 		res.send(JSON.stringify(data));
 	});
 };

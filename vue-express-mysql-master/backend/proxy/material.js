@@ -6,6 +6,9 @@ var MinOrder = require('../models').MinOrder
 var Sequelize = require('sequelize');
 var db = require('../models/index').DB;
 
+
+
+
 exports.findAllMaterial = function (countPerPage,currentPage,callback) {
     if(!countPerPage)
         countPerPage = 10;
@@ -24,22 +27,13 @@ exports.findAllMaterial = function (countPerPage,currentPage,callback) {
     });
 }
 
-// exports.findAllMaterials = function (callback) {
-//     Material.findAndCountAll({
-//         include:[{
-//             model: MaterCate,
-//             required: false,
-//             attributes: [['name','category']],
-//         }], 
-//         raw:true
-//     }).then(function(result){
-//         results = {
-//             data: result.rows,
-//             count: result.count
-//         }
-//         callback(results)
-//     });
-// }
+exports.findAllMaterialsId = function (callback) {
+    Material.findAll({
+        attributes: ['id','name'], 
+    }).then(function(result){
+        callback(result)
+    });
+}
 
 exports.findAllMaterial = function (id,name,property,category,callback) {
     var where = "material.status = '正常'";
@@ -72,8 +66,19 @@ exports.findAllMaterial = function (id,name,property,category,callback) {
     });
 }
 
-exports.findMaterialBySupplier = async function (id,callback) {
-    var sqlquery1="select material.id as id,material.name as name,material.property,matercate.name as category,min_orders.quantity as minorder from materials as material inner join mater_cates as matercate on material.materCateId=matercate.id, suppliers inner join min_orders on suppliers.id = min_orders.supplierid and suppliers.id = " + id + " WHERE min_orders.materialId = material.id;"
+exports.findMaterialBySupplier = function (id,materialid,name,category,callback) {
+
+    var sqlquery1="select material.id as id,material.name as name,material.property,matercate.name as category,min_orders.quantity as minorder from materials as material inner join mater_cates as matercate on material.materCateId=matercate.id, suppliers inner join min_orders on suppliers.id = min_orders.supplierid and suppliers.id = " + id + " WHERE min_orders.materialId = material.id"
+    if(materialid){
+        sqlquery1 += " and material.id =" + materialid; 
+    }
+    if(name){
+        sqlquery1 += " and material.name like '%" + name+"%'"; 
+    }
+    if(category){
+        sqlquery1 += " and matercate.name like '%" + category+"%'"; 
+    }
+    sqlquery1 += ";"
     db.query(sqlquery1).then(function(data){
         callback(data)
     })

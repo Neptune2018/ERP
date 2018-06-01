@@ -92,6 +92,7 @@ router.get('/updateOfferList',purchase.updateOfferList);
 router.get('/deleteOfferList',purchase.deleteOfferList);
 
 router.get('/getMaterials',purchase.getMaterials);
+router.get('/getAllMaterialsId',purchase.getAllMaterialsId);
 router.get('/getAllMaterials',purchase.getAllMaterials);
 router.get('/getMaterialsBySupplier',purchase.getMaterialsBySupplier);
 router.get('/setSafeQuantity',purchase.setSafeQuantity);

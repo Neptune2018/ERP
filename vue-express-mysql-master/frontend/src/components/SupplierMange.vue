@@ -20,38 +20,34 @@
       </div>
       <div class='addromve'>
         <row>
-          <i-button class="oper" type="primary" @click="addsupplier=true">新增供应商</i-button>
-          <Modal v-model="addsupplier" title="新增供应商" @on-ok="supplier_addok" @on-cancel="cancel">
+          <i-button class="oper" type="primary" @click="addsupplier">新增供应商</i-button>
+          <Modal v-model="addsupplier1" title="新增供应商" @on-ok="supplier_addok" @on-cancel="cancel">
             <Form :model="formRight" label-position="right" :label-width="100">
               <FormItem label="供应商名称">
                 <input type="text" v-model="addSupplierName" style="width:200px">
               </FormItem>
               <FormItem label="电话">
-                <input type="tel" v-model="addSupplierPhone" style="width:200px">
+                <input type="text" v-model="addSupplierPhone" style="width:200px">
               </FormItem>
               <FormItem label="负责人">
-                <Select v-model="addPersonName" style="width:200px">
-                  <Option v-for="item in addSupplierPersonList" :value="item.value" :key="item.value">{{ item.label }}</Option>
-                </Select>
+                <input type="text" v-model="addPersonName" style="width:200px">
               </FormItem>
               <FormItem label="备注">
                 <input type="textarea" v-model="addRemark" style="width:200px">
               </FormItem>
             </Form>
           </Modal>
-          <i-button class="oper" type="primary" @click="supplier_modify()">修改供应商信息</i-button>
-          <Modal v-model="supplier_modify" title="修改供应商信息" @on-ok="supplier_modifyok" @on-cancel="cancel">
+          <i-button class="oper" type="primary" @click="supplier_modify">修改供应商信息</i-button>
+          <Modal v-model="supplier_modify1" title="修改供应商信息" @on-ok="supplier_modifyok" @on-cancel="cancel">
             <Form :model="formRight" label-position="right" :label-width="100">
               <FormItem label="供应商名称">
                 <input type="text" v-model="modifySupplierName" style="width:200px">
               </FormItem>
               <FormItem label="电话">
-                <input type="number" v-model="modifySupplierPhone" style="width:200px">
+                <input type="text" v-model="modifySupplierPhone" style="width:200px">
               </FormItem>
               <FormItem label="负责人">
-                <Select v-model="modifyPersonName" style="width:200px">
-                  <Option v-for="item in modifySupplierPersonList" :value="item.value" :key="item.value">{{ item.label }}</Option>
-                </Select>
+                <input type="text" v-model="modifyPersonName" style="width:200px">
               </FormItem>
               <FormItem label="备注">
                 <input type="textarea" v-model="modifyRemark" style="width:200px">
@@ -80,17 +76,17 @@
           <i-input v-model="matrerial_category" placeholder="请输入分类" style="width: 70%"></i-input>
         </row>
         <row class="search">
-          <i-button class="cost-module-btn" type="ghost" icon="ios-search" shape="circle" @click="search()">搜索</i-button>
+          <i-button class="cost-module-btn" type="ghost" icon="ios-search" shape="circle" @click="materialsearch()">搜索</i-button>
         </row>
       </div>
       <div class='addromve'>
         <row>
           <i-button class="oper" type="primary" @click="addmaterial">新增物料</i-button>
-          <Modal v-model="addmaterial" title="新增物料" @on-ok="material_addok" @on-cancel="cancel">
+          <Modal v-model="addmaterial1" title="新增物料" @on-ok="material_addok" @on-cancel="cancel">
             <Form :model="formRight" label-position="right" :label-width="100">
               <FormItem label="物料id">
                 <Select v-model="addmaterialId" style="width:200px">
-                  <Option v-for="item in addmaterialIdList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+                  <Option v-for="item in addmaterialIdList" :value="item.id" :key="item.id">{{ item.name }}</Option>
                 </Select>
               </FormItem>
               <FormItem label="起定点">
@@ -98,8 +94,8 @@
               </FormItem>
             </Form>
           </Modal>
-          <i-button class="oper" type="primary" @click="material_modify = true">修改起定点</i-button>
-          <Modal v-model="material_modify" title="修改起定点" @on-ok="material_modifyok" @on-cancel="cancel">
+          <i-button class="oper" type="primary" @click="material_modify">修改起定点</i-button>
+          <Modal v-model="material_modify1" title="修改起定点" @on-ok="material_modifyok" @on-cancel="cancel">
             <Form :model="formRight" label-position="right" :label-width="100">
               <FormItem label="起定点">
                 <input v-model="modifymaterialMinorder" style="width:200px">
@@ -121,19 +117,23 @@ export default {
   name: 'SupplierMange',
   data() {
     return {
+      addsupplier1:false,
+      supplier_modify1:false,
+      addmaterial1:false,
+      material_modify1:false,
+
       id: '',
       name: '',
       person: '',
       table_data: [],
       dataList: [],
 
-      addSupplierPersonList: [],
-      addSupplierName: [],
+      addSupplierName: '',
       addSupplierPhone: '',
       addPersonName: '',
       addRemark: '',
 
-      modifySupplierPersonList: [],
+      modifySupplierList: [],
       modifySupplierName: '',
       modifySupplierPhone: '',
       modifyPersonName: '',
@@ -211,7 +211,7 @@ export default {
         //   key: 'price'
         // }
       ],
-      currentrow = ''
+      currentrow : ''
     }
   },
   created() {
@@ -252,17 +252,45 @@ export default {
         }
       )
     },
+    materialsearch:function(){
+      this.$http({
+        url: '/getMaterialsBySupplier',
+        method: 'GET',
+        params: {
+          id: this.currentrow,
+          materialid: this.matrerial_id,
+          name: this.matrerial_name,
+          category: this.matrerial_category
+        }
+      }).then(
+        function(res) {
+          this.$Message.success('搜索成功')
+          this.material_data = res.body[0]
+          // 返回总记录
+          //this.$router.push({path: '/hello', query:{data: res.body}})
+        },
+        function() {
+          this.$Message.error('搜索失败')
+        }
+      )
+    },
     selectionClick(arr) {
       this.dataList = []
       for (var i = 0; i < arr.length; i++) {
         this.dataList.push(arr[i]['id'])
       }
+      this.modifySupplierName = arr[0]['name']
+      this.modifySupplierPhone = arr[0]['phone']
+      this.modifyPersonName = arr[0]['person']
+      this.modifyRemark = arr[0]['remark']
     },
-    materialSelectionClick(){
+    materialSelectionClick(arr){
       this.material_list = []
       for (var i = 0; i < arr.length; i++) {
         this.material_list.push(arr[i]['id'])
       }
+      if(arr.length == 1)
+        this.modifymaterialMinorder = arr[0].minorder 
     },
     deletesupplier: function() {
       if (this.dataList.length != 0) {
@@ -275,6 +303,11 @@ export default {
         }).then(
           function(res) {
             this.$Message.success('删除成功')
+            for (var i = 0; i < this.dataList.length; i++){
+              if(this.dataList[i] == this.currentrow){
+                this.material_data = []
+              }
+            }
             this.table_data = res.body
             // 返回总记录
             //this.$router.push({path: '/hello', query:{data: res.body}})
@@ -294,12 +327,12 @@ export default {
           method: 'GET',
           params: {
             id: this.currentrow,
-            material_id: this.material_list
+            materialid: this.material_list
           }
         }).then(
           function(res) {
             this.$Message.success('删除成功')
-            this.material_data = res.body
+            this.material_data = res.body[0]
             // 返回总记录
             //this.$router.push({path: '/hello', query:{data: res.body}})
           },
@@ -329,19 +362,7 @@ export default {
       )
     },
     addsupplier:function(){
-      this.$http({
-        url: '/getAllUserId',
-        method: 'GET',
-      }).then(
-        function(res) {
-          this.addSupplierPersonList.value = res.body
-          // 返回总记录
-          //this.$router.push({path: '/hello', query:{data: res.body}})
-        },
-        function() {}
-      )
-      alert(1)
-      this.addsupplier = true;
+      this.addsupplier1 = true;
     },
     supplier_addok: function() {
       if (this.addSupplierName == ''){
@@ -383,30 +404,16 @@ export default {
        }else if (this.dataList.length > 1){
          this.$Message.warning('需要修改的供应商个数必须是一个')
        }else{
-        this.$http({
-          url: '/getSupplierById',
-          method: 'GET',
-          params:{
-            id: this.dataList[0]
-          }
-        }).then(
-          function(res) {
-            this.addmaterialIdList.value = res.body
-            // 返回总记录
-            //this.$router.push({path: '/hello', query:{data: res.body}})
-          },
-          function() {}
-        )
-        alert(1)
-        this.addmaterial = true;
+        
+        this.supplier_modify1 = true;
        }
     },
     supplier_modifyok: function() {
-       if(this.addSupplierName == ''){
+       if(this.modifySupplierName == ''){
          this.$Message.warning('请填写需要修改的供应商名称')
-       }else if(this.addSupplierPhone == ''){
+       }else if(this.modifySupplierPhone == ''){
          this.$Message.warning('请填写需要修改的供应商电话')
-       }else if(this.addPersonName == ''){
+       }else if(this.modifyPersonName == ''){
          this.$Message.warning('请选择需要修改的供应商负责人')
        }else{
          this.$http({
@@ -414,10 +421,10 @@ export default {
         method: 'GET',
         params:{
           id: this.dataList[0],
-          name: this.addSupplierName,
-          phone: this.addSupplierPhone,
-          person: this.addPersonName,
-          remark: this.addRemark
+          name: this.modifySupplierName,
+          phone: this.modifySupplierPhone,
+          person: this.modifyPersonName,
+          remark: this.modifyRemark
         }
       }).then(
         function(res) {
@@ -438,17 +445,17 @@ export default {
         return
       }
       this.$http({
-        url: '/getAllUserId',
+        url: '/getAllMaterialsId',
         method: 'GET',
       }).then(
         function(res) {
-          this.addmaterialIdList.value = res.body
+          this.addmaterialIdList = res.body
           // 返回总记录
           //this.$router.push({path: '/hello', query:{data: res.body}})
         },
         function() {}
       )
-      this.addmaterial = true;
+      this.addmaterial1 = true;
     },
     material_addok:function(){
       if(this.addmaterialId == ''){
@@ -461,13 +468,13 @@ export default {
           method: 'GET',
           params:{
             id: this.currentrow,
-            material_id: this,
+            materialid: this.addmaterialId,
             quantity: this.addmaterialMinorder,
           }
         }).then(
           function(res) {
             this.$Message.success('添加成功')
-            this.material_data = res.body
+            this.material_data = res.body[0]
             // 返回总记录
             //this.$router.push({path: '/hello', query:{data: res.body}})
           },
@@ -484,8 +491,10 @@ export default {
       }
       if (this.material_list.length == 0) {
          this.$Message.warning('请选择需要修改的物料')
-         this.material_modify = true;
+       }else{
+         this.material_modify1 = true;
        }
+
     },
     material_modifyok:function(){
       if(this.modifymaterialMinorder == ''){
@@ -496,13 +505,13 @@ export default {
           method: 'GET',
           params:{
             id: this.currentrow,
-            material_id: this.material_list,
+            materialid: this.material_list,
             quantity: this.modifymaterialMinorder,
           }
         }).then(
           function(res) {
             this.$Message.success('修改成功')
-            this.material_data = res.body
+            this.material_data = res.body[0]
             // 返回总记录
             //this.$router.push({path: '/hello', query:{data: res.body}})
           },

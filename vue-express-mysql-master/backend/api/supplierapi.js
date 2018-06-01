@@ -102,10 +102,11 @@ exports.addMaterialsToSupplier = function(req, res){
     console.log(req.session.sess)
     req.session.sess = 'yes';
     var params = url.parse(req.url, true).query;
-    Supplier.addMaterialsToSupplier(params.id, params.material_id, params.quantity,function(data){
-        Material.findMaterialBySupplier(params.id,function(result){
-            res.send(result)
-        })
+    console.log(params.materialid, params.id,params.quantity)
+    Supplier.addMaterialsToSupplier(params.id, params.materialid, params.quantity,function(data){
+        Material.findMaterialBySupplier(params.id,null,null,null, function(data) {
+            res.send(JSON.stringify(data));
+        });
     })
 }
 
@@ -113,10 +114,11 @@ exports.removeMaterialsFromSupplier = function(req, res){
     console.log(req.session.sess)
     req.session.sess = 'yes';
     var params = url.parse(req.url, true).query;
-    Supplier.removeMaterialsFromSupplier(params.id, params.material_id, function(data){
-        Material.findMaterialBySupplier(params.id,function(result){
-            res.send(result)
-        })
+    Supplier.removeMaterialsFromSupplier(params.id, params['materialid[]'], function(data){
+        Material.findMaterialBySupplier(params.id,null,null,null, function(data) {
+            console.log(data)
+            res.send(JSON.stringify(data));
+        });
     })
 }
 
@@ -124,9 +126,9 @@ exports.setMinOrder = function(req, res){
     console.log(req.session.sess);
     req.session.sess = 'yes';
     var params = url.parse(req.url, true).query;
-    Supplier.setMinOrder(params.id,params.material_id,params.quantity,function(data){
-        Material.findMaterialBySupplier(params.id,function(data) {
-            res.send(data);
+    Supplier.setMinOrder(params.id,params['materialid[]'],params.quantity,function(data){
+        Material.findMaterialBySupplier(params.id,null,null,null, function(data) {
+            res.send(JSON.stringify(data));
         });
     });
     
