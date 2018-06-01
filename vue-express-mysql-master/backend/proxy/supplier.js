@@ -1,5 +1,6 @@
 var Supplier = require('../models').Supplier;
 var User = require('../models').User;
+var Material = require('../models').Material;
 var Sequelize = require('sequelize');
 
 exports.findAllSupplier = function (id,name,person,callback) {
@@ -105,6 +106,32 @@ exports.findAllSupplier = function (id,name,person,callback) {
 exports.getAllUserId = function(callback){
   User.findAll({
     attributes : ['id']
+  }).then(function(result){
+    callback(result)
+  })
+}
+
+exports.addMaterialsToSupplier = async function(id, material_id, quantity, callback){
+  supplier = await Supplier.findById(id)
+  material = await Material.findById(material_id)
+  supplier.addMaterial(material, { 'quantity': quantity}).then(function(result){
+    callback(result)
+  })
+}
+
+exports.removeMaterialsFromSupplier = async function(id, material_id,callback){
+  supplier = await Supplier.findById(id)
+  material = await Material.findById(material_id)
+  supplier.removeMaterial(material).then(function(result){
+    callback(result)
+  })
+}
+
+exports.setMinOrder = async function (supplier_id, material_id, quantity,callback) {
+  var supplier = await Supplier.findById(supplier_id)
+  var material = await Material.findById(material_id)
+  supplier.setMaterials(material, {
+    quantity: quantity
   }).then(function(result){
     callback(result)
   })

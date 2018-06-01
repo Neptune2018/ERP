@@ -80,6 +80,9 @@ router.get('/getSupplier',supplier.getSupplier);
 router.get('/getSupplierById',supplier.getSupplierById);
 router.get('/deleteSupplierById',supplier.deleteSupplierById);
 router.get('/updateSupplierById',supplier.updateSupplierById);
+router.get('/setMinOrder',supplier.setMinOrder);
+router.get('/addMaterialsToSupplier',supplier.addMaterialsToSupplier);
+router.get('/removeMaterialsFromSupplier',supplier.removeMaterialsFromSupplier);
 
 router.get('/getOfferList',purchase.getOfferList);
 router.get('/getOfferListById',purchase.getOfferListById);
@@ -87,7 +90,6 @@ router.get('/getOfferListBySupplier',purchase.getOfferListBySupplier);
 router.get('/addOfferList',purchase.addOfferList);
 router.get('/updateOfferList',purchase.updateOfferList);
 router.get('/deleteOfferList',purchase.deleteOfferList);
-router.get('/setMinOrder',purchase.setMinOrder);
 
 router.get('/getMaterials',purchase.getMaterials);
 router.get('/getAllMaterials',purchase.getAllMaterials);

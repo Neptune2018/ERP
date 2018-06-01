@@ -139,20 +139,3 @@ exports.deleteOfferList = async function (offerList_id,callback) {
 }
 
 
-exports.setMinOrder = async function (supplier_name, material_id, quantity,callback) {
-  var supplier = await Supplier.findAll({
-    where: {
-      name: supplier_name
-    }
-  })
-  var material = await Material.findAll({
-    where: {
-      id: material_id
-    }
-  })
-  supplier.setMaterials(material, {
-    quantity: quantity
-  }).then(function(result){
-    callback(result)
-  })
-}

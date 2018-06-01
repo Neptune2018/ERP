@@ -70,18 +70,6 @@ exports.updateOfferList = function(req,res){
     });
 }
 
-exports.setMinOrder = function(req, res){
-    console.log(req.session.sess);
-    req.session.sess = 'yes';
-    var params = url.parse(req.url, true).query;
-    Purchase.setMinOrder(params.name,params.id,params.quantity,function(data){
-        Material.findMaterialBySupplier(+params.limit,+params.page,params.name,function(data) {
-            res.send(data);
-        });
-    });
-    
-}
-
 exports.getMaterials = function(req, res){
     console.log(req.session.sess);
     req.session.sess = 'yes';

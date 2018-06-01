@@ -97,3 +97,37 @@ exports.getAllUserId = function(req, res){
             res.send(data)
     });
 }
+
+exports.addMaterialsToSupplier = function(req, res){
+    console.log(req.session.sess)
+    req.session.sess = 'yes';
+    var params = url.parse(req.url, true).query;
+    Supplier.addMaterialsToSupplier(params.id, params.material_id, params.quantity,function(data){
+        Material.findMaterialBySupplier(params.id,function(result){
+            res.send(result)
+        })
+    })
+}
+
+exports.removeMaterialsFromSupplier = function(req, res){
+    console.log(req.session.sess)
+    req.session.sess = 'yes';
+    var params = url.parse(req.url, true).query;
+    Supplier.removeMaterialsFromSupplier(params.id, params.material_id, function(data){
+        Material.findMaterialBySupplier(params.id,function(result){
+            res.send(result)
+        })
+    })
+}
+
+exports.setMinOrder = function(req, res){
+    console.log(req.session.sess);
+    req.session.sess = 'yes';
+    var params = url.parse(req.url, true).query;
+    Supplier.setMinOrder(params.id,params.material_id,params.quantity,function(data){
+        Material.findMaterialBySupplier(params.id,function(data) {
+            res.send(data);
+        });
+    });
+    
+}
