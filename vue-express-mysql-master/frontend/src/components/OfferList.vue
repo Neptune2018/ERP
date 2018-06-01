@@ -7,8 +7,8 @@
           <i-input v-model="id" placeholder="请输入编号" style="width: 70%"></i-input>
         </row>
         <row class="query">
-          <label class="top-label">名称</label>
-          <i-input v-model="name" placeholder="请输入名称" style="width: 70%"></i-input>
+          <label class="top-label">供应商名称</label>
+          <i-input v-model="name" placeholder="请输入名称" style="width: 60%"></i-input>
         </row>
         <row class="query">
           <label class="top-label">负责人</label>
@@ -20,46 +20,45 @@
       </div>
       <div class='addromve'>
         <row>
-          <i-button class="oper" type="primary" @click="addsupplier">新增供应商</i-button>
-          <Modal v-model="addsupplier1" title="新增供应商" @on-ok="supplier_addok" @on-cancel="cancel">
+          <i-button class="oper" type="primary" @click="addofferlist = true">新建采购订单</i-button>
+          <Modal v-model="addofferlist" title="新建采购订单" @on-ok="offerlist_addok" @on-cancel="cancel">
             <Form :model="formRight" label-position="right" :label-width="100">
               <FormItem label="供应商名称">
-                <input type="text" v-model="addSupplierName" style="width:200px">
-              </FormItem>
-              <FormItem label="电话">
-                <input type="text" v-model="addSupplierPhone" style="width:200px">
+                <Select v-model="addOfferList.name" style="width:200px">
+                  <Option v-for="item in addOfferList.nameList" :value="item.id" :key="item.id">{{ item.name }}</Option>
+                </Select>
               </FormItem>
               <FormItem label="负责人">
-                <input type="text" v-model="addPersonName" style="width:200px">
+                <input type="text" v-model="addOfferList.person" style="width:200px">
               </FormItem>
-              <FormItem label="备注">
-                <input type="textarea" v-model="addRemark" style="width:200px">
+              <FormItem label="时间">
+                <DatePicker type="date" placeholder="Select date" v-model="addOfferList.time" style="width: 200px"></DatePicker>
               </FormItem>
             </Form>
           </Modal>
-          <i-button class="oper" type="primary" @click="supplier_modify">修改供应商信息</i-button>
-          <Modal v-model="supplier_modify1" title="修改供应商信息" @on-ok="supplier_modifyok" @on-cancel="cancel">
+          <i-button class="oper" type="primary" @click="offerlist_modify=true">修改订单信息</i-button>
+          <Modal v-model="offerlist_modify" title="修改订单信息" @on-ok="offerlist_modifyok" @on-cancel="cancel">
             <Form :model="formRight" label-position="right" :label-width="100">
-              <FormItem label="供应商名称">
-                <input type="text" v-model="modifySupplierName" style="width:200px">
+              <FormItem label="订单编号">
+                <input type="text" disabled v-model="modifyOfferList.id" style="width:200px">
               </FormItem>
-              <FormItem label="电话">
-                <input type="text" v-model="modifySupplierPhone" style="width:200px">
+              <FormItem label="供应商名称">
+                <input type="text" disabled v-model="modifyOfferList.name" style="width:200px">
               </FormItem>
               <FormItem label="负责人">
-                <input type="text" v-model="modifyPersonName" style="width:200px">
+                <input type="text" v-model="modifyOfferList.person" style="width:200px">
               </FormItem>
-              <FormItem label="备注">
-                <input type="textarea" v-model="modifyRemark" style="width:200px">
+              <FormItem label="时间">
+                <DatePicker type="date" placeholder="Select date" v-model="modifyOfferList.time" style="width: 200px"></DatePicker>
               </FormItem>
             </Form>
           </Modal>
-          <i-button class="oper" type="primary" @click="deletesupplier()">删除供应商</i-button>
+          <i-button class="oper" type="primary" @click="deleteofferlist()">删除订单</i-button>
         </row>
       </div>
     </row>
     <div style="margin-top: 20px;">
-      <i-table highlight-row @on-current-change='currentchange' @on-selection-change='selectionClick' border :height="150" :columns="columns" :data="table_data"></i-table>
+      <i-table highlight-row @on-current-change='currentchange' @on-selection-change='selectionClick' border :height="150" :columns="offerListColumns" :data="offerList_data"></i-table>
     </div>
     <row class="content">
       <div class="search-form">
@@ -72,8 +71,8 @@
           <i-input v-model="matrerial_name" placeholder="请输入名称" style="width: 70%"></i-input>
         </row>
         <row class="query">
-          <label class="top-label">分类</label>
-          <i-input v-model="matrerial_category" placeholder="请输入分类" style="width: 70%"></i-input>
+          <label class="top-label">批次</label>
+          <i-input v-model="matrerial_banch" placeholder="请输入批次" style="width: 70%"></i-input>
         </row>
         <row class="search">
           <i-button class="cost-module-btn" type="ghost" icon="ios-search" shape="circle" @click="materialsearch()">搜索</i-button>
@@ -81,24 +80,45 @@
       </div>
       <div class='addromve'>
         <row>
-          <i-button class="oper" type="primary" @click="addmaterial">新增物料</i-button>
+          <i-button class="oper" type="primary" @click="addmaterial1=true">新增物料</i-button>
           <Modal v-model="addmaterial1" title="新增物料" @on-ok="material_addok" @on-cancel="cancel">
             <Form :model="formRight" label-position="right" :label-width="100">
               <FormItem label="物料">
                 <Select v-model="addmaterialId" style="width:200px">
-                  <Option v-for="item in addmaterialIdList" :value="item.id" :key="item.id">{{ item.name }}</Option>
+                  <Option v-for="item in addmaterialList.material" :value="item.id" :key="item.id">{{ item.name }}</Option>
                 </Select>
               </FormItem>
-              <FormItem label="起定点">
-                <input v-model="addmaterialMinorder" style="width:200px">
+              <FormItem label="数量">
+                <input v-model="addmaterialList.quantity" style="width:200px">
+              </FormItem>
+              <FormItem label="批次">
+                <input v-model="addmaterialList.banch" style="width:200px">
+              </FormItem>
+              <FormItem label="单价">
+                <input v-model="addmaterialList.price" style="width:200px">
+              </FormItem>
+              <FormItem label="总价">
+                <input disabled v-model="addmaterialList.total_price" style="width:200px">
               </FormItem>
             </Form>
           </Modal>
-          <i-button class="oper" type="primary" @click="material_modify">修改起定点</i-button>
+          <i-button class="oper" type="primary" @click="material_modify1=true">修改物料信息</i-button>
           <Modal v-model="material_modify1" title="修改起定点" @on-ok="material_modifyok" @on-cancel="cancel">
             <Form :model="formRight" label-position="right" :label-width="100">
-              <FormItem label="起定点">
-                <input v-model="modifymaterialMinorder" style="width:200px">
+              <FormItem label="物料">
+                <input disabled v-model="modifymaterialList.material" style="width:200px">
+              </FormItem>
+              <FormItem label="数量">
+                <input v-model="modifymaterialList.quantity" style="width:200px">
+              </FormItem>
+              <FormItem label="批次">
+                <input v-model="modifymaterialList.banch" style="width:200px">
+              </FormItem>
+              <FormItem label="单价">
+                <input v-model="modifymaterialList.price" style="width:200px">
+              </FormItem>
+              <FormItem label="总价">
+                <input disabled v-model="modifymaterialList.total_price" style="width:200px">
               </FormItem>
             </Form>
           </Modal>
@@ -114,49 +134,39 @@
 <script>
 import { Modal } from 'iview'
 export default {
-  name: 'SupplierMange',
+  name: 'OfferList',
   data() {
     return {
-      addsupplier1:false,
-      supplier_modify1:false,
+      addofferlist:false,
+      offerlist_modify:false,
       addmaterial1:false,
       material_modify1:false,
 
       id: '',
       name: '',
       person: '',
-      table_data: [],
+      offerList_data: [],
       dataList: [],
 
-      addSupplierName: '',
-      addSupplierPhone: '',
-      addPersonName: '',
-      addRemark: '',
-
-      modifySupplierList: [],
-      modifySupplierName: '',
-      modifySupplierPhone: '',
-      modifyPersonName: '',
-      modifyRemark: '',
+      addOfferList: [],
+      modifyOfferList: [],
 
       matrerial_id: '',
       matrerial_name:'',
-      matrerial_category: '',   
+      matrerial_banch: '',   
       material_data: [],
       material_list:[],
 
-      addmaterialId:'',
-      addmaterialIdList: [],
-      addmaterialMinorder: '',
-      modifymaterialMinorder: '',
-      columns: [
+      addmaterialList: [],
+      modifymaterialList: [],
+      offerListColumns: [
         {
           type: 'selection',
           width: 60,
           align: 'center'
         },
         {
-          title: '供应商编号',
+          title: '订单编号',
           key: 'id'
         },
         {
@@ -164,16 +174,12 @@ export default {
           key: 'name'
         },
         {
-          title: '联系方式',
-          key: 'phone'
-        },
-        {
           title: '负责人',
           key: 'person'
         },
         {
-          title: '备注',
-          key: 'remark'
+            title: '时间',
+            key: 'time'
         }
         // {
         //   title: '单价(元)',
@@ -195,31 +201,32 @@ export default {
           key: 'name'
         },
         {
-          title: '性质',
-          key: 'property'
+          title: '数量',
+          key: 'quantity'
         },
         {
-          title: '分类',
-          key: 'category'
+          title: '单价',
+          key: 'price'
         },
         {
-          title: '起定点',
-          key: 'minorder'
+          title: '批次',
+          key: 'banch'
+        },
+        {
+            title:'总价',
+            key: 'total_price'
         }
-        // {
-        //   title: '单价(元)',
-        //   key: 'price'
-        // }
       ],
       currentrow : ''
     }
   },
   created() {
     this.$http({
-      url: '/getSupplier',
+      url: '/',
       method: 'GET'
     }).then(
       function(res) {
+        this.$Message.success('获取数据成功')
         this.table_data = res.body
         // 返回总记录
         //this.$router.push({path: '/hello', query:{data: res.body}})
@@ -411,7 +418,7 @@ export default {
         this.supplier_modify1 = true;
        }
     },
-    supplier_modifyok: function() {
+    offerlist_modifyok: function() {
        if(this.modifySupplierName == ''){
          this.$Message.warning('请填写需要修改的供应商名称')
        }else if(this.modifySupplierPhone == ''){

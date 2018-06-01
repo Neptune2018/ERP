@@ -49,8 +49,9 @@
                 <span class='main-text'>采购辅助管理</span>
               </template>
               <Menu-item name='starving'>缺料浏览</Menu-item>
-              <Menu-item name='supplier'>供应商管理</Menu-item>
               <Menu-item name='safeStock'>安全库存</Menu-item>
+              <Menu-item name='supplier'>供应商管理</Menu-item>
+              <Menu-item name='offerlist'>报价单管理</Menu-item>
             </Submenu>
             <Submenu name='production'>
               <template slot='title'>
@@ -167,6 +168,9 @@ export default {
       }else if(name === 'starving'){
         this.bigPos = '采购辅助管理'
         this.samllPos = '缺料浏览' 
+      }else if(name === 'offerlist'){
+        this.bigPos = '采购辅助管理'
+        this.samllPos = '报价单管理' 
       }else if(name === 'supplier'){
         this.bigPos = '采购辅助管理'
         this.samllPos = '供应商管理'

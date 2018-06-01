@@ -72,7 +72,6 @@ export default {
         method: 'GET',
         }).then(
         function(res) {
-          this.$Message.success('获取数据成功')
           this.table_data=res.body.data
           // 返回总记录
           //this.$router.push({path: '/hello', query:{data: res.body}})

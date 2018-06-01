@@ -4,10 +4,10 @@ var db = require('./index').DB;
 var User = require('./user');
 var Supplier = require('./supplier');
 
-// 报价单
+// 创建 model
 var OfferList = db.define('offer_list', {
     time: {
-        type: Sequelize.DATE	// 报价时间
+        type: Sequelize.DATE 
     }
     // 没有指定 field，表中键名称则与对象键名相同，为 email
 }, {
@@ -20,8 +20,7 @@ var OfferList = db.define('offer_list', {
 Supplier.hasMany(OfferList);
 
 // 前者将拥有后者的get/set/add方法,后者id是前者外键
-OfferList.belongsTo(User, {as: 'from_person'});
-OfferList.belongsTo(User, {as: 'to_person'});
+OfferList.belongsTo(User);
 OfferList.belongsTo(Supplier);
 
 // 创建表
