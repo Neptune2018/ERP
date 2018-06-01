@@ -2,7 +2,9 @@ var Material = require('../models').Material;
 var MaterCate = require('../models').MaterCate;
 var Stock = require('../models').Stock;
 var Supplier = require('../models').Supplier;
+var MinOrder = require('../models').MinOrder
 var Sequelize = require('sequelize');
+var db = require('../models/index').DB;
 
 exports.findAllMaterial = function (countPerPage,currentPage,callback) {
     if(!countPerPage)
@@ -70,16 +72,9 @@ exports.findAllMaterial = function (id,name,property,category,callback) {
     });
 }
 
-exports.findMaterialBySupplier = function (countPerPage,currentPage,name,callback) {
-    supplier = Supplier.findAll({
-        where: {
-          name: SupplierName
-        },
-        limit:countPerPage,
-        offset: countPerPage * (currentPage - 1)
-    })
-    supplier.getMaterials().then(function(data){
-        console.log(data)
+exports.findMaterialBySupplier = async function (id,callback) {
+    var sqlquery1="select material.id as id,material.name as name,material.property,matercate.name as category,min_orders.quantity as minorder from materials as material inner join mater_cates as matercate on material.materCateId=matercate.id, suppliers inner join min_orders on suppliers.id = min_orders.supplierid and suppliers.id = " + id + " WHERE min_orders.materialId = material.id;"
+    db.query(sqlquery1).then(function(data){
         callback(data)
     })
 }

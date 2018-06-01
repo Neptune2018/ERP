@@ -2,91 +2,11 @@ var config = require('../config');
 var fs = require('fs');
 var path = require('path');
 var Purchase = require('../proxy').Purchase;
+var Supplier = require('../proxy').Supplier;
 var Material = require('../proxy').Material;
 var url = require('url');
 
-exports.addSupplier = function(req, res) {
-	console.log(req.session.sess)
-    req.session.sess = 'yes';
-    var params = url.parse(req.url, true).query;
-    Purchase.addSupplier(params.name,params.phone,params.person,params.remark,function(data){
-        Purchase.findAllSupplier(null,null,null,function(data) {
-            res.send(data)
-        });
-    });
-    
-}
 
-exports.getSupplier = function(req, res){
-    console.log(req.session.sess)
-    req.session.sess = 'yes';
-    var params = url.parse(req.url, true).query;
-    suppliers = Purchase.findAllSupplier(params.id,params.name,params.person,function(data) {
-		res.send(data)
-	});
-}
-
-exports.getSupplierByName = function(req, res){
-    console.log(req.session.sess)
-    req.session.sess = 'yes';
-    var params = url.parse(req.url, true).query;
-    supplier = Purchase.findSupplierByName(params.name,function(data) {
-		res.send(data)
-	});
-}
-
-exports.getSupplierById = function(req, res){
-    console.log(req.session.sess)
-    req.session.sess = 'yes';
-    var params = url.parse(req.url, true).query;
-    supplier = Purchase.findSupplierById(params.id,function(data) {
-		res.send(data)
-	});
-}
-
-exports.deleteSupplierByName = function(req, res){
-    console.log(req.session.sess)
-    req.session.sess = 'yes';
-    var params = url.parse(req.url, true).query;
-    Purchase.deleteSupplierByName(params.name,function(data){
-        suppliers = Purchase.findAllSupplier(null,null,null,function(data) {
-            res.send(data)
-        });
-    });
-}
-
-exports.deleteSupplierById = function(req, res){
-    console.log(req.session.sess)
-    req.session.sess = 'yes';
-    var params = url.parse(req.url, true).query;
-    Purchase.deleteSupplierById(params['id[]'],function(data){
-        suppliers = Purchase.findAllSupplier(null,null,null,function(data) {
-            res.send(data)
-        });
-    });
-}
-
-exports.updateSupplierByName = function(req, res){
-    console.log(req.session.sess)
-    req.session.sess = 'yes';
-    var params = url.parse(req.url, true).query;
-    Purchase.updateSupplierByName(params.from_name,params.name,params.phone,params.person,params.remark,function(data){
-        suppliers = Purchase.findAllSupplier(null,null,null,function(data) {
-            res.send(data)
-        });
-    });
-}
-
-exports.updateSupplierById = function(req, res){
-    console.log(req.session.sess)
-    req.session.sess = 'yes';
-    var params = url.parse(req.url, true).query;
-    Purchase.updateSupplierById(params.id,params.name,params.phone,params.person,params.remark,function(data){
-        suppliers = Purchase.findAllSupplier(null,null,null,function(data) {
-            res.send(data)
-        });
-    });
-}
 
 exports.getOfferList = function(req,res){
     console.log(req.session.sess)
@@ -184,8 +104,8 @@ exports.getMaterialsBySupplier = function(req, res){
     console.log(req.session.sess);
     req.session.sess = 'yes';
     var params = url.parse(req.url, true).query;
-    Material.findMaterialBySupplier(+params.limit,+params.page,params.name, function(data) {
-		res.send(data);
+    Material.findMaterialBySupplier(params.id, function(data) {
+		res.send(JSON.stringify(data));
 	});
 };
 

@@ -1,4 +1,6 @@
 var Supplier = require('../models').Supplier;
+var User = require('../models').User;
+var Sequelize = require('sequelize');
 
 exports.findAllSupplier = function (id,name,person,callback) {
     var where = "1 = 1 ";
@@ -99,3 +101,11 @@ exports.findAllSupplier = function (id,name,person,callback) {
 //       callback(result)
 //     });
 //   };
+
+exports.getAllUserId = function(callback){
+  User.findAll({
+    attributes : ['id']
+  }).then(function(result){
+    callback(result)
+  })
+}
