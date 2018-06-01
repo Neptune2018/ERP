@@ -143,7 +143,7 @@ export default {
       matrerial_name:'',
       matrerial_category: '',   
       material_data: [],
-      matrerial_list:[],
+      material_list:[],
 
       addmaterialId:'',
       addmaterialIdList: [],
@@ -211,6 +211,7 @@ export default {
         //   key: 'price'
         // }
       ],
+      currentrow = ''
     }
   },
   created() {
@@ -258,9 +259,9 @@ export default {
       }
     },
     materialSelectionClick(){
-      this.matrerial_list = []
+      this.material_list = []
       for (var i = 0; i < arr.length; i++) {
-        this.matrerial_list.push(arr[i]['id'])
+        this.material_list.push(arr[i]['id'])
       }
     },
     deletesupplier: function() {
@@ -287,12 +288,13 @@ export default {
       }
     },
     deletematerial:function(){
-      if (this.matrerial_list.length != 0) {
+      if (this.material_list.length != 0) {
         this.$http({
-          url: '/',
+          url: '/removeMaterialsFromSupplier',
           method: 'GET',
           params: {
-            id: this.matrerial_list
+            id: this.currentrow,
+            material_id: this.material_list
           }
         }).then(
           function(res) {
@@ -310,6 +312,7 @@ export default {
       }
     },
     currentchange: function(currentRow, oldCurrentRow) {
+      this.currentrow = currentRow['id']
       this.$http({
         url: '/getMaterialsBySupplier',
         method: 'GET',
@@ -399,11 +402,11 @@ export default {
        }
     },
     supplier_modifyok: function() {
-       if(addSupplierName == ''){
+       if(this.addSupplierName == ''){
          this.$Message.warning('请填写需要修改的供应商名称')
-       }else if(addSupplierPhone == ''){
+       }else if(this.addSupplierPhone == ''){
          this.$Message.warning('请填写需要修改的供应商电话')
-       }else if(addPersonName == ''){
+       }else if(this.addPersonName == ''){
          this.$Message.warning('请选择需要修改的供应商负责人')
        }else{
          this.$http({
@@ -430,6 +433,10 @@ export default {
        }
     },
     addmaterial:function(){
+      if(this.currentrow == ''){
+        this.$Message.warning('请选择需要添加的物料的供应商')
+        return
+      }
       this.$http({
         url: '/getAllUserId',
         method: 'GET',
@@ -441,8 +448,69 @@ export default {
         },
         function() {}
       )
-      alert(1)
       this.addmaterial = true;
+    },
+    material_addok:function(){
+      if(this.addmaterialId == ''){
+         this.$Message.warning('请选择需要添加的物料编号')
+       }else if(this.addmaterialMinorder == ''){
+         this.$Message.warning('请填写需要添加的物料的起定点')
+       }else{
+         this.$http({
+          url: '/addMaterialsToSupplier',
+          method: 'GET',
+          params:{
+            id: this.currentrow,
+            material_id: this,
+            quantity: this.addmaterialMinorder,
+          }
+        }).then(
+          function(res) {
+            this.$Message.success('添加成功')
+            this.material_data = res.body
+            // 返回总记录
+            //this.$router.push({path: '/hello', query:{data: res.body}})
+          },
+          function() {
+            this.$Message.error('添加失败')
+          }
+        )
+       }
+    },
+    material_modify:function(){
+      if(this.currentrow == ''){
+        this.$Message.warning('请选择需要修改物料起定点的供应商')
+        return
+      }
+      if (this.material_list.length == 0) {
+         this.$Message.warning('请选择需要修改的物料')
+         this.material_modify = true;
+       }
+    },
+    material_modifyok:function(){
+      if(this.modifymaterialMinorder == ''){
+         this.$Message.warning('请填写需要修改的物料起定点')
+       }else{
+          this.$http({
+          url: '/setMinOrder',
+          method: 'GET',
+          params:{
+            id: this.currentrow,
+            material_id: this.material_list,
+            quantity: this.modifymaterialMinorder,
+          }
+        }).then(
+          function(res) {
+            this.$Message.success('修改成功')
+            this.material_data = res.body
+            // 返回总记录
+            //this.$router.push({path: '/hello', query:{data: res.body}})
+          },
+          function() {
+            this.$Message.error('修改失败')
+          }
+        )
+       }
     },
     cancel: function() {}
   }
