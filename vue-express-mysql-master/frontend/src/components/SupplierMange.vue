@@ -20,11 +20,14 @@
       </div>
       <div class='addromve'>
         <row>
-          <Button class="oper" type="primary" @click="addsupplier=true">新增供应商</Button>
+          <i-button class="oper" type="primary" @click="addsupplier=true">新增供应商</i-button>
           <Modal v-model="addsupplier" title="新增供应商" @on-ok="supplier_addok" @on-cancel="cancel">
             <Form :model="formRight" label-position="right" :label-width="100">
               <FormItem label="供应商名称">
                 <input type="text" v-model="addSupplierName" style="width:200px">
+              </FormItem>
+              <FormItem label="电话">
+                <input type="tel" v-model="addSupplierPhone" style="width:200px">
               </FormItem>
               <FormItem label="负责人">
                 <Select v-model="addPersonName" style="width:200px">
@@ -36,11 +39,14 @@
               </FormItem>
             </Form>
           </Modal>
-          <i-button class="oper" type="primary" @click="supplier_modify=true">修改供应商信息</i-button>
+          <i-button class="oper" type="primary" @click="supplier_modify()">修改供应商信息</i-button>
           <Modal v-model="supplier_modify" title="修改供应商信息" @on-ok="supplier_modifyok" @on-cancel="cancel">
             <Form :model="formRight" label-position="right" :label-width="100">
               <FormItem label="供应商名称">
                 <input type="text" v-model="modifySupplierName" style="width:200px">
+              </FormItem>
+              <FormItem label="电话">
+                <input type="number" v-model="modifySupplierPhone" style="width:200px">
               </FormItem>
               <FormItem label="负责人">
                 <Select v-model="modifyPersonName" style="width:200px">
@@ -79,7 +85,7 @@
       </div>
       <div class='addromve'>
         <row>
-          <Button class="oper" type="primary" @click="addmaterial()">新增物料</Button>
+          <i-button class="oper" type="primary" @click="addmaterial">新增物料</i-button>
           <Modal v-model="addmaterial" title="新增物料" @on-ok="material_addok" @on-cancel="cancel">
             <Form :model="formRight" label-position="right" :label-width="100">
               <FormItem label="物料id">
@@ -123,11 +129,13 @@ export default {
 
       addSupplierPersonList: [],
       addSupplierName: [],
+      addSupplierPhone: '',
       addPersonName: '',
       addRemark: '',
 
       modifySupplierPersonList: [],
       modifySupplierName: '',
+      modifySupplierPhone: '',
       modifyPersonName: '',
       modifyRemark: '',
 
@@ -203,7 +211,6 @@ export default {
         //   key: 'price'
         // }
       ],
-      addmaterial:false
     }
   },
   created() {
@@ -318,6 +325,110 @@ export default {
         function() {}
       )
     },
+    addsupplier:function(){
+      this.$http({
+        url: '/getAllUserId',
+        method: 'GET',
+      }).then(
+        function(res) {
+          this.addSupplierPersonList.value = res.body
+          // 返回总记录
+          //this.$router.push({path: '/hello', query:{data: res.body}})
+        },
+        function() {}
+      )
+      alert(1)
+      this.addsupplier = true;
+    },
+    supplier_addok: function() {
+      if (this.addSupplierName == ''){
+        this.$Message.warning('请填写需要添加供应商的名称')
+        return
+      }
+      if (this.addSupplierPhone == ''){
+        this.$Message.warning('请填写需要添加供应商的名称')
+        return
+      }
+      if (this.addPersonName == ''){
+        this.$Message.warning('请选择需要添加供应商的负责人')
+        return 
+      }
+      this.$http({
+        url: '/addSupplier',
+        method: 'GET',
+        params:{
+          name: this.addSupplierName,
+          phone: this.addSupplierPhone,
+          person: this.addPersonName,
+          remark: this.addRemark
+        }
+      }).then(
+        function(res) {
+          this.$Message.success('添加成功')
+          this.table_data = res.body
+          // 返回总记录
+          //this.$router.push({path: '/hello', query:{data: res.body}})
+        },
+        function() {
+          this.$Message.error('添加失败')
+        }
+      )
+    },
+    supplier_modify:function(){
+      if (this.dataList.length == 0) {
+         this.$Message.warning('请选择需要修改的供应商')
+       }else if (this.dataList.length > 1){
+         this.$Message.warning('需要修改的供应商个数必须是一个')
+       }else{
+        this.$http({
+          url: '/getSupplierById',
+          method: 'GET',
+          params:{
+            id: this.dataList[0]
+          }
+        }).then(
+          function(res) {
+            this.addmaterialIdList.value = res.body
+            // 返回总记录
+            //this.$router.push({path: '/hello', query:{data: res.body}})
+          },
+          function() {}
+        )
+        alert(1)
+        this.addmaterial = true;
+       }
+    },
+    supplier_modifyok: function() {
+       if(addSupplierName == ''){
+         this.$Message.warning('请填写需要修改的供应商名称')
+       }else if(addSupplierPhone == ''){
+         this.$Message.warning('请填写需要修改的供应商电话')
+       }else if(addPersonName == ''){
+         this.$Message.warning('请选择需要修改的供应商负责人')
+       }else{
+         this.$http({
+        url: '/updateSupplierById',
+        method: 'GET',
+        params:{
+          id: this.dataList[0],
+          name: this.addSupplierName,
+          phone: this.addSupplierPhone,
+          person: this.addPersonName,
+          remark: this.addRemark
+        }
+      }).then(
+        function(res) {
+          this.$Message.success('修改成功')
+          this.table_data = res.body
+          // 返回总记录
+          //this.$router.push({path: '/hello', query:{data: res.body}})
+        },
+        function() {
+          this.$Message.error('修改失败')
+        }
+      )
+       }
+    },
     addmaterial:function(){
       this.$http({
         url: '/getAllUserId',
@@ -333,8 +444,6 @@ export default {
       alert(1)
       this.addmaterial = true;
     },
-    supplier_addok: function() {},
-    supplier_modifyok: function() {},
     cancel: function() {}
   }
 }

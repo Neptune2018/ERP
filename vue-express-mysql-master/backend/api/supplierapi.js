@@ -27,14 +27,14 @@ exports.getSupplier = function(req, res){
 	});
 }
 
-exports.getSupplierByName = function(req, res){
-    console.log(req.session.sess)
-    req.session.sess = 'yes';
-    var params = url.parse(req.url, true).query;
-    supplier = Supplier.findSupplierByName(params.name,function(data) {
-		res.send(data)
-	});
-}
+// exports.getSupplierByName = function(req, res){
+//     console.log(req.session.sess)
+//     req.session.sess = 'yes';
+//     var params = url.parse(req.url, true).query;
+//     supplier = Supplier.findSupplierByName(params.name,function(data) {
+// 		res.send(data)
+// 	});
+// }
 
 exports.getSupplierById = function(req, res){
     console.log(req.session.sess)
@@ -45,16 +45,16 @@ exports.getSupplierById = function(req, res){
 	});
 }
 
-exports.deleteSupplierByName = function(req, res){
-    console.log(req.session.sess)
-    req.session.sess = 'yes';
-    var params = url.parse(req.url, true).query;
-    Supplier.deleteSupplierByName(params.name,function(data){
-        suppliers = Supplier.findAllSupplier(null,null,null,function(data) {
-            res.send(data)
-        });
-    });
-}
+// exports.deleteSupplierByName = function(req, res){
+//     console.log(req.session.sess)
+//     req.session.sess = 'yes';
+//     var params = url.parse(req.url, true).query;
+//     Supplier.deleteSupplierByName(params.name,function(data){
+//         suppliers = Supplier.findAllSupplier(null,null,null,function(data) {
+//             res.send(data)
+//         });
+//     });
+// }
 
 exports.deleteSupplierById = function(req, res){
     console.log(req.session.sess)
@@ -67,16 +67,16 @@ exports.deleteSupplierById = function(req, res){
     });
 }
 
-exports.updateSupplierByName = function(req, res){
-    console.log(req.session.sess)
-    req.session.sess = 'yes';
-    var params = url.parse(req.url, true).query;
-    Supplier.updateSupplierByName(params.from_name,params.name,params.phone,params.person,params.remark,function(data){
-        suppliers = Supplier.findAllSupplier(null,null,null,function(data) {
-            res.send(data)
-        });
-    });
-}
+// exports.updateSupplierByName = function(req, res){
+//     console.log(req.session.sess)
+//     req.session.sess = 'yes';
+//     var params = url.parse(req.url, true).query;
+//     Supplier.updateSupplierByName(params.from_name,params.name,params.phone,params.person,params.remark,function(data){
+//         suppliers = Supplier.findAllSupplier(null,null,null,function(data) {
+//             res.send(data)
+//         });
+//     });
+// }
 
 exports.updateSupplierById = function(req, res){
     console.log(req.session.sess)
