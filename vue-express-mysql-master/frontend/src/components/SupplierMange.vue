@@ -36,7 +36,7 @@
               </FormItem>
             </Form>
           </Modal>
-          <i-button class="oper" type="primary" @click="supplier_modify = true">修改供应商信息</i-button>
+          <i-button class="oper" type="primary" @click="supplier_modify=true">修改供应商信息</i-button>
           <Modal v-model="supplier_modify" title="修改供应商信息" @on-ok="supplier_modifyok" @on-cancel="cancel">
             <Form :model="formRight" label-position="right" :label-width="100">
               <FormItem label="供应商名称">
@@ -48,7 +48,7 @@
                 </Select>
               </FormItem>
               <FormItem label="备注">
-                <Input type="textarea" v-model="modifyRemark" style="width:200px"></Input>
+                <input type="textarea" v-model="modifyRemark" style="width:200px">
               </FormItem>
             </Form>
           </Modal>
@@ -63,15 +63,15 @@
       <div class="search-form">
         <row class="query">
           <label class="top-label">编号</label>
-          <i-input v-model="id" placeholder="请输入编号" style="width: 70%"></i-input>
+          <i-input v-model="matrerial_id" placeholder="请输入编号" style="width: 70%"></i-input>
         </row>
         <row class="query">
           <label class="top-label">名称</label>
-          <i-input v-model="name" placeholder="请输入名称" style="width: 70%"></i-input>
+          <i-input v-model="matrerial_name" placeholder="请输入名称" style="width: 70%"></i-input>
         </row>
         <row class="query">
-          <label class="top-label">负责人</label>
-          <i-input v-model="person" placeholder="请输入负责人" style="width: 70%"></i-input>
+          <label class="top-label">分类</label>
+          <i-input v-model="matrerial_category" placeholder="请输入分类" style="width: 70%"></i-input>
         </row>
         <row class="search">
           <i-button class="cost-module-btn" type="ghost" icon="ios-search" shape="circle" @click="search()">搜索</i-button>
@@ -79,50 +79,37 @@
       </div>
       <div class='addromve'>
         <row>
-          <Button class="oper" type="primary" @click="addsupplier=true">新增供应商</Button>
-          <Modal v-model="addsupplier" title="新增供应商" @on-ok="supplier_addok" @on-cancel="cancel">
+          <Button class="oper" type="primary" @click="addmaterial()">新增物料</Button>
+          <Modal v-model="addmaterial" title="新增物料" @on-ok="material_addok" @on-cancel="cancel">
             <Form :model="formRight" label-position="right" :label-width="100">
-              <FormItem label="供应商名称">
-                <input type="text" v-model="addSupplierName" style="width:200px">
-              </FormItem>
-              <FormItem label="负责人">
-                <Select v-model="addPersonName" style="width:200px">
-                  <Option v-for="item in addSupplierPersonList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+              <FormItem label="物料id">
+                <Select v-model="addmaterialId" style="width:200px">
+                  <Option v-for="item in addmaterialIdList" :value="item.value" :key="item.value">{{ item.label }}</Option>
                 </Select>
               </FormItem>
-              <FormItem label="备注">
-                <input type="textarea" v-model="addRemark" style="width:200px">
+              <FormItem label="起定点">
+                <input v-model="addmaterialMinorder" style="width:200px">
               </FormItem>
             </Form>
           </Modal>
-          <i-button class="oper" type="primary" @click="supplier_modify = true">修改供应商信息</i-button>
-          <Modal v-model="supplier_modify" title="修改供应商信息" @on-ok="supplier_modifyok" @on-cancel="cancel">
+          <i-button class="oper" type="primary" @click="material_modify = true">修改起定点</i-button>
+          <Modal v-model="material_modify" title="修改起定点" @on-ok="material_modifyok" @on-cancel="cancel">
             <Form :model="formRight" label-position="right" :label-width="100">
-              <FormItem label="供应商名称">
-                <input type="text" v-model="modifySupplierName" style="width:200px">
-              </FormItem>
-              <FormItem label="负责人">
-                <Select v-model="modifyPersonName" style="width:200px">
-                  <Option v-for="item in modifySupplierPersonList" :value="item.value" :key="item.value">{{ item.label }}</Option>
-                </Select>
-              </FormItem>
-              <FormItem label="备注">
-                <Input type="textarea" v-model="modifyRemark" style="width:200px"></Input>
+              <FormItem label="起定点">
+                <input v-model="modifymaterialMinorder" style="width:200px">
               </FormItem>
             </Form>
           </Modal>
-          <i-button class="oper" type="primary" @click="deletesupplier()">删除供应商</i-button>
+          <i-button class="oper" type="primary" @click="deletematerial()">删除物料</i-button>
         </row>
       </div>
     </row>
     <div style="margin-top: 20px">
-      <i-table @on-selection-change='selectionClick' border :height="200" :columns="material_columns" :data="material_data"></i-table>
+      <i-table @on-selection-change='materialSelectionClick' border :height="200" :columns="material_columns" :data="material_data"></i-table>
     </div>
   </div>
 </template>
 <script>
-import Button from '../../node_modules/iview/src/components/button/button.vue'
-import Row from '../../node_modules/iview/src/components/grid/row.vue'
 import { Modal } from 'iview'
 export default {
   name: 'SupplierMange',
@@ -132,15 +119,28 @@ export default {
       name: '',
       person: '',
       table_data: [],
-      material_data: [],
+      dataList: [],
+
       addSupplierPersonList: [],
-      modifySupplierPersonList: [],
       addSupplierName: [],
+      addPersonName: '',
+      addRemark: '',
+
+      modifySupplierPersonList: [],
       modifySupplierName: '',
       modifyPersonName: '',
       modifyRemark: '',
-      addPersonName: '',
-      addRemark: '',
+
+      matrerial_id: '',
+      matrerial_name:'',
+      matrerial_category: '',   
+      material_data: [],
+      matrerial_list:[],
+
+      addmaterialId:'',
+      addmaterialIdList: [],
+      addmaterialMinorder: '',
+      modifymaterialMinorder: '',
       columns: [
         {
           type: 'selection',
@@ -202,7 +202,8 @@ export default {
         //   title: '单价(元)',
         //   key: 'price'
         // }
-      ]
+      ],
+      addmaterial:false
     }
   },
   created() {
@@ -249,6 +250,12 @@ export default {
         this.dataList.push(arr[i]['id'])
       }
     },
+    materialSelectionClick(){
+      this.matrerial_list = []
+      for (var i = 0; i < arr.length; i++) {
+        this.matrerial_list.push(arr[i]['id'])
+      }
+    },
     deletesupplier: function() {
       if (this.dataList.length != 0) {
         this.$http({
@@ -269,7 +276,30 @@ export default {
           }
         )
       } else {
-        this.$Message.warning('请选择需要更改安全库存的物料')
+        this.$Message.warning('请选择需要删除的供应商')
+      }
+    },
+    deletematerial:function(){
+      if (this.matrerial_list.length != 0) {
+        this.$http({
+          url: '/',
+          method: 'GET',
+          params: {
+            id: this.matrerial_list
+          }
+        }).then(
+          function(res) {
+            this.$Message.success('删除成功')
+            this.material_data = res.body
+            // 返回总记录
+            //this.$router.push({path: '/hello', query:{data: res.body}})
+          },
+          function() {
+            this.$Message.error('删除失败')
+          }
+        )
+      } else {
+        this.$Message.warning('请选择需要删除的物料')
       }
     },
     currentchange: function(currentRow, oldCurrentRow) {
@@ -287,6 +317,21 @@ export default {
         },
         function() {}
       )
+    },
+    addmaterial:function(){
+      this.$http({
+        url: '/getAllUserId',
+        method: 'GET',
+      }).then(
+        function(res) {
+          this.addmaterialIdList.value = res.body
+          // 返回总记录
+          //this.$router.push({path: '/hello', query:{data: res.body}})
+        },
+        function() {}
+      )
+      alert(1)
+      this.addmaterial = true;
     },
     supplier_addok: function() {},
     supplier_modifyok: function() {},

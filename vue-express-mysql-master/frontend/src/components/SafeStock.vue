@@ -167,6 +167,7 @@ export default {
   margin-top: 15px;
 }
 .query {
+  width: 15%;
   margin-left: 2%;
   margin-right: 2%;
   display: inline-block;
@@ -185,7 +186,7 @@ export default {
 }
 
 .search {
-  margin-left: 50%;
+  margin-left: 20%;
 }
 
 .top-label {
