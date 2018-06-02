@@ -15,7 +15,7 @@
     <!-- Main -->
     <div class='main' :class="{'main-hide-text': spanLeft < 4}">
       <Row type='flex'>
-        <i-col :span="spanLeft" class='main-menu-left'>
+        <i-col :span="spanLeft" class='main-menu-left' :xs="{ span: 8, offset: 0}" :sm="{ span: 6, offset: 0}" :md="{ span: 4, offset: 0}">
           <Menu active-name='outline' theme='dark' width='auto' @on-select='select'>
             <Submenu name='BOM'>
               <template slot='title'>
@@ -70,11 +70,9 @@
             </Submenu>
           </Menu>
         </i-col>
-        <i-col :span='spanRight' class='content'>
+        <i-col :span='spanRight' class='content' :xs="{ span: 16, offset: 0}" :sm="{ span: 18, offset: 0}" :md="{ span: 20, offset: 0}">
            <div class='main-header'>
-            <i-button type='text' @click='toggleClick' id='toggle-click'>
-              <Icon type='navicon' size='32'></Icon>
-            </i-button>
+            <Icon type="ios-arrow-forward"></Icon>
             <span>当前所在位置为：{{bigPos}} / {{samllPos}}</span>
           </div> 
           <div class='main-content'>
@@ -259,13 +257,15 @@ export default {
 
 .main-menu-left {
   background: #464c5b;
-  height:fill-available;
 }
 
 .main-header {
+  font-size: 14px;
   height: 60px;
   background: #fff;
   box-shadow: 0 1px 1px rgba(0, 0, 0, .1);
+  padding-top: 1.8%;
+  padding-left: 1%;
 }
 
 .main-logo-left {
