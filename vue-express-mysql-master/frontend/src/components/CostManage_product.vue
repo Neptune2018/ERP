@@ -96,9 +96,9 @@ export default {
             console.log(this.sqlSearch)
         }
         if(this.product_name!=''){
-            this.sqlSearch+=" and product.name='"
+            this.sqlSearch+=" and product.name LIKE '%"
             this.sqlSearch+=this.product_name
-            this.sqlSearch+="'"
+            this.sqlSearch+="%'"
             console.log(this.sqlSearch)
         }
         if(this.product_batch!=''){
@@ -112,7 +112,7 @@ export default {
             this.sqlSearch+=this.product_warehouse
             console.log(this.sqlSearch)
         }
-
+        this.sqlSearch = this.sqlSearch.replace(/\%/g, "%25")
         this.$http({
             url: '/cmproductquery?sql='+this.sqlSearch,
             method: 'GET',
