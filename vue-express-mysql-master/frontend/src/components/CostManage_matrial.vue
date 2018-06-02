@@ -99,9 +99,9 @@ export default {
             this.sqlSearch+=this.matrial_number
         }
         if(this.matrial_name!=''){
-            this.sqlSearch+=" and material.name='"
+            this.sqlSearch+=" and material.name LIKE '%"
             this.sqlSearch+=this.matrial_name
-            this.sqlSearch+="'"
+            this.sqlSearch+="%'"
         }
         if(this.matrial_batch!=''){
             this.sqlSearch+=" and stock.batch='"
@@ -112,7 +112,9 @@ export default {
             this.sqlSearch+=" and stock.repertoryId="
             this.sqlSearch+=this.matrial_warehouse
         }
-        this.$http({
+        console.log(this.sqlSearch)
+        this.sqlSearch = this.sqlSearch.replace(/\%/g, "%25"),
+        this.$http({           
             url: '/cmmaterialquery?sql='+this.sqlSearch,
             method: 'GET',
         }).then(function (res) {
