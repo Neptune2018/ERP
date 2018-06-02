@@ -88,6 +88,8 @@ router.get('/removeMaterialsFromSupplier',supplier.removeMaterialsFromSupplier);
 
 router.get('/getOfferByOfferList',offer.getOfferByOfferList);
 router.get('/deleteOffer',offer.deleteOffer);
+router.get('/addOffer',offer.addOffer);
+router.get('/updateOffer',offer.updateOffer);
 
 
 router.get('/getOfferList',offerlist.getOfferList);

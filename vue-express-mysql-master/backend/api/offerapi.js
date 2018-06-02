@@ -31,26 +31,28 @@ exports.deleteOffer = function(req,res){
     
 }
 
-exports.addOfferList = function(req,res){
+exports.addOffer = function(req,res){
     console.log(req.session.sess)
     req.session.sess = 'yes';
     var params = url.parse(req.url, true).query;
-    console.log(params.time)
-    console.log(req.query)
-    OfferList.addOfferList(params.supplier_id, params.user_id,params.time,function(data){
-        OfferList.findAllOfferList(function(data) {
-            res.send(data)
-        });
+    Offer.addOffer(params.offerlist_id, params.material_id,params.quantity,params.batch,params.price,params.total_price,function(data){
+        if(data){
+            Offer.findAllOfferByOfferList(params.offerlist_id,null,null,null,function(data) {
+                res.send(data)
+            });
+        }else{
+            res.send("0")
+        }
     });
     
 }
 
-exports.updateOfferList = function(req,res){
+exports.updateOffer = function(req,res){
     console.log(req.session.sess);
     req.session.sess = 'yes';
     var params = url.parse(req.url, true).query;
-    OfferList.updateOfferList(params.id, params.person,params.time,function(){
-        OfferList.findAllOfferList(function(data) {
+    Offer.updateOffer(params.offerlist_id, params.material_id,params.quantity,params.batch,params.price,params.total_price,function(){
+        Offer.findAllOfferByOfferList(params.offerlist_id,null,null,null,function(data) {
             res.send(data)
         });
     });

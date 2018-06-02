@@ -78,10 +78,18 @@ exports.findOfferListByID = function (offerList_id,callback) {
     })
   };
   
-  exports.updateOfferList = function (offerList_id, user_id, time,callback) {
-    var sqlquery1="update offer_lists set userId = " + user_id+",time = "+ time + " where id = "+ offerList_id+";"
-    db.query(sqlquery1).then(function(data){
-      callback(data)
+  exports.updateOfferList = async function (offerList_id, user_id, time,callback) {
+    var offerlist = await OfferList.update({
+      time:time
+    },{
+      where:{
+        id:offerList_id
+      }
+    }).then(function(result){
+      var sqlquery1="update offer_lists set userId = " + user_id + " where id = "+ offerList_id+";"
+      db.query(sqlquery1).then(function(data){
+        callback(data)
+      })
     })
     
   };

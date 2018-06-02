@@ -116,10 +116,14 @@ exports.addMaterialsToSupplier = async function(id, material_id, quantity, callb
   supplier = await Supplier.findById(id)
   material = await Material.findById(material_id)
   supplier.addMaterial(material, { 'quantity': quantity}).then(function(result){
-    var sql = "update min_orders set quantity = "+quantity + " where materialId = "+ material_id + " and supplierId = " + id + ";"
-    db.query(sql).then(function(data){
-      callback(data)
-  })
+    if(result.length){
+      var sql = "update min_orders set quantity = "+quantity + " where materialId = "+ material_id + " and supplierId = " + id + ";"
+      db.query(sql).then(function(data){
+        callback(data)
+      })
+    }else{
+      callback(0)
+    }
   })
 }
 

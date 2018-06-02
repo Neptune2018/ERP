@@ -104,9 +104,13 @@ exports.addMaterialsToSupplier = function(req, res){
     var params = url.parse(req.url, true).query;
     console.log(params.materialid, params.id,params.quantity)
     Supplier.addMaterialsToSupplier(params.id, params.materialid, params.quantity,function(data){
-        Material.findMaterialBySupplier(params.id,null,null,null, function(data) {
-            res.send(JSON.stringify(data));
-        });
+        if(data){
+            Material.findMaterialBySupplier(params.id,null,null,null, function(data) {
+                res.send(JSON.stringify(data));
+            });
+        }else{
+            res.send('0')
+        }
     })
 }
 
