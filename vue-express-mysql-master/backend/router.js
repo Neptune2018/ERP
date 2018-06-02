@@ -31,6 +31,7 @@ var costmoduleonloadmtr = require('./api/costmoduleonloadmtrapi');
 var cmproductquery = require('./api/cmproductqueryapi')
 var cmmaterialquery = require('./api/cmmaterialqueryapi')
 var supplier = require('./api/supplierapi');
+var offerlist = require('./api/offerlistapi');
 var purchase = require('./api/purchaseapi');
 var threshold_warning = require('./api/threshold_warning_api');
 var io_events = require('./api/ioapi')
@@ -84,12 +85,12 @@ router.get('/setMinOrder',supplier.setMinOrder);
 router.get('/addMaterialsToSupplier',supplier.addMaterialsToSupplier);
 router.get('/removeMaterialsFromSupplier',supplier.removeMaterialsFromSupplier);
 
-router.get('/getOfferList',purchase.getOfferList);
-router.get('/getOfferListById',purchase.getOfferListById);
-router.get('/getOfferListBySupplier',purchase.getOfferListBySupplier);
+router.get('/getOfferList',offerlist.getOfferList);
+router.get('/getOfferListById',offerlist.getOfferListById);
+router.get('/getOfferListBySupplier',offerlist.getOfferListBySupplier);
 router.get('/addOfferList',purchase.addOfferList);
 router.get('/updateOfferList',purchase.updateOfferList);
-router.get('/deleteOfferList',purchase.deleteOfferList);
+router.get('/deleteOfferList',offerlist.deleteOfferList);
 
 router.get('/getMaterials',purchase.getMaterials);
 router.get('/getAllMaterialsId',purchase.getAllMaterialsId);

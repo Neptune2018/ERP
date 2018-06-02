@@ -13,6 +13,7 @@ exports.GetGroup = require('./getgroup');
 exports.UserInfor = require('./userInfor');
 exports.User = require('./user');
 exports.Material = require('./material');
+exports.OfferList = require('./offerlist');
 exports.Purchase = require('./purchase');
 exports.Supplier = require('./supplier');
 exports.Product = require('./product');
