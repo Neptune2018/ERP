@@ -19,6 +19,8 @@
 <script>
 import { mapMutations } from 'vuex'
 
+import { MD5, aesEncrypt} from '../utils'
+
 export default {
       data() {
           return{
@@ -60,7 +62,8 @@ export default {
                   method: 'POST',
                   body:{
                     username:that.username,
-                    password:that.password
+                    password:aesEncrypt(that.password, MD5(that.username)),
+                    key: MD5(that.username)
                   },
                   dataType:"json",
               }).then(function (res) {

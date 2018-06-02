@@ -1,9 +1,11 @@
 var User = require('../proxy').User;
+var utils = require('../utils');
 
 exports.signin = function(req, res) {
 	var username = req.body.username;
-	var password = req.body.password;
-	console.log(req);
+	var key = req.body.key;
+	var password = utils.aesDecrypt(req.body.password, key);
+	console.log(password);
 	User.signin(username, password, function(user){
 		data = {};
 		req.session.user = user;

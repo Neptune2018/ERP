@@ -1,6 +1,7 @@
  var Sequelize = require('sequelize');
 var db = require('./index').DB;
 var User = require('./user');
+var utils = require('../utils');
 
 // 创建 model
 var Admin = db.define('admin', {
@@ -22,6 +23,21 @@ var Admin = db.define('admin', {
 Admin.belongsTo(User);
 
 User.hasOne(Admin);
+
+Admin.beforeCreate(function(admin) {
+  	admin.password = utils.makePassword(admin.password);
+})
+
+Admin.beforeUpdate(function(admin) {
+  	admin.password = utils.makePassword(admin.password);
+})
+
+
+Admin.beforeBulkUpdate(function(attributes, where) {
+  // attributes 是发送 Model.update 的第一个参数
+  // where 是发送 Model.update 的第二个参数
+  attributes.password = utils.makePassword(attributes.password);
+})
 
 // 创建表
 // User.sync() 会创建表并且返回一个Promise对象
