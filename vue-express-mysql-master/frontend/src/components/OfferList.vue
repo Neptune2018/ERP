@@ -20,8 +20,8 @@
       </div>
       <div class='addromve'>
         <row>
-          <i-button class="oper" type="primary" @click="addofferlist = true">新建采购订单</i-button>
-          <Modal v-model="addofferlist" title="新建采购订单" @on-ok="offerlist_addok" @on-cancel="cancel">
+          <i-button class="oper" type="primary" @click="addofferlist">新建采购订单</i-button>
+          <Modal v-model="addofferlist1" title="新建采购订单" @on-ok="offerlist_addok" @on-cancel="cancel">
             <Form :model="formRight" label-position="right" :label-width="100">
               <FormItem label="供应商名称">
                 <Select v-model="addOfferList.name" style="width:200px">
@@ -29,15 +29,17 @@
                 </Select>
               </FormItem>
               <FormItem label="负责人">
-                <input type="text" v-model="addOfferList.person" style="width:200px">
+                <Select v-model="addOfferList.person" style="width:200px">
+                  <Option v-for="item in addOfferList.personList" :value="item.id" :key="item.id">{{ item.name }}</Option>
+                </Select>
               </FormItem>
               <FormItem label="时间">
-                <DatePicker type="date" placeholder="Select date" v-model="addOfferList.time" style="width: 200px"></DatePicker>
+                <DatePicker type="datetime" placeholder="Select date" v-model="addOfferList.time" style="width: 200px"></DatePicker>
               </FormItem>
             </Form>
           </Modal>
-          <i-button class="oper" type="primary" @click="offerlist_modify=true">修改订单信息</i-button>
-          <Modal v-model="offerlist_modify" title="修改订单信息" @on-ok="offerlist_modifyok" @on-cancel="cancel">
+          <i-button class="oper" type="primary" @click="offerlist_modify">修改订单信息</i-button>
+          <Modal v-model="offerlist_modify1" title="修改订单信息" @on-ok="offerlist_modifyok" @on-cancel="cancel">
             <Form :model="formRight" label-position="right" :label-width="100">
               <FormItem label="订单编号">
                 <input type="text" disabled v-model="modifyOfferList.id" style="width:200px">
@@ -46,10 +48,12 @@
                 <input type="text" disabled v-model="modifyOfferList.name" style="width:200px">
               </FormItem>
               <FormItem label="负责人">
-                <input type="text" v-model="modifyOfferList.person" style="width:200px">
+                <Select v-model="modifyOfferList.person" style="width:200px">
+                  <Option v-for="item in modifyOfferList.personList" :value="item.id" :key="item.id">{{ item.name }}</Option>
+                </Select>
               </FormItem>
               <FormItem label="时间">
-                <DatePicker type="date" placeholder="Select date" v-model="modifyOfferList.time" style="width: 200px"></DatePicker>
+                <DatePicker type="datetime" placeholder="Select date" v-model="modifyOfferList.time" style="width: 200px"></DatePicker>
               </FormItem>
             </Form>
           </Modal>
@@ -137,8 +141,8 @@ export default {
   name: 'OfferList',
   data() {
     return {
-      addofferlist:false,
-      offerlist_modify:false,
+      addofferlist1:false,
+      offerlist_modify1:false,
       addmaterial1:false,
       material_modify1:false,
 
@@ -148,8 +152,20 @@ export default {
       offerList_data: [],
       offerList_list: [],
 
-      addOfferList: [],
-      modifyOfferList: [],
+      addOfferList: {
+        name: '',
+        person: '',
+        time: '',
+        nameList: '',
+        personList: ''
+      },
+      modifyOfferList:  {
+        id: '',
+        name: '',
+        person: '',
+        time: '',
+        personList: ''
+      },
 
       matrerial_id: '',
       matrerial_name:'',
@@ -229,7 +245,9 @@ export default {
         for(var i=0; i< res.body.length ;i++){
           this.offerList_data.push({
             id: res.body[i].id,
+            supplier_id: res.body[i].supplier.id,
             name: res.body[i].supplier.name,
+            user_id: res.body[i].user.id,
             person : res.body[i].user.name,
             time : res.body[i].time
           })
@@ -295,10 +313,11 @@ export default {
       for (var i = 0; i < arr.length; i++) {
         this.offerList_list.push(arr[i]['id'])
       }
-      this.modifySupplierName = arr[0]['name']
-      this.modifySupplierPhone = arr[0]['phone']
-      this.modifyPersonName = arr[0]['person']
-      this.modifyRemark = arr[0]['remark']
+      this.modifyOfferList.id = arr[0]['id']
+      this.modifyOfferList.supplier_id = arr[0]['supplier_id']
+      this.modifyOfferList.name = arr[0]['name']
+      this.modifyOfferList.person = arr[0]['user_id']
+      this.modifyOfferList.time = arr[0]['time']
     },
     materialSelectionClick(arr){
       this.material_list = []
@@ -328,7 +347,9 @@ export default {
             for(var i=0; i< res.body.length ;i++){
               this.offerList_data.push({
                 id: res.body[i].id,
+                supplier_id: res.body[i].supplier.id,
                 name: res.body[i].supplier.name,
+                user_id: res.body[i].user.id,
                 person : res.body[i].user.name,
                 time : res.body[i].time
               })
@@ -385,35 +406,68 @@ export default {
         function() {}
       )
     },
-    addsupplier:function(){
-      this.addsupplier1 = true;
+    addofferlist:function(){
+      this.$http({
+        url: '/getSupplier',
+        method: 'GET',
+      }).then(
+        function(res) {
+          this.addOfferList.nameList = res.body
+          // 返回总记录
+          //this.$router.push({path: '/hello', query:{data: res.body}})
+        },
+        function() {
+        }
+      )
+      this.$http({
+        url: '/getAllUserIdAndName',
+        method: 'GET',
+      }).then(
+        function(res) {
+          this.addOfferList.personList = res.body
+          // 返回总记录
+          //this.$router.push({path: '/hello', query:{data: res.body}})
+        },
+        function() {
+        }
+      )
+      this.addofferlist1 = true;
     },
-    supplier_addok: function() {
-      if (this.addSupplierName == ''){
+    offerlist_addok: function() {
+      if (this.addOfferList.name == ''){
         this.$Message.warning('请填写需要添加供应商的名称')
         return
       }
-      if (this.addSupplierPhone == ''){
-        this.$Message.warning('请填写需要添加供应商的名称')
+      if (this.addOfferList.person == ''){
+        this.$Message.warning('请填写需要添加的负责人')
         return
       }
-      if (this.addPersonName == ''){
-        this.$Message.warning('请选择需要添加供应商的负责人')
+      if (this.addOfferList.time == ''){
+        this.$Message.warning('请选择需要添加的时间')
         return 
       }
       this.$http({
-        url: '/addSupplier',
+        url: '/addOfferList',
         method: 'GET',
         params:{
-          name: this.addSupplierName,
-          phone: this.addSupplierPhone,
-          person: this.addPersonName,
-          remark: this.addRemark
+          supplier_id: this.addOfferList.name,
+          user_id: this.addOfferList.person,
+          time: this.addOfferList.time
         }
       }).then(
         function(res) {
           this.$Message.success('添加成功')
-          this.table_data = res.body
+          this.offerList_data = []
+            for(var i=0; i< res.body.length ;i++){
+              this.offerList_data.push({
+                id: res.body[i].id,
+                supplier_id: res.body[i].supplier.id,
+                name: res.body[i].supplier.name,
+                user_id: res.body[i].user.id,
+                person : res.body[i].user.name,
+                time : res.body[i].time
+              })
+            }
           // 返回总记录
           //this.$router.push({path: '/hello', query:{data: res.body}})
         },
@@ -422,38 +476,55 @@ export default {
         }
       )
     },
-    supplier_modify:function(){
+    offerlist_modify:function(){
       if (this.offerList_list.length == 0) {
-         this.$Message.warning('请选择需要修改的供应商')
+         this.$Message.warning('请选择需要修改的订单')
        }else if (this.offerList_list.length > 1){
-         this.$Message.warning('需要修改的供应商个数必须是一个')
+         this.$Message.warning('需要修改的订单个数必须是一个')
        }else{
-        
-        this.supplier_modify1 = true;
+        this.$http({
+        url: '/getAllUserIdAndName',
+        method: 'GET',
+      }).then(
+        function(res) {
+          this.modifyOfferList.personList = res.body
+          // 返回总记录
+          //this.$router.push({path: '/hello', query:{data: res.body}})
+        },
+        function() {
+        }
+      )
+        this.offerlist_modify1 = true;
        }
     },
     offerlist_modifyok: function() {
-       if(this.modifySupplierName == ''){
-         this.$Message.warning('请填写需要修改的供应商名称')
-       }else if(this.modifySupplierPhone == ''){
-         this.$Message.warning('请填写需要修改的供应商电话')
-       }else if(this.modifyPersonName == ''){
+       if(this.modifyOfferList.person == ''){
          this.$Message.warning('请选择需要修改的供应商负责人')
+       }else if(this.modifyOfferList.time == ''){
+         this.$Message.warning('请选择需要修改的时间')
        }else{
          this.$http({
-        url: '/updateSupplierById',
+        url: '/updateOfferList',
         method: 'GET',
         params:{
-          id: this.offerList_list[0],
-          name: this.modifySupplierName,
-          phone: this.modifySupplierPhone,
-          person: this.modifyPersonName,
-          remark: this.modifyRemark
+          id: this.modifyOfferList.id,
+          person: this.modifyOfferList.person,
+          time: this.modifyOfferList.time
         }
       }).then(
         function(res) {
           this.$Message.success('修改成功')
-          this.table_data = res.body
+          this.offerList_data = []
+          for(var i=0; i< res.body.length ;i++){
+            this.offerList_data.push({
+              id: res.body[i].id,
+              supplier_id: res.body[i].supplier.id,
+              name: res.body[i].supplier.name,
+              user_id: res.body[i].user.id,
+              person : res.body[i].user.name,
+              time : res.body[i].time
+            })
+          }
           // 返回总记录
           //this.$router.push({path: '/hello', query:{data: res.body}})
         },
