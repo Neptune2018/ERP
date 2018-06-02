@@ -32,6 +32,7 @@ var cmproductquery = require('./api/cmproductqueryapi')
 var cmmaterialquery = require('./api/cmmaterialqueryapi')
 var supplier = require('./api/supplierapi');
 var offerlist = require('./api/offerlistapi');
+var offer = require('./api/offerapi');
 var purchase = require('./api/purchaseapi');
 var threshold_warning = require('./api/threshold_warning_api');
 var io_events = require('./api/ioapi')
@@ -84,6 +85,10 @@ router.get('/updateSupplierById',supplier.updateSupplierById);
 router.get('/setMinOrder',supplier.setMinOrder);
 router.get('/addMaterialsToSupplier',supplier.addMaterialsToSupplier);
 router.get('/removeMaterialsFromSupplier',supplier.removeMaterialsFromSupplier);
+
+router.get('/getOfferByOfferList',offer.getOfferByOfferList);
+router.get('/deleteOffer',offer.deleteOffer);
+
 
 router.get('/getOfferList',offerlist.getOfferList);
 router.get('/getOfferListById',offerlist.getOfferListById);
