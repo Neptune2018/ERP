@@ -7,7 +7,7 @@
           <i-input v-model="id" placeholder="请输入编号" style="width: 70%"></i-input>
         </row>
         <row class="query">
-          <label class="top-label">供应商名称</label>
+          <label class="top-label">供应商</label>
           <i-input v-model="name" placeholder="请输入名称" style="width: 60%"></i-input>
         </row>
         <row class="query">
@@ -42,7 +42,7 @@
               <FormItem label="订单编号">
                 <input type="text" disabled v-model="modifyOfferList.id" style="width:200px">
               </FormItem>
-              <FormItem label="供应商名称">
+              <FormItem label="供应商">
                 <input type="text" disabled v-model="modifyOfferList.name" style="width:200px">
               </FormItem>
               <FormItem label="负责人">
@@ -72,7 +72,7 @@
         </row>
         <row class="query">
           <label class="top-label">批次</label>
-          <i-input v-model="matrerial_banch" placeholder="请输入批次" style="width: 70%"></i-input>
+          <i-input v-model="matrerial_batch" placeholder="请输入批次" style="width: 70%"></i-input>
         </row>
         <row class="search">
           <i-button class="cost-module-btn" type="ghost" icon="ios-search" shape="circle" @click="materialsearch()">搜索</i-button>
@@ -92,7 +92,7 @@
                 <input v-model="addmaterialList.quantity" style="width:200px">
               </FormItem>
               <FormItem label="批次">
-                <input v-model="addmaterialList.banch" style="width:200px">
+                <input v-model="addmaterialList.batch" style="width:200px">
               </FormItem>
               <FormItem label="单价">
                 <input v-model="addmaterialList.price" style="width:200px">
@@ -112,7 +112,7 @@
                 <input v-model="modifymaterialList.quantity" style="width:200px">
               </FormItem>
               <FormItem label="批次">
-                <input v-model="modifymaterialList.banch" style="width:200px">
+                <input v-model="modifymaterialList.batch" style="width:200px">
               </FormItem>
               <FormItem label="单价">
                 <input v-model="modifymaterialList.price" style="width:200px">
@@ -146,14 +146,14 @@ export default {
       name: '',
       person: '',
       offerList_data: [],
-      dataList: [],
+      offerList_list: [],
 
       addOfferList: [],
       modifyOfferList: [],
 
       matrerial_id: '',
       matrerial_name:'',
-      matrerial_banch: '',   
+      matrerial_batch: '',   
       material_data: [],
       material_list:[],
 
@@ -210,7 +210,7 @@ export default {
         },
         {
           title: '批次',
-          key: 'banch'
+          key: 'batch'
         },
         {
             title:'总价',
@@ -222,12 +222,18 @@ export default {
   },
   created() {
     this.$http({
-      url: '/',
+      url: '/getOfferList',
       method: 'GET'
     }).then(
       function(res) {
-        this.$Message.success('获取数据成功')
-        this.table_data = res.body
+        for(var i=0; i< res.body.length ;i++){
+          this.offerList_data.push({
+            id: res.body[i].id,
+            name: res.body[i].supplier.name,
+            person : res.body[i].user.name,
+            time : res.body[i].time
+          })
+        }
         // 返回总记录
         //this.$router.push({path: '/hello', query:{data: res.body}})
       },
@@ -285,9 +291,9 @@ export default {
       )
     },
     selectionClick(arr) {
-      this.dataList = []
+      this.offerList_list = []
       for (var i = 0; i < arr.length; i++) {
-        this.dataList.push(arr[i]['id'])
+        this.offerList_list.push(arr[i]['id'])
       }
       this.modifySupplierName = arr[0]['name']
       this.modifySupplierPhone = arr[0]['phone']
@@ -302,23 +308,31 @@ export default {
       if(arr.length == 1)
         this.modifymaterialMinorder = arr[0].minorder 
     },
-    deletesupplier: function() {
-      if (this.dataList.length != 0) {
+    deleteofferlist: function() {
+      if (this.offerList_list.length != 0) {
         this.$http({
-          url: '/deleteSupplierById',
+          url: '/deleteOfferList',
           method: 'GET',
           params: {
-            id: this.dataList
+            id: this.offerList_list
           }
         }).then(
           function(res) {
             this.$Message.success('删除成功')
-            for (var i = 0; i < this.dataList.length; i++){
-              if(this.dataList[i] == this.currentrow){
+            for (var i = 0; i < this.offerList_list.length; i++){
+              if(this.offerList_list[i] == this.currentrow){
                 this.material_data = []
               }
             }
-            this.table_data = res.body
+            this.offerList_data = []
+            for(var i=0; i< res.body.length ;i++){
+              this.offerList_data.push({
+                id: res.body[i].id,
+                name: res.body[i].supplier.name,
+                person : res.body[i].user.name,
+                time : res.body[i].time
+              })
+            }
             // 返回总记录
             //this.$router.push({path: '/hello', query:{data: res.body}})
           },
@@ -409,9 +423,9 @@ export default {
       )
     },
     supplier_modify:function(){
-      if (this.dataList.length == 0) {
+      if (this.offerList_list.length == 0) {
          this.$Message.warning('请选择需要修改的供应商')
-       }else if (this.dataList.length > 1){
+       }else if (this.offerList_list.length > 1){
          this.$Message.warning('需要修改的供应商个数必须是一个')
        }else{
         
@@ -430,7 +444,7 @@ export default {
         url: '/updateSupplierById',
         method: 'GET',
         params:{
-          id: this.dataList[0],
+          id: this.offerList_list[0],
           name: this.modifySupplierName,
           phone: this.modifySupplierPhone,
           person: this.modifyPersonName,
