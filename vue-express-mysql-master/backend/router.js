@@ -75,7 +75,7 @@ router.get('/addGetList', product.addGetList);
 router.get('/confirmOrderList', product.confirmOrderList);
 router.get('/findProductQuan', product.findProductQuan);
 
-router.get('/getAllUserId',supplier.getAllUserId);
+router.get('/getAllUserIdAndName',supplier.getAllUserIdAndName);
 router.get('/addSupplier',supplier.addSupplier);
 router.get('/getSupplier',supplier.getSupplier);
 router.get('/getSupplierById',supplier.getSupplierById);
@@ -88,8 +88,8 @@ router.get('/removeMaterialsFromSupplier',supplier.removeMaterialsFromSupplier);
 router.get('/getOfferList',offerlist.getOfferList);
 router.get('/getOfferListById',offerlist.getOfferListById);
 router.get('/getOfferListBySupplier',offerlist.getOfferListBySupplier);
-router.get('/addOfferList',purchase.addOfferList);
-router.get('/updateOfferList',purchase.updateOfferList);
+router.get('/addOfferList',offerlist.addOfferList);
+router.get('/updateOfferList',offerlist.updateOfferList);
 router.get('/deleteOfferList',offerlist.deleteOfferList);
 
 router.get('/getMaterials',purchase.getMaterials);

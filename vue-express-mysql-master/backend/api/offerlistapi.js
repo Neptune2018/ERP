@@ -46,3 +46,27 @@ exports.deleteOfferList = function(req,res){
     
 }
 
+exports.addOfferList = function(req,res){
+    console.log(req.session.sess)
+    req.session.sess = 'yes';
+    var params = url.parse(req.url, true).query;
+    console.log(params.time)
+    console.log(req.query)
+    OfferList.addOfferList(params.supplier_id, params.user_id,params.time,function(data){
+        OfferList.findAllOfferList(function(data) {
+            res.send(data)
+        });
+    });
+    
+}
+
+exports.updateOfferList = function(req,res){
+    console.log(req.session.sess);
+    req.session.sess = 'yes';
+    var params = url.parse(req.url, true).query;
+    OfferList.updateOfferList(params.id, params.person,params.time,function(){
+        OfferList.findAllOfferList(function(data) {
+            res.send(data)
+        });
+    });
+}

@@ -104,9 +104,9 @@ exports.findAllSupplier = function (id,name,person,callback) {
 //     });
 //   };
 
-exports.getAllUserId = function(callback){
+exports.getAllUserIdAndName = function(callback){
   User.findAll({
-    attributes : ['id']
+    attributes : ['id','name']
   }).then(function(result){
     callback(result)
   })

@@ -89,11 +89,11 @@ exports.updateSupplierById = function(req, res){
     });
 }
 
-exports.getAllUserId = function(req, res){
+exports.getAllUserIdAndName = function(req, res){
     console.log(req.session.sess)
     req.session.sess = 'yes';
     var params = url.parse(req.url, true).query;
-    Supplier.getAllUserId(function(data){
+    Supplier.getAllUserIdAndName(function(data){
             res.send(data)
     });
 }

@@ -11,10 +11,10 @@ exports.findAllOfferList = function (callback) {
   OfferList.findAll({
     include: [{
         model: Supplier,
-        attributes: ['name','person']
+        attributes: ['id','name','person']
     }, {
         model: User,
-        attributes: ['name']
+        attributes: ['id','name']
     }]
   }).then(function(data){
     callback(data);
@@ -54,3 +54,23 @@ exports.findOfferListByID = function (offerList_id,callback) {
         })
     })
   }
+
+  exports.addOfferList = async function (supplier_id, user_id,  time,callback) {
+    
+    var offerList = await OfferList.create({
+      time: time
+    }).then(function(result){
+      var sql1 = "update offer_lists set supplierId = " + supplier_id + ",userId = "+ user_id + " where id = "+ result.dataValues.id + ";"
+      db.query(sql1).then(function(data){
+          callback(data)
+      })
+    })
+  };
+  
+  exports.updateOfferList = function (offerList_id, user_id, time,callback) {
+    var sqlquery1="update offer_lists set userId = " + user_id+",time = "+ time + " where id = "+ offerList_id+";"
+    db.query(sqlquery1).then(function(data){
+      callback(data)
+    })
+    
+  };
