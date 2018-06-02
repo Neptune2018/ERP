@@ -7,7 +7,17 @@ var Material = require('../models').Material;
 var Sequelize = require('sequelize');
 var db = require('../models/index').DB;
 
-exports.findAllOfferList = function (callback) {
+exports.findAllOfferList = function (id,name,person,callback) {
+  var where = "1 = 1 ";
+  if(id){
+      where += "and offer_list.id =" + id; 
+  }
+  if(name){
+      where += " and supplier.name like '%" + name+"%'"; 
+  }
+  if(person){
+      where += " and user.name like '%" + person+"%'"; 
+  }
   OfferList.findAll({
     include: [{
         model: Supplier,
@@ -15,7 +25,8 @@ exports.findAllOfferList = function (callback) {
     }, {
         model: User,
         attributes: ['id','name']
-    }]
+    }],
+    where:Sequelize.literal(where)
   }).then(function(data){
     callback(data);
   });

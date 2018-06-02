@@ -11,7 +11,7 @@ exports.getOfferList = function(req,res){
     console.log(req.session.sess)
     req.session.sess = 'yes';
     var params = url.parse(req.url, true).query;
-    OfferList.findAllOfferList(function(data) {
+    OfferList.findAllOfferList(params.id,params.name,params.person,function(data) {
 		res.send(data)
 	});
 }
@@ -39,7 +39,7 @@ exports.deleteOfferList = function(req,res){
     req.session.sess = 'yes';
     var params = url.parse(req.url, true).query;
     OfferList.deleteOfferList(params['id[]'],function(data){
-        OfferList.findAllOfferList(function(data) {
+        OfferList.findAllOfferList(null,null,null,function(data) {
             res.send(data)
         });
     });
@@ -53,7 +53,7 @@ exports.addOfferList = function(req,res){
     console.log(params.time)
     console.log(req.query)
     OfferList.addOfferList(params.supplier_id, params.user_id,params.time,function(data){
-        OfferList.findAllOfferList(function(data) {
+        OfferList.findAllOfferList(null,null,null,function(data) {
             res.send(data)
         });
     });
@@ -65,7 +65,7 @@ exports.updateOfferList = function(req,res){
     req.session.sess = 'yes';
     var params = url.parse(req.url, true).query;
     OfferList.updateOfferList(params.id, params.person,params.time,function(){
-        OfferList.findAllOfferList(function(data) {
+        OfferList.findAllOfferList(null,null,null,function(data) {
             res.send(data)
         });
     });

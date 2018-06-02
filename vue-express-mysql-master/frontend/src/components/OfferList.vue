@@ -269,7 +269,7 @@ export default {
   methods: {
     search: function() {
       this.$http({
-        url: '/getSupplier',
+        url: '/getOfferList',
         method: 'GET',
         params: {
           id: this.id,
@@ -279,7 +279,18 @@ export default {
       }).then(
         function(res) {
           this.$Message.success('搜索成功')
-          this.table_data = res.body
+          this.offerList_data = []
+          for(var i=0; i< res.body.length ;i++){
+            this.offerList_data.push({
+              id: res.body[i].id,
+              supplier_id: res.body[i].supplier.id,
+              name: res.body[i].supplier.name,
+              user_id: res.body[i].user.id,
+              person : res.body[i].user.name,
+              time : res.body[i].time,
+              created_time: res.body[i].createdAt
+            })
+          }
           // 返回总记录
           //this.$router.push({path: '/hello', query:{data: res.body}})
         },
