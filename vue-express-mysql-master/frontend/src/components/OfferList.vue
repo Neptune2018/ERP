@@ -1,5 +1,6 @@
 <template>
   <div style="height: 520px;">
+    <p></p>
     <row class="content">
       <div class="search-form">
         <row class="query">
@@ -196,6 +197,10 @@ export default {
         {
             title: '时间',
             key: 'time'
+        },
+        {
+          title:'创建时间',
+          key: 'created_time'
         }
         // {
         //   title: '单价(元)',
@@ -249,7 +254,8 @@ export default {
             name: res.body[i].supplier.name,
             user_id: res.body[i].user.id,
             person : res.body[i].user.name,
-            time : res.body[i].time
+            time : res.body[i].time,
+            created_time: res.body[i].createdAt
           })
         }
         // 返回总记录
@@ -368,11 +374,11 @@ export default {
     deletematerial:function(){
       if (this.material_list.length != 0) {
         this.$http({
-          url: '/removeMaterialsFromSupplier',
+          url: '/deleteOffer',
           method: 'GET',
           params: {
-            id: this.currentrow,
-            materialid: this.material_list
+            offerlist_id: this.currentrow,
+            material_id: this.material_list
           }
         }).then(
           function(res) {
@@ -392,7 +398,7 @@ export default {
     currentchange: function(currentRow, oldCurrentRow) {
       this.currentrow = currentRow['id']
       this.$http({
-        url: '/getMaterialsBySupplier',
+        url: '/getOfferByOfferList',
         method: 'GET',
         params: {
           id: currentRow['id']
