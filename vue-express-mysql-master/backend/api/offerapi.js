@@ -13,7 +13,7 @@ exports.getOfferByOfferList = function(req,res){
     console.log(req.session.sess)
     req.session.sess = 'yes';
     var params = url.parse(req.url, true).query;
-    Offer.findAllOfferByOfferList(params.id,function(data) {
+    Offer.findAllOfferByOfferList(params.id,params.material_id,params.name,params.batch,function(data) {
 		res.send(data)
 	});
 }
@@ -24,7 +24,7 @@ exports.deleteOffer = function(req,res){
     var params = url.parse(req.url, true).query;
     console.log(params.offerlist_id,params['material_id[]'])
     Offer.deleteOffer(params.offerlist_id,params['material_id[]'],function(data){
-        Offer.findAllOfferByOfferList(params.offerlist_id,function(data) {
+        Offer.findAllOfferByOfferList(params.offerlist_id,null,null,null,function(data) {
             res.send(data)
         });
     });

@@ -305,13 +305,13 @@ export default {
         return
       }
       this.$http({
-        url: '/getMaterialsBySupplier',
+        url: '/getOfferByOfferList',
         method: 'GET',
         params: {
           id: this.currentrow,
-          materialid: this.matrerial_id,
+          material_id: this.matrerial_id,
           name: this.matrerial_name,
-          category: this.matrerial_category
+          batch: this.matrerial_batch
         }
       }).then(
         function(res) {
