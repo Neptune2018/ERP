@@ -57,7 +57,7 @@ export default {
               method: 'POST',
               body:{
                 username:that.form.username,
-                password:aesEncrypt(that.form.password, MD5(that.username)),
+                password:aesEncrypt(that.form.password, MD5(that.form.username)),
                 key: MD5(that.form.username)
               },
               dataType:"json",

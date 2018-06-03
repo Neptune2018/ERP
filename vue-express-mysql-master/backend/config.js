@@ -28,7 +28,7 @@ var config = {
 
   //session配置
   session_secret: 'nk_development_secret',
-  session_time: 1000 * 60 * 3, // 设置 session 的有效时间，单位毫秒
+  session_time: 1000 * 60 * 60* 24, // 设置 session 的有效时间，单位毫秒
 
    // redis 配置，默认是本地
   redis_host: '127.0.0.1',
