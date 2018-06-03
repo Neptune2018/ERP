@@ -1,6 +1,7 @@
-export const setUserState = (state, user, role, features) => {
+export const setUserState = (state, {user, role, features, isSignin}) => {
     state.user = user
     state.role = role
     state.features = features
-    state.isLogin = 1
+    state.isSignin = isSignin
+	console.log("mutation", state)
 }

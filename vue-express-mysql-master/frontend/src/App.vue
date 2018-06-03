@@ -87,6 +87,8 @@
 </template>
 
 <script>
+import { mapGetters, mapActions } from 'vuex'
+
 export default {
   name: 'app',
   components: {
@@ -106,12 +108,18 @@ export default {
       */
     iconSize () {
       return this.spanLeft === 4 ? 14 : 24
-    }
+    },
+    ...mapGetters({
+        isLogin: 'isLogin',
+    }),
   },
   methods: {
     /**
       * @description 点击图标切换大小图标并能显示或隐藏标题
       */
+    ...mapActions({
+        resetUserState: 'resetState',
+    }),
     toggleClick () {
       if (this.spanLeft === 4) {
         this.spanLeft = 2
@@ -131,7 +139,30 @@ export default {
       * @description 登出接口
       */
     logout () {
-     
+      if (!this.isLogin) {
+        this.$Message.warning("Not Sign In!")
+      }
+      else {
+          var that = this
+          this.$http({
+            url: '/signout',
+            method: 'POST',
+            dataType:"json",
+        }).then(function (res) {
+            console.log(res.body);
+            if (res.body === 'fail') {
+              alert("fail sign out");
+            }
+            else {
+              that.$Message.success("Success!")
+              that.resetUserState().then(function(){
+                  that.$router.push('/signin')
+              })
+            }
+        }, function () {
+            alert("ajax failure")
+        })
+      }
     },
     /**
       * @description 选择路由，渲染不同组件

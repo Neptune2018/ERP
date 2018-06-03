@@ -22,5 +22,5 @@ export const getFeatures = (state) => {
 }
 
 export const isLogin = (state) => {
-	return state.isLogin
+	return state.isSignin
 }

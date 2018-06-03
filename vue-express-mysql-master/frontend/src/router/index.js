@@ -217,12 +217,13 @@ const router = new Router({
 })
 
 
-router.beforeEach((to, from, next) => {
+router.beforeResolve((to, from, next) => {
   if (to.path === '/signin') {
     next();
   }
   else {
-    if (!store.getters.isLogin) {
+    console.log(store)
+    if (store.state.isSignin === false) {
       alert('NOT SIGN IN!');
       next('/signin')
     }

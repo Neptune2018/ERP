@@ -21,3 +21,11 @@ exports.signin = function(req, res) {
 		res.send('fail');
 	})
 }
+
+
+exports.signout = function(req, res) {
+	req.session.user = {};
+	req.session.features = [];
+	req.session.role = '';
+	res.send('');
+}

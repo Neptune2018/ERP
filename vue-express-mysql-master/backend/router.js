@@ -57,6 +57,7 @@ router.get('/userInfor', userInfor.showUser);
 router.get('/updateUser', userInfor.updateUser);
 router.get('/changePass', userInfor.changePass);
 router.post('/signin', user.signin);
+router.post('/signout', user.signout);
 
 router.get('/getgrouponloadapi', getgroup.onloadapi)
 router.get('/getsinglegrouponloadapi', getgroup.singleonloadapi)
