@@ -125,7 +125,7 @@ export default {
       * @description 帮助中心接口
       */
     help () {
-     
+      window.open("https://mrlchen.github.io/");
     },
     /**
       * @description 登出接口
