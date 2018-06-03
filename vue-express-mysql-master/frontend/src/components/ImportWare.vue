@@ -1,8 +1,10 @@
 <template>
     <div>
-        <h1 class="import-title">入库基本信息</h1>
-        <Card dis-hover class="import-table-wrapper">
-          <Form :model="formItem" :label-width="80" inline>
+        <Table :columns="column" :data="data"></Table>
+        <Button type="ghost" @click="clearData()" >添加记录</Button>
+        <Button type="ghost" @click="handleSubmit()" >物品入库</Button>
+        <Modal v-model="addInTable" title="入库基本信息" @on-ok="insertToTable">
+          <Form ref="formItem" :model="formItem" :label-width="80" inline>
             <FormItem label = "物品种类" >
               <RadioGroup  style="width:200px;" v-model="formItem.style">
                 <Radio label="物料"></Radio>
@@ -10,7 +12,7 @@
               </RadioGroup>
             </FormItem>
             <FormItem label = "入库日期">
-              <Input v-model="formItem.date" placeholder="" style="width:200px"></Input>
+              <DatePicker v-model="formItem.date" type="date" placeholder="选择入库时间" style="width: 200px"></DatePicker>
             </FormItem><br/>
             <FormItem label = "验收人">
               <Input v-model="formItem.fromPerson" placeholder="" style="width:200px"></Input>
@@ -40,19 +42,16 @@
             </FormItem>
             <br/>     
             <FormItem>
-              <Button type="primary" style="" @click=" stockAvail()">数量可用查询</Button>
+              <Button type="ghost" style="" @click=" stockAvail()">数量可用查询</Button>
             </FormItem>     
             <FormItem>
-              <Button type="primary" style="" @click=" placeAvail()">库位可用查询</Button>
+              <Button type="ghost" style="" @click=" placeAvail()">库位可用查询</Button>
             </FormItem>
-              <FormItem>
-              <Button type="primary" style="" @click=" wareAvail()">仓库可用查询</Button>
-            </FormItem>     
             <FormItem>
-              <Button type="primary" style="" @click="handleSubmit()">确认</Button>
-            </FormItem>
+              <Button type="ghost" style="" @click=" wareAvail()">仓库可用查询</Button>
+            </FormItem> 
           </Form>
-        </Card>
+        </Modal>
     </div>
 </template>
 
@@ -62,6 +61,68 @@ export default {
   data () {
     //一定要有return！！
     return{
+      column:[
+        {
+          title:'日期',
+          key:'date'
+        },
+        {
+          title:'类型',
+          key:'style'
+        },
+        {
+          title:'验收人',
+          key:'fromPerson'
+        },  
+        {
+          title:'入库人',
+          key:'toPerson'
+        },
+        {
+          title:'仓库id',
+          key:'stockId'
+        },     
+        {
+          title:'仓库库位',
+          key:'stockPlace'
+        }, 
+        {
+          title:'数量',
+          key:'quantity'
+        },
+        {
+          title:'单位',
+          key:'unit'
+        },
+        {
+          title:'批次',
+          key:'batch'
+        },
+        {
+          title:'操作',
+          key:'action',
+          width:150,
+          align:'center',
+          render: (h, params) => {
+            return h('div', [
+                h('Button', {
+                    props: {
+                        type: 'primary',
+                        size: 'small'
+                    },
+                    on: {
+                        click: () => {
+                            this.remove(params.index)
+                        }
+                    }
+                }, '删除')
+            ]);
+        }
+      }
+      ],
+      data:[],
+      addInTable:false,
+      addInStock:false,
       formItem: {
         date:'',
         fromPerson:'',
@@ -70,7 +131,7 @@ export default {
         stockName:'',
         style:'物料',
         stockPlace:'',
-        quantity:0,
+        quantity:'',
         unit:'',
         batch:''
       },
@@ -93,7 +154,7 @@ export default {
         batch:this.formItem.batch
       }
       this.$http.post('/insertWare',info).then(function (res) {
-        console.log(res.body)
+        //console.log(res.body)
         if(res.body == "success"){
           alert("入库成功")
         }
@@ -124,7 +185,7 @@ export default {
         quantity:this.formItem.quantity
       }
       this.$http.post('/stockAvail',info).then(function (res) {
-        console.log(res.body.quant)
+        //console.log(res.body.quant)
         if(res.body.quant === 0){
           alert('数量超过库存限制')
         } else {
@@ -142,7 +203,7 @@ export default {
         quantity:this.formItem.quantity
       }
       this.$http.post('/placeAvail',info).then(function (res) {
-        console.log(res.body.place)
+        //console.log(res.body.place)
         if(res.body.place === 0){
           alert('库位被占用')
         } else {
@@ -160,7 +221,7 @@ export default {
         quantity:this.formItem.quantity
       }
       this.$http.post('/wareAvail',info).then(function (res) {
-        console.log(res.body.ware)
+        //console.log(res.body.ware)
         if(res.body.ware === 0){
           alert('仓库id错误！')
         } else {
@@ -169,7 +230,41 @@ export default {
       }, function () {
           alert("ajax failure")
       }) 
-    }
+    },
+    insertToTable(){
+      const info = {
+        date:this.formItem.date,
+        fromPerson:this.formItem.fromPerson,
+        toPerson:this.formItem.toPerson,
+        stockId:this.formItem.stockId,
+        stockName:this.formItem.stockName,
+        style:this.formItem.style,
+        stockPlace:this.formItem.stockPlace,
+        quantity:this.formItem.quantity,
+        unit:this.formItem.unit,
+        batch:this.formItem.batch
+      }
+      this.data.push(info)
+      console.log('already push!')
+    },
+    remove (index) {
+      this.data.splice(index, 1);
+    },
+    clearData(){
+      this.formItem = {
+        date:'',
+        fromPerson:'',
+        toPerson:'',
+        stockId:'',
+        stockName:'',
+        style:'物料',
+        stockPlace:'',
+        quantity:'',
+        unit:'',
+        batch:''        
+      }
+      this.addInTable = true
+    }    
   },
 }
 </script>
