@@ -2,14 +2,17 @@
     <Card style="width:335px;height:320px" class="signincard">
         <div style="text-align:left" id='signin'>
             <br>
-
+            <Form ref="form" :model="form" :rules="rule">
+            <Form-item prop="username">
             <h3>Username</h3>
-            <Input  v-model="username" :placeholder="id_input" style="width: 300px"></Input>
-            <br><br>
-
+            <Input  v-model="form.username" placeholder="Username" style="width: 300px"></Input>
+            </Form-item>
+            <Form-item prop="password">
             <h3>Password</h3>
-            <Input  v-model="password" :placeholder="pd_input" style="width: 300px" type="password"></Input>
-            <br><br><br>
+            <Input  v-model="form.password" placeholder="Password" style="width: 300px" type="password"></Input>
+            </Form-item>
+            <br>
+            </Form>
 
             <Button type="success" long  v-on:click="signin()">Sign in</Button>
         </div>
@@ -23,9 +26,24 @@ import { MD5, aesEncrypt} from '../utils'
 
 export default {
       data() {
+        const validateEmpty = (rule, value, callback) => {
+            if (value === '') {
+                callback(new Error('Not Empty!'))
+            }
+        }
           return{
-            id_input:'your username...',
-            pd_input:'your password...',
+            form: {
+                username: '',
+                password: ''
+            },
+            rule: {
+                username: [
+                    { required: true, validator: validateEmpty, trigger: 'blur' }
+                ],
+                password: [
+                    { required: true, validator: validateEmpty, trigger: 'blur' },
+                ],
+            }
           }
         },
     methods:{
@@ -33,56 +51,31 @@ export default {
             setUserState: 'setState',
         }),
         signin(){    
-            var flag=0
-            if(this.username==null||this.username=="")
-            {
-                this.id_input="not empty"
-               
-            }
-            else
-            {
-                flag+=1
-                this.id_input="your username..."
-            }
-
-            if(this.password==null||this.password=="")
-            {
-                this.pd_input="not empty"
-
-            }
-            else
-            {   
-                flag+=1
-                this.pd_input='your password...'
-            }
-            if(flag==2){
-                var that = this
-                this.$http({
-                  url: '/signin',
-                  method: 'POST',
-                  body:{
-                    username:that.username,
-                    password:aesEncrypt(that.password, MD5(that.username)),
-                    key: MD5(that.username)
-                  },
-                  dataType:"json",
-              }).then(function (res) {
-                  console.log(res.body);
-                  if (res.body === 'fail') {
-                    alert("username or password wrong!");
-                  }
-                  else {
-                    that.$Message.success("Success!")
-                    console.log(res.body)
-                    that.setUserState({user: res.body.user,role: res.body.role,features: res.body.features}).then(function(){
-                        that.$router.push('/userInfor')
-                    })
-                  }
-              }, function () {
-                  alert("ajax failure")
-              })
-            }
-            
+            var that = this
+            this.$http({
+              url: '/signin',
+              method: 'POST',
+              body:{
+                username:that.form.username,
+                password:aesEncrypt(that.form.password, MD5(that.username)),
+                key: MD5(that.form.username)
+              },
+              dataType:"json",
+          }).then(function (res) {
+              console.log(res.body);
+              if (res.body === 'fail') {
+                alert("username or password wrong!");
+              }
+              else {
+                that.$Message.success("Success!")
+                console.log(res.body)
+                that.setUserState({user: res.body.user,role: res.body.role,features: res.body.features}).then(function(){
+                    that.$router.push('/userInfor')
+                })
+              }
+          }, function () {
+              alert("ajax failure")
+          })
         }
     }
 }
