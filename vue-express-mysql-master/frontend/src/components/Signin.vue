@@ -17,7 +17,7 @@
 </template>
 
 <script>
-import { mapMutations } from 'vuex'
+import { mapActions } from 'vuex'
 
 import { MD5, aesEncrypt} from '../utils'
 
@@ -29,8 +29,8 @@ export default {
           }
         },
     methods:{
-        ...mapMutations({
-            setUserState: 'setUserState',
+        ...mapActions({
+            setUserState: 'setState',
         }),
         signin(){    
             var flag=0
@@ -73,7 +73,10 @@ export default {
                   }
                   else {
                     that.$Message.success("Success!")
-                    this.setUserState(res.body.user, res.body.role, res.body.features)
+                    console.log(res.body)
+                    that.setUserState({user: res.body.user,role: res.body.role,features: res.body.features}).then(function(){
+                        that.$router.push('/userInfor')
+                    })
                   }
               }, function () {
                   alert("ajax failure")

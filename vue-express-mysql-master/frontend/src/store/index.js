@@ -18,7 +18,8 @@ const debug = process.env.NODE_ENV !== 'production'
 const state = {
 	user: {},
 	role: '',
-	features: []
+	features: [],
+  isLogin: 0,
 }
 
 export default new Vuex.Store({

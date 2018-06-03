@@ -20,3 +20,7 @@ export const getRole = (state) => {
 export const getFeatures = (state) => {
     return state.features
 }
+
+export const isLogin = (state) => {
+	return state.isLogin
+}

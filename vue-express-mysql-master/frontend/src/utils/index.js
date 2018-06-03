@@ -13,3 +13,12 @@ exports.aesEncrypt = function(data, key) {
     crypted += cipher.final('hex');
     return crypted;
 }
+
+exports.isInArray = (arr,value) => {
+    for(var i = 0; i < arr.length; i++){
+        if(value === arr[i]){
+            return true;
+        }
+    }
+    return false;
+}
