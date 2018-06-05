@@ -108,4 +108,6 @@ router.post('/insertWare',io_events.insertIO)
 router.get('/stocks', stocks.Stocks)
 router.get('/stations', stations.Stations)
 router.get('/iorecord', iorecord.IORecord)
+router.post('/findPerson',io_events.findPerson)
+router.post('/findStockId',io_events.findStockid)
 module.exports = router;
