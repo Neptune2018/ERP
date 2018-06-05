@@ -40,6 +40,9 @@
           <i-button class="oper" type="primary" @click="supplier_modify">修改供应商信息</i-button>
           <Modal v-model="supplier_modify1" title="修改供应商信息" @on-ok="supplier_modifyok" @on-cancel="cancel">
             <Form :model="formRight" label-position="right" :label-width="100">
+              <FormItem label="供应商编号">
+                <input type="text" disabled v-model="modifySupplierId" style="width:200px">
+              </FormItem>
               <FormItem label="供应商名称">
                 <input type="text" v-model="modifySupplierName" style="width:200px">
               </FormItem>
@@ -97,6 +100,13 @@
           <i-button class="oper" type="primary" @click="material_modify">修改起定点</i-button>
           <Modal v-model="material_modify1" title="修改起定点" @on-ok="material_modifyok" @on-cancel="cancel">
             <Form :model="formRight" label-position="right" :label-width="100">
+            <FormItem label="物料名称">
+                <input disabled v-model="modifymaterialId" style="width:200px">
+              </FormItem>
+            <FormItem label="物料名称">
+                <input disabled v-model="modifymaterialName" style="width:200px">
+              </FormItem>
+            <Form :model="formRight" label-position="right" :label-width="100">
               <FormItem label="起定点">
                 <input v-model="modifymaterialMinorder" style="width:200px">
               </FormItem>
@@ -135,6 +145,7 @@ export default {
 
       modifySupplierList: [],
       modifySupplierName: '',
+      modifySupplierId:'',
       modifySupplierPhone: '',
       modifyPersonName: '',
       modifyRemark: '',
@@ -149,6 +160,8 @@ export default {
       addmaterialIdList: [],
       addmaterialMinorder: '',
       modifymaterialMinorder: '',
+      modifymaterialId:'',
+      modifymaterialName:'',
       columns: [
         {
           type: 'selection',
@@ -282,6 +295,7 @@ export default {
       for (var i = 0; i < arr.length; i++) {
         this.dataList.push(arr[i]['id'])
       }
+      this.modifySupplierId = arr[0].id
       this.modifySupplierName = arr[0]['name']
       this.modifySupplierPhone = arr[0]['phone']
       this.modifyPersonName = arr[0]['person']
@@ -294,6 +308,8 @@ export default {
       }
       if(arr.length == 1)
         this.modifymaterialMinorder = arr[0].minorder 
+        this.modifymaterialId = arr[0].id
+        this.modifymaterialName = arr[0].name
     },
     deletesupplier: function() {
       if (this.dataList.length != 0) {
@@ -476,8 +492,15 @@ export default {
           }
         }).then(
           function(res) {
-            this.$Message.success('添加成功')
-            this.material_data = res.body[0]
+            if(res.body == '0'){
+              this.$Modal.error({
+                  title: "添加失败",
+                  content: "该供应商已经提供该物料"
+              });
+            }else{
+              this.$Message.success('添加成功')
+              this.material_data = res.body[0]
+            }
             // 返回总记录
             //this.$router.push({path: '/hello', query:{data: res.body}})
           },
