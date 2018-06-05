@@ -82,3 +82,15 @@ exports.updateBOM_productByid = function(req,res){
         });
     });
 }
+
+
+//返回：productid,quantity,materialid,name,property,materCateId
+exports.findmaterials = function(req, res) {
+    console.log(req.session.sess)
+    req.session.sess = 'yes';
+    var params = url.parse(req.url, true).query;
+    BOM_product.findmaterials(params.id,function(data) {
+        console.log(data);
+        res.send(data)
+    })
+}

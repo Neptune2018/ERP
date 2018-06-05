@@ -28,22 +28,22 @@ exports.listallMater_cates = function(req, res) {
 
 
 //列出指定父分类下的所有子分类,参数:materCateId，返回同上
-exports.listallMater_catesbyMaterCatename = function(req, res){
+exports.listallMater_catesbyMaterCateid = function(req, res){
     console.log(req.session.sess)
     req.session.sess = 'yes';
     var params = url.parse(req.url, true).query;
-    Mater_cate.listallMater_catesbyMater_Catename(params.name,function(data) {
+    Mater_cate.listallMater_catesbyMater_Cateid(params.id,function(data) {
 		res.send(data)
 	});
 }
 
 
 //列出指定父分类下的所有物料,参数:materCateId，返回（物料的）(id,name,property)编号名称状态属性
-exports.listallMaterbyMaterCatename = function(req, res){
+exports.listallMaterbyMaterCateid = function(req, res){
     console.log(req.session.sess)
     req.session.sess = 'yes';
     var params = url.parse(req.url, true).query;
-    Mater_cate.listallMaterbyMater_Catename(params.name,function(data) {
+    Mater_cate.listallMaterbyMater_Cateid(params.id,function(data) {
 		res.send(data)
 	});
 }

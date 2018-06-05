@@ -9,9 +9,6 @@
         <div class="query">
           <label class="top-label">物料名称</label><i-input v-model="material_name" placeholder="请输入物料名称" style="width: 60%"></i-input>
         </div>
-        <div class="query">
-          <label class="top-label">货品反查</label><i-input v-model="product_name" placeholder="请输入货品名称" style="width: 60%"></i-input>
-        </div>
         <i-button class="search" type="ghost" icon="ios-search" shape="circle" @click="material_search()">搜索</i-button>
       </div>
       <div style="width: 35%;float: left;margin: 0.5% 1% ">
@@ -109,6 +106,26 @@
             this.$Message.error('获取数据失败')
           }
         )
+        this.$http({
+          url: '/getMaterialcates',
+          method: 'GET'
+        }).then(
+          function(res) {
+            console.log(res.body)
+            for(var i=0;i<res.body.length;i++){
+            this.material_data0.push({
+              sortid: res.body[i].id,
+              sort: res.body[i].name
+            })
+            }
+            this.$Message.success('获取数据成功')
+            // 返回总记录
+            //this.$router.push({path: '/hello', query:{data: res.body}})
+          },
+          function() {
+            this.$Message.error('获取数据失败')
+          }
+        )
       },
     name: 'Material',
     data () {
@@ -188,6 +205,31 @@
     {
       this.select=arr
       },
+      handleRowChange(currentRow, oldCurrentRow){
+        console.log(currentRow)
+        this.material_data1=[]
+        this.$http({
+            url: '/cateMaterial',
+            method: 'GET',
+            params:{
+              id: currentRow.sortid
+            }
+        }).then(function (res) {
+            console.log(res.body)
+            for(var i=0;i<res.body.length;i++){
+            this.material_data1.push({
+              num: i+1,
+              name: res.body[i].name,
+              id: res.body[i].id,
+              amount:'2626',
+              property: res.body[i].property,
+              matercateid: res.body[i].materCateId
+            })
+            }
+        }, function () {
+            alert("ajax failure")
+        })
+    },
       material_delete(){
         this.material_data1=[]
         var k=0
@@ -202,7 +244,7 @@
         }).then(function (res) {
             console.log(res.body)
             console.log(k++)
-            if(k==deletecount-1){
+            if(k==deletecount){
             for(var i=0;i<res.body.length;i++){
             this.material_data1.push({
               num: i+1,

@@ -10,14 +10,14 @@
             <label class="top-label">货品名称</label><i-input v-model="product_name" placeholder="请输入货品名称" style="width: 60%"></i-input>
           </div>
           <div class="query">
-            <label class="top-label">物料反查</label><i-input v-model="material_name" placeholder="请输入物料名称" style="width: 60%"></i-input>
+            <label class="top-label">物料反查</label><i-input v-model="material_name" placeholder="请输入物料编号" style="width: 60%"></i-input>
           </div>
             <i-button class="search" type="ghost" icon="ios-search" shape="circle" @click="product_search()">搜索</i-button>
         </div>
     <div style="width: 35%;float: left;margin: 0.5% 1% ">
       <table cellspacing="10">
       <tr>
-        <td><i-button class="oper" type="primary" @click="material_add=true">新增货品</i-button></td>
+        <td><i-button class="oper" type="primary" @click="product_add=true">新增货品</i-button></td>
         <Modal
           v-model="product_add"
           title="新增货品"
@@ -40,7 +40,7 @@
           </div>
         </Modal>
 
-        <td><i-button class="oper" type="primary" @click="material_modify=true">修改货品信息</i-button></td>
+        <td><i-button class="oper" type="primary" @click="product_modify=true">修改货品信息</i-button></td>
         <Modal
           v-model="product_modify"
           title="修改货品信息"
@@ -69,7 +69,7 @@
       <tr>
         <td><i-button class="oper" type="primary" @click="handleSelectAll(true)">全选</i-button></td>
         <td><i-button class="oper" type="primary" @click="handleSelectAll(false)">全清</i-button></td>
-        <td><i-button class="oper" type="primary" @click="material_delete()">删除</i-button></td>
+        <td><i-button class="oper" type="primary" @click="product_delete()">删除</i-button></td>
         <td><i-button class="oper" type="primary">导出</i-button></td>
       </tr>
     </table>
@@ -80,7 +80,7 @@
           <i-table highlight-row stripe border :height="200"  :columns="columns1" :data="data1"  @on-current-change="handleRowChange"></i-table>
     </div>
   <div class="show" style="width: 70%">
-    <i-table @on-selection-change='matrial_selectionClick' stripe ref="selection" border :height="200" :columns="columns2" :data="data2"></i-table>
+    <i-table highlight-row @on-current-change="handleRowChange2" @on-selection-change='matrial_selectionClick' stripe ref="selection" border :height="200" :columns="columns2" :data="data2" ></i-table>
   </div>
     </div>
     <div>
@@ -143,6 +143,27 @@
             this.$Message.success('获取数据成功')
             // 返回总记录
             //this.$router.push({path: '/hello', query:{data: res.body}})
+          },
+          function() {
+            this.$Message.error('获取数据失败')
+          }
+        )
+        this.$http({
+          url: '/getMaterial',
+          method: 'GET'
+        }).then(
+          function(res) {
+            console.log(res.body)
+            for(var i=0;i<res.body.length;i++){
+            this.data3.push({
+              num: i+1,
+              material_name: res.body[i].name,
+              material_id: res.body[i].id,
+              count:'2626',
+              material_property: res.body[i].property,
+            })
+            }
+            this.$Message.success('获取数据成功')            // 返回总记            //this.$router.push({path: '/hello', query:{data: res.body}})
           },
           function() {
             this.$Message.error('获取数据失败')
@@ -219,11 +240,6 @@
         data2:[],
         columns3: [
           {
-            type: 'index',
-            width: 60,
-            align: 'center'
-          },
-          {
             title: '序号',
             key: 'num',
             sortable:'true'
@@ -252,7 +268,30 @@
       }
     },
     methods: {
-
+      handleRowChange2(currentRow, oldCurrentRow){
+        console.log(currentRow)
+        this.data3=[]
+        this.$http({
+            url: '/Productmaterial',
+            method: 'GET',
+            params:{
+              id: currentRow.id
+            }
+        }).then(function (res) {
+            console.log(res.body)
+            for(var i=0;i<res.body.length;i++){
+            this.data3.push({
+              num: i+1,
+              material_name: res.body[0][i].name,
+              material_id: res.body[0][i].id,
+              count:res.body[0][i].quantity,
+              material_property: res.body[0][i].property,
+            })
+            }
+        }, function () {
+            alert("ajax failure")
+        })
+      },
       handleSelectAll (status) {
         this.$refs.selection.selectAll(status);
       },
@@ -263,7 +302,7 @@
             url: '/cateProduct',
             method: 'GET',
             params:{
-              name: currentRow.sort
+              id: currentRow.sortid
             }
         }).then(function (res) {
             console.log(res.body)
@@ -316,6 +355,7 @@
         var k=0
         var deletecount=this.select.length
         for(var j=0;j<deletecount;j++){
+          
         this.$http({
             url: '/deleteProduct',
             method: 'GET',
@@ -323,9 +363,9 @@
               id: this.select[j].id,
             }
         }).then(function (res) {
-            console.log(res.body)
-            console.log(k++)
-            if(k==deletecount-1){
+          console.log(res.body)
+          console.log(k++)
+            if(k==deletecount){
             for(var i=0;i<res.body.length;i++){
             this.data2.push({
               num: i+1,
@@ -371,6 +411,8 @@
         },
       product_search() {
         this.data2=[]
+        if(!this.material_name){
+          console.log("222")
         this.$http({
             url: '/productSearch',
             method: 'GET',
@@ -391,7 +433,31 @@
             }
         }, function () {
             alert("ajax failure")
+        })}
+        else{
+          console.log("111")
+          this.$http({
+            url: '/materialSearchproduct',
+            method: 'GET',
+            params:{
+              id: this.material_name,
+            }
+        }).then(function (res) {
+            console.log(res.body[0].productId)
+            for(var i=0;i<res.body.length;i++){
+            this.data2.push({
+              num: i+1,
+              id: res.body[0][i].productId,
+              name: res.body[0][i].name,
+              add_time: '2018-5-27',
+              productCateId: '111'
+            })
+            }
+        }, function () {
+            alert("ajax failure")
         })
+
+        }
     },
     }
   }

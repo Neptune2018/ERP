@@ -1,5 +1,6 @@
 var BOM_product = require('../models').Product;
 var Product = require('../models').Product;
+var db = require('../models/index').DB;
 
 
 //添加函数,函数:
@@ -36,7 +37,7 @@ exports.listallBOM_productbyIdname = function (Id,name,callback) {
     'attributes': ['id', 'name','price','remark','productCateId'],
     'where': {
         'Id': Id,
-        'name': name,
+        'name': {'$like': '%'+name+'%'},
         'status': 0
     }
   }).then(function(result){
@@ -61,7 +62,7 @@ exports.listallBOM_productbyId = function (Id,callback) {
 exports.listallBOM_productbyname = function (name,callback) {
   BOM_product.findAll({
     'where': {
-        'name': name,
+        'name': {'$like': '%'+name+'%'},
         'status': 0
     }
   }).then(function(result){
@@ -95,5 +96,14 @@ exports.deleteBOM_productById = function (id,callback) {
   }).then(function(result){
     callback(result)
   });
+};
+
+
+exports.findmaterials = function(id,dosomething) {
+    var sqlquery1="SELECT * FROM consists left join materials on consists.materialId = materials.id where productId =" + id;
+    db.query(sqlquery1).then(function(tests){ 
+            //console.log(tests)       
+          dosomething(tests)
+        });
 };
 

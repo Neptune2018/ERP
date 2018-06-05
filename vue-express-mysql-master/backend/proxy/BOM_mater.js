@@ -1,6 +1,6 @@
 var BOM_mater = require('../models').BOM_mater;
 var Material = require('../models').Material;
-
+var db = require('../models/index').DB;
 
 //添加函数
 exports.addBOM_mater = function (id,name,property,materCateId,callback) {
@@ -50,7 +50,7 @@ exports.listallBOM_materbyname = function (name,callback) {
   Material.findAll({
     'attributes': ['id', 'name','property','materCateId'],
     'where': {
-        'name': name,
+        'name': {'$like': '%'+name+'%'},
         'status': 0
     }
   }).then(function(result){
@@ -88,7 +88,7 @@ exports.listallBOM_materbyIdname = function (Id,name,callback) {
     'attributes': ['id', 'name','property','materCateId'],
     'where': {
         'Id': Id,
-        'name': name,
+        'name': {'$like': '%'+name+'%'},
         'status': 0
     }
   }).then(function(result){
@@ -98,5 +98,10 @@ exports.listallBOM_materbyIdname = function (Id,name,callback) {
 };
 
 
-
+exports.findproducts = function(id,dosomething) {
+    var sqlquery1="SELECT * FROM consists inner join products on consists.productId = products.id where materialId =" + id;
+    db.query(sqlquery1).then(function(tests){   
+          dosomething(tests)
+        });
+};
 

@@ -10,7 +10,7 @@ exports.addProduct_cate = function(req, res) {
     req.session.sess = 'yes';
     var params = url.parse(req.url, true).query;
     Product_cate.addProduct_cate(params.name,params.productCateId,function(data){
-        Mater_cate.listallProduct_cates(function(data) {
+        Product_cate.listallProduct_cates(function(data) {
             res.send(data)
         });
     });
@@ -26,23 +26,22 @@ exports.listallProduct_cates = function(req, res) {
 }
 
 //列出指定父分类下的所有子分类,参数:materCateId，返回同上
-exports.listallProduct_catesbyProductCatename = function(req, res){
+exports.listallProduct_catesbyProductCateid = function(req, res){
     console.log(req.session.sess)
     req.session.sess = 'yes';
     var params = url.parse(req.url, true).query;
-    Product_cate.listallProduct_catesbyProduct_catename(params.name,function(data) {
+    Product_cate.listallProduct_catesbyProduct_cateid(params.id,function(data) {
 		res.send(data)
 	});
 }
 
 
 //列出指定父分类下的所有物料,参数:materCateId，返回（物料的）(id,name,property)编号名称状态属性
-exports.listallProductbyProductCatename = function(req, res){
+exports.listallProductbyProductCateid = function(req, res){
     console.log(req.session.sess)
     req.session.sess = 'yes';
     var params = url.parse(req.url, true).query;
-    console.log(params.name.toString)
-    Product_cate.listallProductbyProduct_catename(params.name,function(data) {
+    Product_cate.listallProductbyProduct_cateid(params.id,function(data) {
 		res.send(data)
 	});
 }
