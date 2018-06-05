@@ -162,6 +162,9 @@ export default {
       }else if(name === 'ExportWare'){
         this.bigPos = '仓库管理'
         this.samllPos = '出库管理'
+      }else if(name === 'ioinfo'){
+        this.bigPos = '仓库管理'
+        this.smallPos = '出入库信息'
       }else if(name === 'inventory'){
         this.bigPos = '仓库管理'
         this.samllPos = '库存情况管理'
