@@ -14,8 +14,7 @@ import Signin from '@/components/Signin'
 import Generate from '@/components/Generate'
 import MatrialLack from '@/components/MatrialLack'
 import SafeStock from '@/components/SafeStock'
-
-import ThresholdWarning from '@/components/ThresholdWarning'
+import Stocks from '@/components/Stocks'
 import ImportWare from '@/components/ImportWare'
 import ExportWare from '@/components/ExportWare'
 import IOList from '@/components/IOList'
@@ -95,16 +94,17 @@ export default new Router({
     {
       path:'/ExportWare',
       name: 'ExportWare',
-      component: ExportWare},
-    {
-          path: '/inventory',
-          name: 'IOList',
-          component: IOList
+      component: ExportWare
     },
     {
-          path: '/inventory/stocks',
-          name: 'ThresholdWarning',
-          component: ThresholdWarning
-    }
+      path: '/ioinfo',
+      name: 'IOList',
+      component: IOList
+    },
+    {
+      path: '/inventory',
+      name: 'Stocks',
+      component: Stocks
+      }
   ]
 })

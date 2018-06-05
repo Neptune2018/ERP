@@ -41,6 +41,7 @@
               </template>
               <Menu-item name='ImportWare'>入库管理</Menu-item>
               <Menu-item name='ExportWare'>出库管理</Menu-item>
+              <Menu-item name='ioinfo'>出入库信息</Menu-item>
               <Menu-item name='inventory'>库存情况管理</Menu-item>
             </Submenu>
             <Submenu name='purchase'>
@@ -76,7 +77,7 @@
               <Icon type='navicon' size='32'></Icon>
             </i-button>
             <span>当前所在位置为：{{bigPos}} / {{samllPos}}</span>
-          </div> 
+          </div>
           <div class='main-content'>
             <router-view></router-view>
           </div>
@@ -125,13 +126,13 @@ export default {
       * @description 帮助中心接口
       */
     help () {
-     
+
     },
     /**
       * @description 登出接口
       */
     logout () {
-     
+
     },
     /**
       * @description 选择路由，渲染不同组件
@@ -166,7 +167,7 @@ export default {
         this.samllPos = '库存情况管理'
       }else if(name === 'starving'){
         this.bigPos = '采购辅助管理'
-        this.samllPos = '缺料浏览' 
+        this.samllPos = '缺料浏览'
       }else if(name === 'supplier'){
         this.bigPos = '采购辅助管理'
         this.samllPos = '供应商管理'
@@ -175,7 +176,7 @@ export default {
         this.samllPos = '安全库存'
       }else if(name === 'generate'){
         this.bigPos = '生产管理'
-        this.samllPos = '生成订单' 
+        this.samllPos = '生成订单'
       }else if(name === 'state'){
         this.bigPos = '生产管理'
         this.samllPos = '订单状态查询'
@@ -185,7 +186,7 @@ export default {
       }else if(name === 'group'){
         this.bigPos = '个人信息管理'
         this.samllPos = '分组'
-      }      
+      }
       this.$router.push('/' + name)
     },
   },
@@ -197,10 +198,10 @@ export default {
 <style scoped>
 .app
 {
-    padding: 0;  
-    margin: 0;  
-    height: 100%;  
-    overflow:hidden;  
+    padding: 0;
+    margin: 0;
+    height: 100%;
+    overflow:hidden;
 }
 
 .layout {
