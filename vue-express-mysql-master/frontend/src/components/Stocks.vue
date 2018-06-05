@@ -1,21 +1,17 @@
 <template>
   <div>
-    <Tabs type="card">
-        <Tab-pane label="库存">
-            <Table strip height="230" :columns="columns0" :data="data0"></Table>
-        </Tab-pane>
-    </Tabs>
-    <Tabs type="card" style="margin-top:10px;">
-        <Tab-pane label="库存预警">           
-            <Table strip height="132" :columns="columns1" :data="data2"></Table>
-        </Tab-pane>
-    </Tabs > 
-    <Button @click="back()">返回</Button>
+    <p>仓库基本信息</p>
+    <Table strip height="200" :columns="columns1" :data="data1"></Table>
+    <p>库存</p>
+    <Table strip height="450" :columns="columns0" :data="data0"></Table>
+    <!-- <p>库存预警</p>
+    <Table strip height="200" :columns="columns1" :data="data2"></Table> -->
+    <!-- <Button @click="back()">返回</Button> -->
   </div>
 </template>
 <script>
     export default {
-      name:'ThresholdWarning',
+      name:'Stocks',
         data () {
             return {
                 columns0:[
@@ -73,56 +69,47 @@
                 ],
                 columns1: [
                     {
-                        title: '库存id',
-                        key: 'repertoryId'
+                        title: '仓库编码',
+                        key: 'id'
                     },
                     {
-                        title: '存货id',
-                        key: 'materialId'
-                    },
-                    {
-                        title: '名称',
+                        title: '仓库名称',
                         key: 'name'
                     },
                     {
-                        title:'实际库存',
-                        key:'remain'
+                        title: '标记',
+                        key: 'remark'
                     },
                     {
-                        title:'具体货位',
-                        key:'place'
+                        title:'管理员',
+                        key:'user1name'
                     },
                     {
-                      title:'单位',
-                      key:'unit'
-                    },
-                    {
-                      title:'批次',
-                      key:'batch'
+                        title:'负责人',
+                        key:'user2name'
                     }
                 ],
                 data0:[],
-                data2: [
-                    {
-                        repertoryId: '1234',
-                        id: 18,
-                        name: '北京市朝阳区芍药居',
-                        remain:44,
-                        place:'仓库1',
-                        unit:'kg',
-                        batch:1234
-                    }
-                ]
+                data1: []
             }
         },
         created:function()
         {
+            // this.$http({
+            //     url: '/threshold_warning',
+            //     method: 'GET',
+            // }).then(function (res) {
+            //     console.log(res.body);
+            //     this.data2 = res.body;
+            // }, function () {
+            //     alert("ajax failure")
+            // });
             this.$http({
-                url: '/threshold_warning',
+                url: '/stations',
                 method: 'GET',
             }).then(function (res) {
                 console.log(res.body);
-                this.data2 = res.body;
+                this.data0 = res.body;
             }, function () {
                 alert("ajax failure")
             });
@@ -143,9 +130,9 @@
               content: `序号: ${this.data0[index].id}<br>货品编号:${this.data0[index].goodsId}<br>物料名称:${this.data0[index].name}<br>数量:${this.data0[index].remain}<br>单位:${this.data0[index].unit}<br>性质:${this.data0[index].style}<br>批次:${this.data0[index].batch}<br>仓库ID:${this.data0[index].repertoryId}`
             })
           },
-          back() {
-            this.$router.push({path: '/inventory'})
-          }
+          // back() {
+          //   this.$router.push({path: '/inventory'})
+          // }
         }
     }
 </script>
