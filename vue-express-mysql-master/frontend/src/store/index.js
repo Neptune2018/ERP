@@ -15,11 +15,12 @@ Vue.use(Vuex)
 //this come from document from offcial web of vue
 const debug = process.env.NODE_ENV !== 'production'
 
-const state = {
-	user: {},
-	role: '',
-	features: []
-}
+// const state = {
+// 	user: {},
+// 	role: '',
+// 	features: [],
+//   isLogin: false,
+// }
 
 export default new Vuex.Store({
   states,

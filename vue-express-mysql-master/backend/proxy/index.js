@@ -1,5 +1,9 @@
-
 exports.Test = require('./test');
+exports.Mater_cate = require('./mater_cate');
+exports.Product_cate = require('./product_cate');
+exports.BOM_mater = require('./BOM_mater');
+exports.BOM_product = require('./BOM_product');
+
 exports.CostModuleonload =require('./costmoduleonload')
 exports.CMProductQuery =require('./cmproductquery')
 exports.CostModuleonloadmtr =require('./costmoduleonloadmtr')
@@ -12,3 +16,10 @@ exports.Material = require('./material');
 exports.Purchase = require('./purchase');
 exports.Product = require('./product');
 exports.modifyUserInfo=require('./modifyUserInfo');
+<<<<<<< HEAD
+=======
+exports.ThresholdWarningFunc = require('./threshold_warning');
+exports.Stocks = require('./stocks');
+exports.Stations = require('./stations');
+exports.IORecord = require('./iorecord');
+>>>>>>> 452fcea8e23f7760ecfebbb6a5af07cbc7c876c4

@@ -1,11 +1,11 @@
-var path = require('path');
+﻿var path = require('path');
 
 var config = {
   // debug 为 true 时，用于本地调试
   debug: true,
 
   name: '企业级应用开发', // 名字
-  description: '', // 描述
+  description: '125', // 描述
   keywords: 'nodejs, node, express, connect',
 
   static: '../frontend/dist', // 静态文件存储域名
@@ -16,8 +16,8 @@ var config = {
   db: {
     host: 'localhost',
     dialect: 'mysql',
-    user: 'wenbin',
-    password: '137139',
+    user: 'wdyiwdwd',
+    password: '',
     database: 'development',
     pool: {
       max: 5,    //最大连接数
@@ -28,7 +28,7 @@ var config = {
 
   //session配置
   session_secret: 'nk_development_secret',
-  session_time: 1000 * 60 * 3, // 设置 session 的有效时间，单位毫秒
+  session_time: 1000 * 60 * 60* 24, // 设置 session 的有效时间，单位毫秒
 
    // redis 配置，默认是本地
   redis_host: '127.0.0.1',
