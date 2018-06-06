@@ -1,5 +1,9 @@
+/**
+  在出入库信息中显示
+  【注意！！】需要先于ioitem和iolist两个js文件执行
+**/
 var models = require('../models')
-const addMaterials = async function(){
+const addProducts = async function(){
   // await models.Product.destroy({where:{}});
   var material1 = await models.Product.create({
     'id': 241,
@@ -39,3 +43,4 @@ const addMaterials = async function(){
   });
 
 }
+addProducts();
