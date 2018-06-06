@@ -14,7 +14,7 @@
       <div style="width: 35%;float: left;margin: 0.5% 1% ">
         <table cellspacing="10">
           <tr>
-          <td><i-button class="oper" type="primary" @click="material_add=true">新增物料</i-button></td>
+          <td><i-button class="oper" type="primary" @click="material_addf()">新增物料</i-button></td>
           <Modal
          v-model="material_add"
         title="新增物料"
@@ -30,17 +30,29 @@
             <label class="model1">物料性质</label><i-input v-model="add_mproperty" placeholder="请输入物料性质" style="width: 60%"></i-input>
           </div>
            <div class="q">
-            <label class="model1">物料分类</label><i-input v-model="add_mmaterialcateid" placeholder="请输入物料类别" style="width: 60%"></i-input>
+            <Form :model="formRight" label-position="rigtht" :label-width="100">
+            <FormItem label="物料分类">
+          <Select v-model="addMaterialcatenum" style="width: 60%" >
+              <Option v-for="item in addMaterialcatenumList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+            </Select>
+          </FormItem>
+          </Form>
           </div>
     </Modal>
-            <td><i-button class="oper" type="primary" @click="material_modify=true">修改物料信息</i-button></td>
+            <td><i-button class="oper" type="primary" @click="material_modifyf()">修改物料信息</i-button></td>
            <Modal
          v-model="material_modify"
         title="修改物料信息"
         @on-ok="material_modifyok"
         @on-cancel="cancel">
         <div class="q">
-            <label class="model2">物料编号</label><i-input v-model="modify_mnumber" placeholder="请输入编号" style="width: 60%"></i-input>
+            <Form :model="formRight" label-position="rigtht" :label-width="100">
+            <FormItem label="物料编号">
+          <Select v-model="modifyMaterialnum" style="width: 60%" >
+              <Option v-for="item in modifyMaterialnumList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+            </Select>
+          </FormItem>
+          </Form>
           </div>
           <div class="q">
             <label class="model2">物料名称</label><i-input v-model="modify_mname" placeholder="请输入物料名称" style="width: 60%"></i-input>
@@ -49,8 +61,17 @@
             <label class="model2">物料性质</label><i-input v-model="modify_mproperty" placeholder="请输入物料性质" style="width: 60%"></i-input>
           </div>
            <div class="q">
-            <label class="model2">物料分类</label><i-input v-model="modify_mmaterialcateid" placeholder="请输入物料类别" style="width: 60%"></i-input>
-          </div>
+            <Form :model="formRight" label-position="rigtht" :label-width="100">
+            <FormItem label="物料分类">
+          <Select v-model="modifyMaterialcatenum" style="width: 60%" >
+              <Option v-for="item in modifyMaterialcatenumList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+            </Select>
+          </FormItem>
+          </Form>
+          </div>    
+          <div class="q">
+            <label class="model2">物料状态</label><i-input v-model="modify_materialstatus" placeholder="请输入物料类别" style="width: 60%"></i-input>
+          </div>             
     </Modal>
             <td></td>
             <td><i-button class="oper" type="primary">打印</i-button></td>
@@ -91,16 +112,28 @@
           function(res) {
             console.log(res.body)
             for(var i=0;i<res.body.length;i++){
+            if(res.body[i].status==0){
             this.material_data1.push({
               num: i+1,
               name: res.body[i].name,
               id: res.body[i].id,
               amount:'2626',
               property: res.body[i].property,
-              matercateid: res.body[i].materCateId
-            })
+              matercateid: res.body[i].materCateId,
+              materstatus: "启用"
+            })}
+            else{
+            this.material_data1.push({
+              num: i+1,
+              name: res.body[i].name,
+              id: res.body[i].id,
+              amount:'2626',
+              property: res.body[i].property,
+              matercateid: res.body[i].materCateId,
+              materstatus: "停用"
+            })  
             }
-            this.$Message.success('获取数据成功')            // 返回总记            //this.$router.push({path: '/hello', query:{data: res.body}})
+            }           // 返回总记            //this.$router.push({path: '/hello', query:{data: res.body}})
           },
           function() {
             this.$Message.error('获取数据失败')
@@ -118,7 +151,6 @@
               sort: res.body[i].name
             })
             }
-            this.$Message.success('获取数据成功')
             // 返回总记录
             //this.$router.push({path: '/hello', query:{data: res.body}})
           },
@@ -131,6 +163,13 @@
     data () {
       //一定要有return！！
       return{
+        addMaterialcatenum:'',
+        addMaterialcatenumList:[],
+        modifyMaterialcatenum:'',
+        modifyMaterialcatenumList:[],
+        modifyMaterialnum:'',
+        modifyMaterialnumList:[],
+        modify_materialstatus:'',
         select:'',
         modify_mnumber:'',
         modify_mname:'',
@@ -195,12 +234,68 @@
           {
             title:'物料分类',
             key:'matercateid'
+          },
+          {
+            title: '物料状态',
+            key: 'materstatus'
           }
         ],
         material_data1:[],
       }
     },
     methods: {
+      material_modifyf(){
+        this.modifyMaterialnum=''
+        this.modifyMaterialnumList=[]
+        this.$http({
+          url: '/getMaterial',
+          method: 'GET'
+        }).then(
+          function(res) {
+            console.log(res.body)
+            for(var i=0;i<res.body.length;i++){
+            this.modifyMaterialnumList.push({
+              label: res.body[i].id, 
+              value:  res.body[i].id,
+            })            
+            }
+          },
+        )
+        this.modifyMaterialcatenum=''
+        this.modifyMaterialcatenumList=[]
+        this.$http({
+          url: '/getMaterialcates',
+          method: 'GET'
+        }).then(
+          function(res) {
+            console.log(res.body)
+            for(var i=0;i<res.body.length;i++){
+              console.log(res.body[i].id)
+            this.modifyMaterialcatenumList.push({
+              label: res.body[i].id, 
+              value:  res.body[i].id,         
+            })
+            }})
+        this.material_modify=true
+      },
+      material_addf(){
+      this.addMaterialcatenum=''
+        this.addMaterialcatenumList=[]
+        this.$http({
+          url: '/getMaterialcates',
+          method: 'GET'
+        }).then(
+          function(res) {
+            console.log(res.body)
+            for(var i=0;i<res.body.length;i++){
+              console.log(res.body[i].id)
+            this.addMaterialcatenumList.push({
+              label: res.body[i].id, 
+              value:  res.body[i].id,         
+            })
+            }})
+        this.material_add=true
+      },
       matrial_selectionClick(arr)
     {
       this.select=arr
@@ -217,14 +312,27 @@
         }).then(function (res) {
             console.log(res.body)
             for(var i=0;i<res.body.length;i++){
+            if(res.body[i].status==0){
             this.material_data1.push({
               num: i+1,
               name: res.body[i].name,
               id: res.body[i].id,
               amount:'2626',
               property: res.body[i].property,
-              matercateid: res.body[i].materCateId
-            })
+              matercateid: res.body[i].materCateId,
+              materstatus: "启用"
+            })}
+            else{
+            this.material_data1.push({
+              num: i+1,
+              name: res.body[i].name,
+              id: res.body[i].id,
+              amount:'2626',
+              property: res.body[i].property,
+              matercateid: res.body[i].materCateId,
+              materstatus: "停用"
+            })  
+            }
             }
         }, function () {
             alert("ajax failure")
@@ -261,33 +369,60 @@
         }
         },
       material_modifyok(){
+        if(this.modifyMaterialnum=="")
+        {alert("请输入编号")}
+        else{
         this.material_data1=[]
+        if(this.modify_materialstatus=="停用")
+        {this.modify_materialstatus=1}
+        else{this.modify_materialstatus=0}
         this.$http({
             url: '/modifyMaterial',
             method: 'GET',
             params:{
-              id: this.modify_mnumber,
+              id: this.modifyMaterialnum,
               name: this.modify_mname,
               property: this.modify_mproperty,
-              materCateId: this.modify_mmaterialcateid,
+              materCateId: this.modifyMaterialcatenum,
+              status: this.modify_materialstatus
             }
         }).then(function (res) {
             console.log(res.body)
             for(var i=0;i<res.body.length;i++){
+            if(res.body[i].status==0){
             this.material_data1.push({
               num: i+1,
               name: res.body[i].name,
               id: res.body[i].id,
               amount:'2626',
               property: res.body[i].property,
-              matercateid: res.body[i].materCateId
-            })
+              matercateid: res.body[i].materCateId,
+              materstatus: "启用"
+            })}
+            else{
+            this.material_data1.push({
+              num: i+1,
+              name: res.body[i].name,
+              id: res.body[i].id,
+              amount:'2626',
+              property: res.body[i].property,
+              matercateid: res.body[i].materCateId,
+              materstatus: "停用"
+            })  
+            }
             }
         }, function () {
             alert("ajax failure")
-        })
+        })}
       },
       material_addok(){
+      if(this.add_mnumber==" ")
+      {alert("请输入编号")}
+      else if(this.addMaterialcatenum=="")
+      {
+        alert("请输入分类名称")
+      }
+      else{
       this.material_data1=[]
         this.$http({
             url: '/addMaterial',
@@ -296,23 +431,36 @@
               id: this.add_mnumber,
               name: this.add_mname,
               property: this.add_mproperty,
-              materCateId: this.add_mmaterialcateid,
+              materCateId: this.addMaterialcatenum,
             }
         }).then(function (res) {
             console.log(res.body)
             for(var i=0;i<res.body.length;i++){
+            if(res.body[i].status==0){
             this.material_data1.push({
               num: i+1,
               name: res.body[i].name,
               id: res.body[i].id,
               amount:'2626',
               property: res.body[i].property,
-              matercateid: res.body[i].materCateId
-            })
+              matercateid: res.body[i].materCateId,
+              materstatus: "启用"
+            })}
+            else{
+            this.material_data1.push({
+              num: i+1,
+              name: res.body[i].name,
+              id: res.body[i].id,
+              amount:'2626',
+              property: res.body[i].property,
+              matercateid: res.body[i].materCateId,
+              materstatus: "停用"
+            })  
+            }
             }
         }, function () {
             alert("ajax failure")
-        })
+        })}
       },
       material_search() {
         this.material_data1=[]
@@ -326,14 +474,27 @@
         }).then(function (res) {
             console.log(res.body)
             for(var i=0;i<res.body.length;i++){
+            if(res.body[i].status==0){
             this.material_data1.push({
               num: i+1,
               name: res.body[i].name,
               id: res.body[i].id,
               amount:'2626',
               property: res.body[i].property,
-              remark:'不知道数量和备注在数据库中代号'
-            })
+              matercateid: res.body[i].materCateId,
+              materstatus: "启用"
+            })}
+            else{
+            this.material_data1.push({
+              num: i+1,
+              name: res.body[i].name,
+              id: res.body[i].id,
+              amount:'2626',
+              property: res.body[i].property,
+              matercateid: res.body[i].materCateId,
+              materstatus: "停用"
+            })  
+            }
             }
         }, function () {
             alert("ajax failure")

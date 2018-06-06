@@ -47,7 +47,7 @@
     </div>
     <div>
       <div class="show" style="width: 45%">
-        <!-- <Tree :data="product_data1"></Tree> -->
+        <Tree :data="product_data1"></Tree>
         <i-table  highlight-row  @on-selection-change='productcate_selectionClick' border :height="200"  :columns="product_columns1" :data="product_data1"  @on-current-change="handleRowChange1"></i-table>
       </div>
       <div class="show" style="width: 45%">
@@ -81,7 +81,6 @@
               product_name: res.body[i].name,
             })
             }
-            this.$Message.success('获取数据成功')
             // 返回总记录
             //this.$router.push({path: '/hello', query:{data: res.body}})
           },
@@ -101,7 +100,6 @@
               sort: res.body[i].name
             })
             }
-            this.$Message.success('获取数据成功')
             // 返回总记录
             //this.$router.push({path: '/hello', query:{data: res.body}})
           },
@@ -120,8 +118,7 @@
               material_id:res.body[i].id,
               material_name: res.body[i].name,
             })
-            }
-            this.$Message.success('获取数据成功')            // 返回总记            //this.$router.push({path: '/hello', query:{data: res.body}})
+            }           // 返回总记            //this.$router.push({path: '/hello', query:{data: res.body}})
           },
           function() {
             this.$Message.error('获取数据失败')
@@ -139,7 +136,6 @@
               sort: res.body[i].name
             })
             }
-            this.$Message.success('获取数据成功')
             // 返回总记录
             //this.$router.push({path: '/hello', query:{data: res.body}})
           },

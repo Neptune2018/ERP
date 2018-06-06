@@ -76,7 +76,7 @@ exports.updateBOM_productByid = function(req,res){
     console.log(req.session.sess);
     req.session.sess = 'yes';
     var params = url.parse(req.url, true).query;
-    BOM_product.updateBOM_productById(params.id,params.name,params.price,params.remark,params.productCateId,function(){
+    BOM_product.updateBOM_productById(params.id,params.status,params.name,params.price,params.remark,params.productCateId,function(){
         BOM_product.listallBOM_product(function(data) {
             res.send(data)
         });

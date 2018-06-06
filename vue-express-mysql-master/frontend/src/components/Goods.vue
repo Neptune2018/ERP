@@ -17,7 +17,7 @@
     <div style="width: 35%;float: left;margin: 0.5% 1% ">
       <table cellspacing="10">
       <tr>
-        <td><i-button class="oper" type="primary" @click="product_add=true">新增货品</i-button></td>
+        <td><i-button class="oper" type="primary" @click="product_addf()">新增货品</i-button></td>
         <Modal
           v-model="product_add"
           title="新增货品"
@@ -36,18 +36,33 @@
             <label class="model1">货品备注</label><i-input v-model="add_remark" placeholder="请输入货品备注" style="width: 60%"></i-input>
           </div>
           <div class="q">
-            <label class="model1">货品分类</label><i-input v-model="add_productcateid" placeholder="请输入货品分类" style="width: 60%"></i-input>
+          <Form :model="formRight" label-position="rigtht" :label-width="100">
+            <FormItem label="货品分类">
+          <Select v-model="addProductcatenum" style="width: 60%" >
+              <Option v-for="item in addProductcatenumList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+            </Select>
+          </FormItem>
+          </Form>
           </div>
+          <!-- <div class="q">
+            <label class="model1">货品分类</label><i-input v-model="add_productcateid" placeholder="请输入货品分类" style="width: 60%"></i-input>
+          </div> -->
         </Modal>
 
-        <td><i-button class="oper" type="primary" @click="product_modify=true">修改货品信息</i-button></td>
+        <td><i-button class="oper" type="primary" @click="product_modifyf()">修改货品信息</i-button></td>
         <Modal
           v-model="product_modify"
           title="修改货品信息"
           @on-ok="modify_productok"
           @on-cancel="cancel">
           <div class="q">
-            <label class="model2">货品编号</label><i-input v-model="modify_number" placeholder="请输入货号" style="width: 60%"></i-input>
+            <Form :model="formRight" label-position="rigtht" :label-width="100">
+            <FormItem label="货品编号">
+          <Select v-model="modifyProductnum" style="width: 60%" >
+              <Option v-for="item in modifyProductnumList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+            </Select>
+          </FormItem>
+          </Form>
           </div>
           <div class="q">
             <label class="model2">货品名称</label><i-input v-model="modify_name" placeholder="请输入货品名称" style="width: 60%"></i-input>
@@ -59,7 +74,16 @@
             <label class="model2">货品备注</label><i-input v-model="modify_remark" placeholder="请输入货品备注" style="width: 60%"></i-input>
           </div>
           <div class="q">
-            <label class="model2">货品分类</label><i-input v-model="modify_productcateid" placeholder="请输入货品分类" style="width: 60%"></i-input>
+            <Form :model="formRight" label-position="rigtht" :label-width="100">
+            <FormItem label="货品分类">
+          <Select v-model="modifyProductcatenum" style="width: 60%" >
+              <Option v-for="item in modifyProductcatenumList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+            </Select>
+          </FormItem>
+          </Form>
+          </div>
+          <div class="q">
+            <label class="model2">货品状态</label><i-input v-model="modify_status" placeholder="请输入货品分类" style="width: 60%"></i-input>
           </div>
         </Modal>
 
@@ -112,15 +136,26 @@
             this.table_data = res.body.data
             console.log(res.body)
             for(var i=0;i<res.body.length;i++){
+            if(res.body[i].status==0){
             this.data2.push({
               num: i+1,
               id: res.body[i].id,
               name: res.body[i].name,
               add_time: '2018-5-27',
-              productCateId: res.body[i].productCateId
-            })
+              productCateId: res.body[i].productCateId,
+              status: "启用"
+            })}
+            else{
+            this.data2.push({
+              num: i+1,
+              id: res.body[i].id,
+              name: res.body[i].name,
+              add_time: '2018-5-27',
+              productCateId: res.body[i].productCateId,
+              status: "停用"
+            })  
             }
-            this.$Message.success('获取数据成功')
+            }
             // 返回总记录
             //this.$router.push({path: '/hello', query:{data: res.body}})
           },
@@ -140,7 +175,7 @@
               sortid: res.body[i].id
             })
             }
-            this.$Message.success('获取数据成功')
+
             // 返回总记录
             //this.$router.push({path: '/hello', query:{data: res.body}})
           },
@@ -155,15 +190,25 @@
           function(res) {
             console.log(res.body)
             for(var i=0;i<res.body.length;i++){
+            if(res.body[i].status==0){
             this.data3.push({
               num: i+1,
               material_name: res.body[i].name,
               material_id: res.body[i].id,
               count:'2626',
               material_property: res.body[i].property,
-            })
-            }
-            this.$Message.success('获取数据成功')            // 返回总记            //this.$router.push({path: '/hello', query:{data: res.body}})
+              material_status: "启用"
+            })}
+            else{
+            this.data3.push({
+              num: i+1,
+              material_name: res.body[i].name,
+              material_id: res.body[i].id,
+              count:'2626',
+              material_property: res.body[i].property,
+              material_status: "停用"  
+            })}
+            }           // 返回总记            //this.$router.push({path: '/hello', query:{data: res.body}})
           },
           function() {
             this.$Message.error('获取数据失败')
@@ -175,6 +220,13 @@
 
       //一定要有return！！
       return{
+        modifyProductnum:'',
+        modifyProductnumList:[],
+        modifyProductnum:'',
+        modifyProductnumList:[],
+        addProductcatenumList: [],
+        addProductcatenum: '',
+        modify_status:'',
         select:'',
         modify_number:'',
         modify_name:'',
@@ -235,6 +287,10 @@
           {
             title: '类别',
             key: 'productCateId'
+          },
+          {
+            title: '货品状态',
+            key: 'status'
           }
         ],
         data2:[],
@@ -262,6 +318,10 @@
           {
             title: '配料性质',
             key: 'material_property'
+          },
+          {
+            title:'配料状态',
+            key:'material_status'
           }
         ],
         data3:[],
@@ -280,17 +340,82 @@
         }).then(function (res) {
             console.log(res.body)
             for(var i=0;i<res.body.length;i++){
+            if(res.body[0][1].status==0){
             this.data3.push({
               num: i+1,
               material_name: res.body[0][i].name,
               material_id: res.body[0][i].id,
               count:res.body[0][i].quantity,
               material_property: res.body[0][i].property,
+              material_status: "启用"
+            })}
+            else{
+              this.data3.push({
+              num: i+1,
+              material_name: res.body[0][i].name,
+              material_id: res.body[0][i].id,
+              count:res.body[0][i].quantity,
+              material_property: res.body[0][i].property,
+              material_status: "停用"
             })
+            }
             }
         }, function () {
             alert("ajax failure")
         })
+      },
+      product_addf(){
+        console.log("111")
+        this.addProductcatenum=''
+        this.addProductcatenumList=[]
+        this.$http({
+          url: '/getProductcates',
+          method: 'GET'
+        }).then(
+          function(res) {
+            console.log(res.body)
+            for(var i=0;i<res.body.length;i++){
+              console.log(res.body[i].id)
+            this.addProductcatenumList.push({
+              label: res.body[i].id, 
+              value:  res.body[i].id,         
+            })
+            }})
+        this.product_add=true
+      },
+      product_modifyf(){
+        this.modifyProductnum=''
+        this.modifyProductnumList=[]
+        this.$http({
+          url: '/getProducts',
+          method: 'GET'
+        }).then(
+          function(res) {
+            console.log(res.body)
+            for(var i=0;i<res.body.length;i++){
+            this.modifyProductnumList.push({
+              label: res.body[i].id, 
+              value:  res.body[i].id,
+            })            
+            }
+          },
+        )
+        this.modifyProductcatenum=''
+        this.modifyProductcatenumList=[]
+        this.$http({
+          url: '/getProductcates',
+          method: 'GET'
+        }).then(
+          function(res) {
+            console.log(res.body)
+            for(var i=0;i<res.body.length;i++){
+              console.log(res.body[i].id)
+            this.modifyProductcatenumList.push({
+              label: res.body[i].id, 
+              value:  res.body[i].id,         
+            })
+            }})
+        this.product_modify=true
       },
       handleSelectAll (status) {
         this.$refs.selection.selectAll(status);
@@ -307,13 +432,25 @@
         }).then(function (res) {
             console.log(res.body)
             for(var i=0;i<res.body.length;i++){
+            if(res.body[i].status==0){
             this.data2.push({
               num: i+1,
               id: res.body[i].id,
               name: res.body[i].name,
               add_time: '2018-5-27',
-              productCateId: res.body[i].productCateId
-            })
+              productCateId: res.body[i].productCateId,
+              status: "启用"
+            })}
+            else{
+            this.data2.push({
+              num: i+1,
+              id: res.body[i].id,
+              name: res.body[i].name,
+              add_time: '2018-5-27',
+              productCateId: res.body[i].productCateId,
+              status: "停用"
+            })  
+            }
             }
         }, function () {
             alert("ajax failure")
@@ -324,7 +461,13 @@
       this.select=arr
       },
       add_productok(){
-        this.data2=[]
+        console.log(this.addProductcatenum)
+        if(this.add_number=="")
+        {alert("请输入产品编号")}
+        else if(this.addProductcatenum=="")
+        {(alert("请输入分类名称"))}
+        else{
+          this.data2=[]
         this.$http({
             url: '/addProduct',
             method: 'GET',
@@ -333,22 +476,34 @@
               name: this.add_name,
               price: this.add_price,
               remark: this.add_remark,
-              productCateId: this.add_productcateid
+              productCateId: this.addProductcatenum
             }
         }).then(function (res) {
             console.log(res.body)
             for(var i=0;i<res.body.length;i++){
+            if(res.body[i].status==0){
             this.data2.push({
               num: i+1,
               id: res.body[i].id,
               name: res.body[i].name,
               add_time: '2018-5-27',
-              productCateId: res.body[i].productCateId
-            })
+              productCateId: res.body[i].productCateId,
+              status: "启用"
+            })}
+            else{
+            this.data2.push({
+              num: i+1,
+              id: res.body[i].id,
+              name: res.body[i].name,
+              add_time: '2018-5-27',
+              productCateId: res.body[i].productCateId,
+              status: "停用"
+            })  
+            }
             }
         }, function () {
             alert("ajax failure")
-        })
+        })}
       },
       product_delete(){
         this.data2=[]
@@ -367,13 +522,25 @@
           console.log(k++)
             if(k==deletecount){
             for(var i=0;i<res.body.length;i++){
+            if(res.body[i].status==0){
             this.data2.push({
               num: i+1,
               id: res.body[i].id,
               name: res.body[i].name,
               add_time: '2018-5-27',
-              productCateId: res.body[i].productCateId
-            })
+              productCateId: res.body[i].productCateId,
+              status: "启用"
+            })}
+            else{
+            this.data2.push({
+              num: i+1,
+              id: res.body[i].id,
+              name: res.body[i].name,
+              add_time: '2018-5-27',
+              productCateId: res.body[i].productCateId,
+              status: "停用"
+            })  
+            }
             }}
         }, function () {
             alert("ajax failure")
@@ -381,33 +548,53 @@
         }
         },
       modify_productok(){
-
+        if(this.modifyProductnum=="")
+        {
+          alert("请输入编号")
+        }
+        else{
+        if(this.modify_status=="停用")
+        {this.modify_status=1}
+        else{this.modify_status=0}
         this.data2=[]
         this.$http({
             url: '/modifyProduct',
             method: 'GET',
             params:{
-              id: this.modify_number,
+              id: this.modifyProductnum,
               name: this.modify_name,
               price: this.modify_price,
               remark: this.modify_remark,
-              productCateId: this.modify_productcateid
+              productCateId: this.modifyProductcatenum,
+              status:this.modify_status
             }
         }).then(function (res) {
             console.log(res.body)
             for(var i=0;i<res.body.length;i++){
+            if(res.body[i].status==0){
             this.data2.push({
               num: i+1,
               id: res.body[i].id,
               name: res.body[i].name,
               add_time: '2018-5-27',
-              productCateId: res.body[i].productCateId
-            })
+              productCateId: res.body[i].productCateId,
+              status: "启用"
+            })}
+            else{
+            this.data2.push({
+              num: i+1,
+              id: res.body[i].id,
+              name: res.body[i].name,
+              add_time: '2018-5-27',
+              productCateId: res.body[i].productCateId,
+              status: "停用"
+            })  
+            }
             }
         }, function () {
             alert("ajax failure")
         })
-
+}
         },
       product_search() {
         this.data2=[]
@@ -423,13 +610,25 @@
         }).then(function (res) {
             console.log(res.body)
             for(var i=0;i<res.body.length;i++){
+            if(res.body[i].status==0){
             this.data2.push({
               num: i+1,
               id: res.body[i].id,
               name: res.body[i].name,
               add_time: '2018-5-27',
-              productCateId: res.body[i].productCateId
-            })
+              productCateId: res.body[i].productCateId,
+              status: "启用"
+            })}
+            else{
+            this.data2.push({
+              num: i+1,
+              id: res.body[i].id,
+              name: res.body[i].name,
+              add_time: '2018-5-27',
+              productCateId: res.body[i].productCateId,
+              status: "停用"
+            })  
+            }
             }
         }, function () {
             alert("ajax failure")
@@ -445,13 +644,25 @@
         }).then(function (res) {
             console.log(res.body[0].productId)
             for(var i=0;i<res.body.length;i++){
+            if(res.body[i].status==0){
             this.data2.push({
               num: i+1,
-              id: res.body[0][i].productId,
-              name: res.body[0][i].name,
+              id: res.body[i].id,
+              name: res.body[i].name,
               add_time: '2018-5-27',
-              productCateId: '111'
-            })
+              productCateId: res.body[i].productCateId,
+              status: "启用"
+            })}
+            else{
+            this.data2.push({
+              num: i+1,
+              id: res.body[i].id,
+              name: res.body[i].name,
+              add_time: '2018-5-27',
+              productCateId: res.body[i].productCateId,
+              status: "停用"
+            })  
+            }
             }
         }, function () {
             alert("ajax failure")
