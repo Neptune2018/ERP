@@ -1,5 +1,5 @@
 var IO = require('../proxy/io_events')
-
+let start = 123
 exports.getRepertory = function(req,res){
     IO.searchRepertory(function(data) {
         //console.log(data[0][0])
@@ -61,7 +61,16 @@ exports.wareAvail = function(req,res){
         }
     },req.body.id,req.body.name)
 }
+
 exports.insertIO = function(req,res){
-    IO.insertIO(req.body)
+    for(var i = 0;i<req.body.length;i++){
+        var tmp = start.toString()   
+        console.log(tmp)    
+        IO.insertIO(tmp,req.body[i])
+        IO.insertPM(tmp,req.body[i])
+        console.log(req.body[i].style)
+        IO.insertStock(req.body[i],tmp,tmp)  
+        start = start+1
+    }
     res.send("success")
 }

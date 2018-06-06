@@ -12,6 +12,9 @@
                 <Radio label="货品"></Radio>
               </RadioGroup>
             </FormItem>
+            <FormItem label = "物品名称" prop="goodName">
+              <Input v-model="formItem.goodName" placeholder="输入物品名称" style="width: 200px"></Input>
+            </FormItem>
             <FormItem label = "入库日期" prop="date">
               <DatePicker v-model="formItem.date" type="date" placeholder="选择入库时间" style="width: 200px"></DatePicker>
             </FormItem><br/>
@@ -74,7 +77,7 @@ export default {
           callback(new Error("ajax failure"))
       })
     };
-    //id是否存在
+    //仓库是否存在
     const checkStockId = (rule, value, callback) =>{
       if (value === ''){
         callback(new Error('仓库编号不能为空'))
@@ -143,6 +146,10 @@ export default {
           key:'style'
         },
         {
+          title:'物品名称',
+          key:'goodName'
+        },
+        {
           title:'验收人',
           key:'fromPerson'
         },  
@@ -151,7 +158,7 @@ export default {
           key:'toPerson'
         },
         {
-          title:'仓库id',
+          title:'仓库编号',
           key:'stockId'
         },     
         {
@@ -200,17 +207,19 @@ export default {
         fromPerson:'',
         toPerson:'',
         stockId:'',
-        stockName:'',
+        goodName:'',
         style:'物料',
         stockPlace:'',
         quantity:'',
         unit:'',
         batch:''
       },
-      maxQuant:20,
       ruleItem: {
         date: [
             { required: true, type: 'date', message: '请选择入库日期', trigger: 'change' }
+        ],
+        goodName:[
+          { required: true, message: '物品名称不得为空！', trigger: 'change' }
         ],
         fromPerson: [
             { required: true, validator:checkPersonId, trigger: 'blur' }
@@ -252,24 +261,25 @@ export default {
       }) 
       
     },
-    searchWarehouse(){
-      this.$http({
-        url: '/getRepertory',
-        method: 'GET',
-      }).then(function (res) {
-          this.stockList = []
-          this.stockInfo = []
-          for(var i = 0;i<res.body.length;i++){
-            var temp={value:res.body[i][i]['name'],label:res.body[i][i]['name']}
-            this.stockList.push(temp)
-          }
-      }, function () {
-          alert("ajax failure")
-      })
-    },
+    // searchWarehouse(){
+    //   this.$http({
+    //     url: '/getRepertory',
+    //     method: 'GET',
+    //   }).then(function (res) {
+    //       this.stockList = []
+    //       this.stockInfo = []
+    //       for(var i = 0;i<res.body.length;i++){
+    //         var temp={value:res.body[i][i]['name'],label:res.body[i][i]['name']}
+    //         this.stockList.push(temp)
+    //       }
+    //   }, function () {
+    //       alert("ajax failure")
+    //   })
+    // },
     insertToTable(){
       const info = {
         date:this.formItem.date,
+        goodName:this.formItem.goodName,
         fromPerson:this.formItem.fromPerson,
         toPerson:this.formItem.toPerson,
         stockId:this.formItem.stockId,

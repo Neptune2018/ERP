@@ -2,8 +2,10 @@ var IoItem = require('../models').IOItem;
 var IoList = require('../models').IOList;
 var Stock = require('../models').Stock;
 var Repertory = require('../models').Repertory;
+var Material = require('../models').Material;
+var Product = require('../models').Product;
 var db = require('../models').DB;
-
+var t
 //搜索仓库名并且返回
 exports.searchRepertory = function(dosomething){
     db.query('select name from repertories;')
@@ -47,27 +49,78 @@ exports.placeAvailable = function(dosomething,place,id){
         dosomething(rows);
     })   
 }
-//插入仓库
-exports.insertIO = function(info){
-    for(var i = 0;i<info.length;i++){
-        if (info[i].style == "物料"){
-            info[i].style = 0
-        } else {
-            info[i].style = 1
-        }
-        IoList.create({
-            //id:1232,
-            time:info[i].time,
-            style:info[i].style,
-            fromPersonId:info[i].fromPerson,
-            toPersonId:info[i].toPerson
-        });
-        IoItem.create({
-            //id:321,
-            style:info[i].style,
-            quantity:info[i].quantity,
-            unit:info[i].unit,
-            batch:info[i].batch
-        });
+//入库数据操作
+exports.insertPM = function(id,info){
+    if (info.style == "物料" || info.style == 0){
+        info.style = 0
+    } else {
+        info.style = 1
     }
+    if(info.style == 1) {
+        Product.create({
+            id:id,
+            name:info.goodName,
+            price:500
+        })
+    } else {
+        Material.create({
+            id:id,
+            name:info.goodName,
+            safe_quantity:500
+        })
+    }
+}
+exports.insertStock = function(info,ioid,pmid){
+    if (info.style == "物料" || info.style == 0){
+        info.style = 0
+    } else {
+        info.style = 1
+    } 
+    console.log(info.style)
+    if(info.style == 1) {
+        IoItem.create({
+            style:info.style,
+            quantity:info.quantity,
+            unit:info.unit,
+            batch:info.batch,
+            ioListId:ioid,
+            productId:pmid
+        })
+        Stock.create({
+            style:info.style,
+            place:info.stockPlace,
+            remain:info.quantity,
+            unit:info.unit,
+            batch:info.batch,
+            repertoryId:info.stockId,
+            productId:pmid,               
+        })
+    } else if(info.style == 0) {
+        IoItem.create({
+            style:info.style,
+            quantity:info.quantity,
+            unit:info.unit,
+            batch:info.batch,
+            ioListId:ioid,
+            materialId:pmid
+        })
+        Stock.create({
+            style:info.style,
+            place:info.stockPlace,
+            remain:info.quantity,
+            unit:info.unit,
+            batch:info.batch,
+            repertoryId:info.stockId,
+            materialId:pmid,               
+        })
+    } 
+}
+exports.insertIO = function(id,info){
+    IoList.create({
+        id:id,
+        style:1,//表示入库操作
+        fromPersonId:info.fromPerson,
+        toPersonId:info.toPerson
+    })
+
 }
