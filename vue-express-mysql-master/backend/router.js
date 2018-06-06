@@ -32,6 +32,9 @@ router.get('/addProductcate',Product_cate.addProduct_cate)
 router.get('/deleteProductcate',Product_cate.deleteProduct_cateById)
 router.get('/deleteMaterialcate',Mater_cate.deleteMater_cateById)
 router.get('/Productmaterial',BOM_product.findmaterials)
+router.get('/cateSon',Product_cate.listallProduct_catesbyProductCateid)
+router.get('/cateSon2',Mater_cate.listallMater_catesbyMaterCateid)
+
 
 
 

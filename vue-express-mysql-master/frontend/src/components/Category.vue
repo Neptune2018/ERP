@@ -11,27 +11,40 @@
       <div style="display: inline-block">
         <table cellspacing="10">
           <tr>
-            <td><i-button class="oper" type="primary" @click="materialcate_add=true">新增物料子分类</i-button></td>
+            <td><i-button class="oper" type="primary" @click="materialcate_addf()">新增物料子分类</i-button></td>
         <Modal
           v-model="materialcate_add"
           title="新增物料分类"
           @on-ok="add_materialcateok"
           @on-cancel="cancel">
           <div class="q">
-            <label class="model1">父分类</label><i-input v-model="add_fathercater" placeholder="请输入父分类标号" style="width: 60%"></i-input>
+            <Form :model="formRight" label-position="rigtht" :label-width="100">
+            <FormItem label="父分类">
+          <Select v-model="addMaterialcatenum" style="width: 60%" >
+              <Option v-for="item in addMaterialcatenumList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+            </Select>
+          </FormItem>
+          </Form>
+            <!-- <label class="model1">父分类</label><i-input v-model="add_fathercater" placeholder="请输入父分类标号" style="width: 60%"></i-input> -->
           </div>
           <div class="q">
             <label class="model1">分类名</label><i-input v-model="add_catename" placeholder="请输入分类名称" style="width: 60%"></i-input>
           </div>
         </Modal>
-        <td><i-button class="oper" type="primary" @click="productcate_add=true">新增货品子分类</i-button></td>
+        <td><i-button class="oper" type="primary" @click="productcate_addf()">新增货品子分类</i-button></td>
         <Modal
           v-model="productcate_add"
           title="新增货品分类"
           @on-ok="add_productcateok"
           @on-cancel="cancel">
           <div class="q">
-            <label class="model1">父分类</label><i-input v-model="add_fathercater2" placeholder="请输入父分类标号" style="width: 60%"></i-input>
+            <Form :model="formRight" label-position="rigtht" :label-width="100">
+            <FormItem label="父分类">
+          <Select v-model="addProductcatenum" style="width: 60%" >
+              <Option v-for="item in addProductcatenumList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+            </Select>
+          </FormItem>
+          </Form>
           </div>
           <div class="q">
             <label class="model1">分类名</label><i-input v-model="add_catename2" placeholder="请输入分类名称" style="width: 60%"></i-input>
@@ -47,7 +60,6 @@
     </div>
     <div>
       <div class="show" style="width: 45%">
-        <Tree :data="product_data1"></Tree>
         <i-table  highlight-row  @on-selection-change='productcate_selectionClick' border :height="200"  :columns="product_columns1" :data="product_data1"  @on-current-change="handleRowChange1"></i-table>
       </div>
       <div class="show" style="width: 45%">
@@ -96,6 +108,8 @@
             console.log(res.body)
             for(var i=0;i<res.body.length;i++){
             this.product_data1.push({
+              number: i+1,
+              num: i+1,
               sortid:res.body[i].id,
               sort: res.body[i].name
             })
@@ -132,6 +146,8 @@
             console.log(res.body)
             for(var i=0;i<res.body.length;i++){
             this.material_data1.push({
+               number: i+1,
+              num: i+1,
               sortid:res.body[i].id,
               sort: res.body[i].name
             })
@@ -149,6 +165,14 @@
 
       //一定要有return！！
       return{
+        addMaterialcatenum:'',
+        addMaterialcatenumList:[],
+        addProductcatenumList: [],
+        addProductcatenum: '',
+        data5:[],
+        data6:[],
+        oldcurrentrow1:'',
+        oldcurrentrow2:'',
         selectproduct:'',
         selectmaterial:'',
         add_catename:'',
@@ -164,9 +188,13 @@
             align: 'center'
           },
           {
-            type:'index',
-            width:60,
-            align:'center'
+            title:'',
+            key:'number'
+          },
+          {
+            title: '序号',
+            key: 'num',
+            sortable:'true'
           },
           {
             title:'货品分类编号',
@@ -187,9 +215,13 @@
             align: 'center'
           },
           {
-            type:'index',
-            width:60,
-            align:'center'
+            title:'',
+            key:'number'
+          },
+          {
+            title: '序号',
+            key: 'num',
+            sortable:'true'
           },
           {
             title:'物料分类编号',
@@ -241,6 +273,42 @@
     },
     methods:
     {
+      productcate_addf(){
+        this.addProductcatenum=''
+        this.addProductcatenumList=[]
+        this.$http({
+          url: '/getProductcates',
+          method: 'GET'
+        }).then(
+          function(res) {
+            console.log(res.body)
+            for(var i=0;i<res.body.length;i++){
+              console.log(res.body[i].id)
+            this.addProductcatenumList.push({
+              label: res.body[i].id, 
+              value:  res.body[i].id,         
+            })
+            }})
+        this.productcate_add=true
+      },
+      materialcate_addf(){
+        this.addMaterialcatenum=''
+        this.addMaterialcatenumList=[]
+        this.$http({
+          url: '/getMaterialcates',
+          method: 'GET'
+        }).then(
+          function(res) {
+            console.log(res.body)
+            for(var i=0;i<res.body.length;i++){
+              console.log(res.body[i].id)
+            this.addMaterialcatenumList.push({
+              label: res.body[i].id, 
+              value:  res.body[i].id,         
+            })
+            }})
+        this.materialcate_add=true
+        },
       matrialcate_selectionClick(arr)
     {
       this.selectmaterial=arr
@@ -250,6 +318,7 @@
       this.selectproduct=arr
       },
       productcate_delete(){
+        this.oldcurrentrow1=''
         this.product_data1=[]
         var k=0
         var deletecount=this.selectproduct.length
@@ -266,6 +335,8 @@
             if(k==deletecount){
             for(var i=0;i<res.body.length;i++){
             this.product_data1.push({
+              number: i+1,
+              num: i+1,
               sortid: res.body[i].id,
               sort: res.body[i].name
             })
@@ -276,6 +347,7 @@
         }
         },
         materialcate_delete(){
+          this.oldcurrentrow2=''
         this.material_data1=[]
         var k=0
         var deletecount=this.selectmaterial.length
@@ -292,6 +364,8 @@
             if(k==deletecount){
             for(var i=0;i<res.body.length;i++){
             this.material_data1.push({
+              number: i+1,
+              num: i+1,
               sortid:res.body[i].id,
               sort: res.body[i].name
             })
@@ -302,6 +376,14 @@
         }
         },
       add_materialcateok(){
+        if(this.add_catename=="")
+      {alert("请输入名称")}
+      else if(this.addMaterialcatenum=="")
+      {
+        alert("请输入父分类名称")
+      }
+      else{
+        this.oldcurrentrow2=''
       this.material_data1=[]
       console.log(this.add_fathercater);
       console.log(this.add_catename);
@@ -309,44 +391,93 @@
             url: '/addMaterialcate',
             method: 'GET',
             params:{
-              materCateId:  this.add_fathercater,
+              materCateId:  this.addMaterialcatenum,
               name: this.add_catename
             }
         }).then(function (res) {
             console.log(res.body)
             for(var i=0;i<res.body.length;i++){
             this.material_data1.push({
+              number: i+1,
+              num: i+1,
               sortid: res.body[i].id,
               sort: res.body[i].name
             })
             }
         }, function () {
             alert("ajax failure")
-        })
+        })}
       },
       add_productcateok(){
+         if(this.add_catename2==" ")
+      {alert("请输名称")}
+      else if(this.addProductcatenum=="")
+      {
+        alert("请输入父分类名称")
+      }
+      else{
+        this.oldcurrentrow1=''
         console.log("11111")
       this.product_data1=[]
         this.$http({
             url: '/addProductcate',
             method: 'GET',
             params:{
-              productCateId:  this.add_fathercater2,
+              productCateId:  this.addProductcatenum,
               name: this.add_catename2
             }
         }).then(function (res) {
             console.log(res.body)
             for(var i=0;i<res.body.length;i++){
             this.product_data1.push({
+              number: i+1,
+              num: i+1,
               sortid: res.body[i].id,
               sort: res.body[i].name
             })
             }
         }, function () {
             alert("ajax failure")
-        })
+        })}
       },
       handleRowChange1(currentRow, oldCurrentRow){
+        if(currentRow.sortid!=this.oldcurrentrow1){
+        //  console.log(this.oldcurrentrow)
+        this.oldcurrentrow1=currentRow.sortid
+        this.data5=[]
+        this.data5=this.product_data1
+        // console.log(this.data1)
+        this.product_data1=[]
+        this.$http({
+            url: '/cateSon',
+            method: 'GET',
+            params:{
+              id: currentRow.sortid
+            }
+        }).then(function(res){
+          for(var i=0;i<currentRow.number;i++)
+          {
+            this.product_data1[i]=this.data5[i]
+          }
+          for(var j=0;j<res.body.length;j++)
+          {
+           this.product_data1.push({
+              number: i+j+1,
+              num: currentRow.num+'.'+(j+1),
+              sort: res.body[j].name,
+              sortid: res.body[j].id
+            })
+          }
+          for(;i<this.data5.length;i++)
+          {
+            this.product_data1.push({
+              number: i+j+1,
+              num: this.data5[i].num,
+              sort: this.data5[i].sort,
+              sortid: this.data5[i].sortid
+            })
+           }
+        })
         this.product_data2=[]
         this.$http({
             url: '/cateProduct',
@@ -364,28 +495,47 @@
             }
         }, function () {
             alert("ajax failure")
-        })
-        // this.product_data1=[]
-        // this.$http({
-        //     url: '/cateProductcate',
-        //     method: 'GET',
-        //     params:{
-        //       id: currentRow.sortid
-        //     }
-        // }).then(function (res) {
-        //     console.log(res.body)
-        //     for(var i=0;i<res.body.length;i++){
-        //     this.product_data1.push({
-        //       product_id: res.body[i].id,
-        //       product_name: res.body[i].name,
-        //     })
-        //     }
-        // }, function () {
-        //     alert("ajax failure")
-        // })
+        })}
     },
     handleRowChange2(currentRow, oldCurrentRow){
         console.log(currentRow)
+        if(currentRow.sortid!=this.oldcurrentrow2){
+        console.log(currentRow)
+        this.oldcurrentrow2=currentRow.sortid
+        this.data6=[]
+        this.data6=this.material_data1
+        // console.log(this.data1)
+        this.material_data1=[]
+        this.$http({
+            url: '/cateSon2',
+            method: 'GET',
+            params:{
+              id: currentRow.sortid
+            }
+        }).then(function(res){
+          for(var i=0;i<currentRow.number;i++)
+          {
+            this.material_data1[i]=this.data6[i]
+          }
+          for(var j=0;j<res.body.length;j++)
+          {
+           this.material_data1.push({
+              number: i+j+1,
+              num: currentRow.num+'.'+(j+1),
+              sort: res.body[j].name,
+              sortid: res.body[j].id
+            })
+          }
+          for(;i<this.data6.length;i++)
+          {
+            this.material_data1.push({
+              number: i+j+1,
+              num: this.data6[i].num,
+              sort: this.data6[i].sort,
+              sortid: this.data6[i].sortid
+            })
+           }
+        })
         this.material_data2=[]
         this.$http({
             url: '/cateMaterial',
@@ -403,7 +553,7 @@
             }
         }, function () {
             alert("ajax failure")
-        })
+        })}
     },
     }
   }

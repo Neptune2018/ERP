@@ -171,6 +171,8 @@
             console.log(res.body)
             for(var i=0;i<res.body.length;i++){
             this.data1.push({
+              number: i+1,
+              num: i+1,
               sort: res.body[i].name,
               sortid: res.body[i].id
             })
@@ -220,6 +222,7 @@
 
       //一定要有return！！
       return{
+        data5:[],
         modifyProductnum:'',
         modifyProductnumList:[],
         modifyProductnum:'',
@@ -244,11 +247,17 @@
         table_data: [],
         product_add : false,
         product_modify:false,
+        oldcurrentrow:'',
+        cengshu:'',
         columns1:[
           {
-            type:'index',
-            width:60,
-            align:'center'
+            title:'',
+            key:'number'
+          },
+          {
+            title: '序号',
+            key: 'num',
+            sortable:'true'
           },
           {title:'分类编号',
             key:'sortid'},
@@ -421,7 +430,43 @@
         this.$refs.selection.selectAll(status);
       },
        handleRowChange(currentRow, oldCurrentRow){
-         console.log(currentRow)
+         if(currentRow.sortid!=this.oldcurrentrow){
+        //  console.log(this.oldcurrentrow)
+        this.oldcurrentrow=currentRow.sortid
+        this.data5=[]
+        this.data5=this.data1
+        // console.log(this.data1)
+        this.data1=[]
+        this.$http({
+            url: '/cateSon',
+            method: 'GET',
+            params:{
+              id: currentRow.sortid
+            }
+        }).then(function(res){
+          for(var i=0;i<currentRow.number;i++)
+          {
+            this.data1[i]=this.data5[i]
+          }
+          for(var j=0;j<res.body.length;j++)
+          {
+           this.data1.push({
+              number: i+j+1,
+              num: currentRow.num+'.'+(j+1),
+              sort: res.body[j].name,
+              sortid: res.body[j].id
+            })
+          }
+          for(;i<this.data5.length;i++)
+          {
+            this.data1.push({
+              number: i+j+1,
+              num: this.data5[i].num,
+              sort: this.data5[i].sort,
+              sortid: this.data5[i].sortid
+            })
+           }
+        })
         this.data2=[]
         this.$http({
             url: '/cateProduct',
@@ -454,7 +499,7 @@
             }
         }, function () {
             alert("ajax failure")
-        })
+        })}
     },
     matrial_selectionClick(arr)
     {
