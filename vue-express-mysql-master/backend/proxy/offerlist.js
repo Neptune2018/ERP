@@ -57,9 +57,9 @@ exports.findOfferListByID = function (offerList_id,callback) {
 
   exports.deleteOfferList = async function (offerList_id,callback) {
 
-    var sql = "delete from offers where  offerListId = "+ offerList_id + ";"
+    var sql = "delete from offers where  offerListId in ("+ offerList_id + ");"
     db.query(sql).then(function(data){
-        var sql1 = "delete from offer_lists where id = "+ offerList_id + ";"
+        var sql1 = "delete from offer_lists where id in ("+ offerList_id + ");"
         db.query(sql1).then(function(data){
             callback(data)
         })

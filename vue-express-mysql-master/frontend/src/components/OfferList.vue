@@ -53,7 +53,7 @@
                 </Select>
               </FormItem>
               <FormItem label="时间">
-                <DatePicker type="datetime" format="yyyy-MM-dd hh:mm:ss" placeholder="Select date" v-model="modifyOfferList.time" style="width: 200px"></DatePicker>
+                <DatePicker type="datetime" placeholder="Select date" v-model="modifyOfferList.time" style="width: 200px"></DatePicker>
               </FormItem>
             </Form>
           </Modal>
@@ -93,13 +93,13 @@
                 </Select>
               </FormItem>
               <FormItem label="数量">
-                <input v-model="addmaterialList.quantity" style="width:200px">
+                <input type="number" v-model="addmaterialList.quantity" style="width:200px">
               </FormItem>
               <FormItem label="批次">
                 <input v-model="addmaterialList.batch" style="width:200px">
               </FormItem>
               <FormItem label="单价">
-                <input v-model="addmaterialList.price" style="width:200px">
+                <input type="number" v-model="addmaterialList.price" style="width:200px">
               </FormItem>
               <FormItem label="总价">
                 <input disabled v-model="add_total_price" style="width:200px">
@@ -113,13 +113,13 @@
                 <input disabled v-model="modifymaterialList.material" style="width:200px">
               </FormItem>
               <FormItem label="数量">
-                <input v-model="modifymaterialList.quantity" style="width:200px">
+                <input type="number" v-model="modifymaterialList.quantity" style="width:200px">
               </FormItem>
               <FormItem label="批次">
                 <input v-model="modifymaterialList.batch" style="width:200px">
               </FormItem>
               <FormItem label="单价">
-                <input v-model="modifymaterialList.price" style="width:200px">
+                <input type="number" v-model="modifymaterialList.price" style="width:200px">
               </FormItem>
               <FormItem label="总价">
                 <input disabled v-model="modify_total_price" style="width:200px">
@@ -165,6 +165,7 @@ export default {
         name: '',
         person: '',
         time: '',
+        supplier_id:'',
         personList: []
       },
 
@@ -271,8 +272,8 @@ export default {
             name: res.body[i].supplier.name,
             user_id: res.body[i].user.id,
             person : res.body[i].user.name,
-            time : res.body[i].time,
-            created_time: res.body[i].createdAt
+            time : formatDate(new Date(res.body[i].time),"yyyy-MM-dd hh:mm:ss"),
+            created_time: formatDate(new Date(res.body[i].createdAt),"yyyy-MM-dd hh:mm:ss")
           })
         }
         // 返回总记录
@@ -282,6 +283,18 @@ export default {
         this.$Message.error('获取数据失败')
       }
     )
+    this.$http({
+        url: '/getAllUserIdAndName',
+        method: 'GET',
+      }).then(
+        function(res) {
+          this.modifyOfferList.personList = res.body
+          // 返回总记录
+          //this.$router.push({path: '/hello', query:{data: res.body}})
+        },
+        function() {
+        }
+      )
   },
   computed: {
     modify_total_price: function(){
@@ -313,8 +326,8 @@ export default {
               name: res.body[i].supplier.name,
               user_id: res.body[i].user.id,
               person : res.body[i].user.name,
-              time : res.body[i].time,
-              created_time: res.body[i].createdAt
+              time : formatDate(new Date(res.body[i].time),"yyyy-MM-dd hh:mm:ss"),
+            created_time: formatDate(new Date(res.body[i].createdAt),"yyyy-MM-dd hh:mm:ss")
             })
           }
           // 返回总记录
@@ -356,11 +369,19 @@ export default {
       for (var i = 0; i < arr.length; i++) {
         this.offerList_list.push(arr[i]['id'])
       }
-      this.modifyOfferList.id = arr[0]['id']
-      this.modifyOfferList.supplier_id = arr[0]['supplier_id']
-      this.modifyOfferList.name = arr[0]['name']
-      this.modifyOfferList.person = arr[0]['user_id']
-      this.modifyOfferList.time = arr[0]['time']
+      if(arr.length!=0){
+        this.modifyOfferList.id = arr[0]['id']
+        this.modifyOfferList.supplier_id = arr[0]['supplier_id']
+        this.modifyOfferList.name = arr[0]['name']
+        this.modifyOfferList.person = arr[0]['user_id']
+        this.modifyOfferList.time = arr[0]['time']
+      }else{
+        this.modifyOfferList.id = this.currentrow.id
+        this.modifyOfferList.supplier_id = this.currentrow.supplier_id
+        this.modifyOfferList.name = this.currentrow.name
+        this.modifyOfferList.person = this.currentrow.user_id
+        this.modifyOfferList.time = this.currentrow.time
+      }
     },
     materialSelectionClick(arr){
       this.material_list = []
@@ -375,19 +396,32 @@ export default {
       
     },
     deleteofferlist: function() {
-      if (this.offerList_list.length != 0) {
-        this.$http({
+      if (this.offerList_list.length == 0 && this.currentrow.id == '') {
+        this.$Message.warning('请选择需要删除的订单')
+      }else{
+        var offerlist_id = []
+        if(this.offerList_list.length != 0){
+          offerlist_id = this.offerList_list
+        }else{
+          offerlist_id.push(this.currentrow.id)
+        }
+        this.$Modal.confirm({
+            title: '确认删除',
+            content: '你确认删除这'+offerlist_id.length+'条订单吗？',
+            onOk: () => {
+                this.$http({
           url: '/deleteOfferList',
           method: 'GET',
           params: {
-            id: this.offerList_list
+            id: offerlist_id
           }
         }).then(
           function(res) {
             this.$Message.success('删除成功')
-            for (var i = 0; i < this.offerList_list.length; i++){
-              if(this.offerList_list[i] == this.currentrow.id){
+            for (var i = 0; i < offerlist_id.length; i++){
+              if(offerlist_id[i] == this.currentrow.id){
                 this.material_data = []
+                this.currentrow.id = ''
               }
             }
             this.offerList_data = []
@@ -398,10 +432,11 @@ export default {
                 name: res.body[i].supplier.name,
                 user_id: res.body[i].user.id,
                 person : res.body[i].user.name,
-                time : res.body[i].time,
-                created_time: res.body[i].createdAt
+                time : formatDate(new Date(res.body[i].time),"yyyy-MM-dd hh:mm:ss"),
+                created_time: formatDate(new Date(res.body[i].createdAt),"yyyy-MM-dd hh:mm:ss")
               })
             }
+            this.offerList_list = []
             // 返回总记录
             //this.$router.push({path: '/hello', query:{data: res.body}})
           },
@@ -409,40 +444,66 @@ export default {
             this.$Message.error('删除失败')
           }
         )
-      } else {
-        this.$Message.warning('请选择需要删除的供应商')
+            },
+            onCancel: () => {
+                
+            }
+        });
+        
       }
     },
     deletematerial:function(){
       if (this.material_list.length != 0) {
-        this.$http({
-          url: '/deleteOffer',
-          method: 'GET',
-          params: {
-            offerlist_id: this.currentrow.id,
-            material_id: this.material_list
-          }
-        }).then(
-          function(res) {
-            this.$Message.success('删除成功')
-            this.material_data = res.body
-            // 返回总记录
-            //this.$router.push({path: '/hello', query:{data: res.body}})
-          },
-          function() {
-            this.$Message.error('删除失败')
-          }
-        )
+        this.$Modal.confirm({
+            title: '确认删除',
+            content: '你确认删除这'+this.material_list.length+'条信息吗？',
+            onOk: () => {
+                this.$http({
+                  url: '/deleteOffer',
+                  method: 'GET',
+                  params: {
+                    offerlist_id: this.currentrow.id,
+                    material_id: this.material_list
+                  }
+                }).then(
+                  function(res) {
+                    this.$Message.success('删除成功')
+                    this.material_data = res.body
+                    this.material_list = []
+                    // 返回总记录
+                    //this.$router.push({path: '/hello', query:{data: res.body}})
+                  },
+                  function() {
+                    this.$Message.error('删除失败')
+                  }
+                )
+            },
+            onCancel: () => {
+                
+            }
+        });
+        
       } else {
         this.$Message.warning('请选择需要删除的物料')
       }
     },
     currentchange: function(currentRow, oldCurrentRow) {
       this.currentrow.id = currentRow['id']
+      this.currentrow.person = currentRow.person
+      this.currentrow.name = currentRow.name
+      this.currentrow.user_id = currentRow.user_id
+      this.currentrow.time = currentRow.time
       this.currentrow.supplier_id = currentRow.supplier_id
       this.matrerial_id = ''
       this.matrerial_name = ''
       this.matrerial_batch = ''
+      if(this.offerList_list.length==0){
+        this.modifyOfferList.id = currentRow.id
+        this.modifyOfferList.supplier_id = currentRow.supplier_id
+        this.modifyOfferList.name = currentRow.name
+        this.modifyOfferList.person = currentRow.user_id
+        this.modifyOfferList.time = currentRow.time
+      }
       this.$http({
         url: '/getOfferByOfferList',
         method: 'GET',
@@ -498,6 +559,7 @@ export default {
         this.$Message.warning('请选择需要添加的时间')
         return 
       }
+
       this.$http({
         url: '/addOfferList',
         method: 'GET',
@@ -510,17 +572,20 @@ export default {
         function(res) {
           this.$Message.success('添加成功')
           this.offerList_data = []
-            for(var i=0; i< res.body.length ;i++){
-              this.offerList_data.push({
-                id: res.body[i].id,
-                supplier_id: res.body[i].supplier.id,
-                name: res.body[i].supplier.name,
-                user_id: res.body[i].user.id,
-                person : res.body[i].user.name,
-                time : res.body[i].time,
-                created_time: res.body[i].createdAt
-              })
-            }
+          for(var i=0; i< res.body.length ;i++){
+            this.offerList_data.push({
+              id: res.body[i].id,
+              supplier_id: res.body[i].supplier.id,
+              name: res.body[i].supplier.name,
+              user_id: res.body[i].user.id,
+              person : res.body[i].user.name,
+              time : formatDate(new Date(res.body[i].time),"yyyy-MM-dd hh:mm:ss"),
+              created_time: formatDate(new Date(res.body[i].createdAt),"yyyy-MM-dd hh:mm:ss")
+            })
+          }
+          this.addOfferList.name = ''
+          this.addOfferList.person = ''
+          this.addOfferList.time = ''
           // 返回总记录
           //this.$router.push({path: '/hello', query:{data: res.body}})
         },
@@ -530,11 +595,12 @@ export default {
       )
     },
     offerlist_modify:function(){
-      if (this.offerList_list.length == 0) {
+      if (this.offerList_list.length == 0 && this.currentrow.id == '') {
          this.$Message.warning('请选择需要修改的订单')
        }else if (this.offerList_list.length > 1){
          this.$Message.warning('需要修改的订单个数必须是一个')
        }else{
+         
         this.$http({
         url: '/getAllUserIdAndName',
         method: 'GET',
@@ -575,8 +641,8 @@ export default {
               name: res.body[i].supplier.name,
               user_id: res.body[i].user.id,
               person : res.body[i].user.name,
-              time : res.body[i].time,
-              created_time: res.body[i].createdAt
+              time : formatDate(new Date(res.body[i].time),"yyyy-MM-dd hh:mm:ss"),
+              created_time: formatDate(new Date(res.body[i].createdAt),"yyyy-MM-dd hh:mm:ss")
             })
           }
           // 返回总记录
@@ -642,6 +708,10 @@ export default {
           }else{
             this.$Message.success('添加成功')
             this.material_data = res.body
+            this.addmaterialList.id = ''
+            this.addmaterialList.quantity = ''
+            this.addmaterialList.price = ''
+            this.addmaterialList.batch = ''
           }
             // 返回总记录
             //this.$router.push({path: '/hello', query:{data: res.body}})
@@ -659,6 +729,8 @@ export default {
       }
       if (this.material_list.length == 0) {
          this.$Message.warning('请选择需要修改的物料')
+      }else if(this.material_list.length > 1) {
+         this.$Message.warning('需要修改的物料个数必须是一个')
        }else{
          this.material_modify1 = true;
        }

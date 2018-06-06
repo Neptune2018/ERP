@@ -27,7 +27,11 @@ exports.findAllOfferByOfferList = async function (id,material_id,name,batch, cal
   
 exports.deleteOffer = async function (offerlist_id,material_id,callback) {
     offerlist = await OfferList.findById(offerlist_id)
-    material = await Material.findById(material_id)
+    material = await Material.findAll({
+        where:{
+            id:material_id
+        }
+    })
     offerlist.removeMaterial(material).then(function(result){
       callback(result)
     })

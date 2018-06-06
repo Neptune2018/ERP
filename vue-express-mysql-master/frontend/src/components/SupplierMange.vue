@@ -93,14 +93,14 @@
                 </Select>
               </FormItem>
               <FormItem label="起定点">
-                <input v-model="addmaterialMinorder" style="width:200px">
+                <input type="number" v-model="addmaterialMinorder" style="width:200px">
               </FormItem>
             </Form>
           </Modal>
           <i-button class="oper" type="primary" @click="material_modify">修改起定点</i-button>
           <Modal v-model="material_modify1" title="修改起定点" @on-ok="material_modifyok" @on-cancel="cancel">
             <Form :model="formRight" label-position="right" :label-width="100">
-            <FormItem label="物料名称">
+            <FormItem label="物料编号">
                 <input disabled v-model="modifymaterialId" style="width:200px">
               </FormItem>
             <FormItem label="物料名称">
@@ -108,7 +108,7 @@
               </FormItem>
             <Form :model="formRight" label-position="right" :label-width="100">
               <FormItem label="起定点">
-                <input v-model="modifymaterialMinorder" style="width:200px">
+                <input type="number" v-model="modifymaterialMinorder" style="width:200px">
               </FormItem>
             </Form>
           </Modal>
@@ -224,7 +224,13 @@ export default {
         //   key: 'price'
         // }
       ],
-      currentrow : ''
+      currentrow : {
+        id:'',
+        name:'',
+        person:'',
+        phone:'',
+        remark:''
+      }
     }
   },
   created() {
@@ -265,7 +271,7 @@ export default {
       )
     },
     materialsearch:function(){
-      if(this.currentrow == ''){
+      if(this.currentrow.id == ''){
         this.$Message.warning('请选择需要查询的物料的供应商')
         return
       }
@@ -273,7 +279,7 @@ export default {
         url: '/getMaterialsBySupplier',
         method: 'GET',
         params: {
-          id: this.currentrow,
+          id: this.currentrow.id,
           materialid: this.matrerial_id,
           name: this.matrerial_name,
           category: this.matrerial_category
@@ -295,76 +301,129 @@ export default {
       for (var i = 0; i < arr.length; i++) {
         this.dataList.push(arr[i]['id'])
       }
-      this.modifySupplierId = arr[0].id
-      this.modifySupplierName = arr[0]['name']
-      this.modifySupplierPhone = arr[0]['phone']
-      this.modifyPersonName = arr[0]['person']
-      this.modifyRemark = arr[0]['remark']
+      if(arr.length!=0){
+        this.modifySupplierId = arr[0].id
+        this.modifySupplierName = arr[0]['name']
+        this.modifySupplierPhone = arr[0]['phone']
+        this.modifyPersonName = arr[0]['person']
+        this.modifyRemark = arr[0]['remark']
+      }else{
+        this.modifySupplierId = this.currentrow.id
+        this.modifySupplierName = this.currentrow.name
+        this.modifySupplierPhone = this.currentrow.phone
+        this.modifyPersonName = this.currentrow.person
+        this.modifyRemark = this.currentrow.remark
+      }
     },
     materialSelectionClick(arr){
       this.material_list = []
       for (var i = 0; i < arr.length; i++) {
         this.material_list.push(arr[i]['id'])
       }
-      if(arr.length == 1)
+      if(arr.length == 1){
         this.modifymaterialMinorder = arr[0].minorder 
         this.modifymaterialId = arr[0].id
         this.modifymaterialName = arr[0].name
+      }else{
+        this.modifymaterialMinorder = ''
+        this.modifymaterialId = ''
+        this.modifymaterialName = ''
+      }
     },
     deletesupplier: function() {
-      if (this.dataList.length != 0) {
-        this.$http({
-          url: '/deleteSupplierById',
-          method: 'GET',
-          params: {
-            id: this.dataList
-          }
-        }).then(
-          function(res) {
-            this.$Message.success('删除成功')
-            for (var i = 0; i < this.dataList.length; i++){
-              if(this.dataList[i] == this.currentrow){
-                this.material_data = []
-              }
-            }
-            this.table_data = res.body
-            // 返回总记录
-            //this.$router.push({path: '/hello', query:{data: res.body}})
-          },
-          function() {
-            this.$Message.error('删除失败')
-          }
-        )
-      } else {
+      if (this.dataList.length == 0 && this.currentrow.id == '') {
         this.$Message.warning('请选择需要删除的供应商')
+      }else{
+        var supplier_id = []
+        if(this.dataList.length != 0){
+          supplier_id = this.dataList
+        }else{
+          supplier_id.push(this.currentrow.id)
+        }
+        this.$Modal.confirm({
+            title: '确认删除',
+            content: '你确认删除这'+ supplier_id.length+ '个供应商吗？',
+            onOk: () => {
+                this.$http({
+                  url: '/deleteSupplierById',
+                  method: 'GET',
+                  params: {
+                    id: supplier_id
+                  }
+                }).then(
+                  function(res) {
+                    this.$Message.success('删除成功')
+                    for (var i = 0; i < supplier_id.length; i++){
+                      if(supplier_id[i] == this.currentrow.id){
+                        this.material_data = []
+                        this.currentrow.id = ''
+                      }
+                    }
+                    this.table_data = res.body
+                    this.dataList = []
+                    // 返回总记录
+                    //this.$router.push({path: '/hello', query:{data: res.body}})
+                  },
+                  function() {
+                    this.$Message.error('删除失败')
+                  }
+                )
+            },
+            onCancel: () => {
+                
+            }
+        });
+        
       }
     },
     deletematerial:function(){
       if (this.material_list.length != 0) {
-        this.$http({
-          url: '/removeMaterialsFromSupplier',
-          method: 'GET',
-          params: {
-            id: this.currentrow,
-            materialid: this.material_list
-          }
-        }).then(
-          function(res) {
-            this.$Message.success('删除成功')
-            this.material_data = res.body[0]
-            // 返回总记录
-            //this.$router.push({path: '/hello', query:{data: res.body}})
-          },
-          function() {
-            this.$Message.error('删除失败')
-          }
-        )
+        this.$Modal.confirm({
+            title: '确认删除',
+            content: '你确认删除这'+this.material_list.length+'个物料吗？',
+            onOk: () => {
+                this.$http({
+                  url: '/removeMaterialsFromSupplier',
+                  method: 'GET',
+                  params: {
+                    id: this.currentrow.id,
+                    materialid: this.material_list
+                  }
+                }).then(
+                  function(res) {
+                    this.$Message.success('删除成功')
+                    this.material_data = res.body[0]
+                    this.material_list = []
+                    // 返回总记录
+                    //this.$router.push({path: '/hello', query:{data: res.body}})
+                  },
+                  function() {
+                    this.$Message.error('删除失败')
+                  }
+                )
+            },
+            onCancel: () => {
+                
+            }
+        });
+        
       } else {
         this.$Message.warning('请选择需要删除的物料')
       }
     },
     currentchange: function(currentRow, oldCurrentRow) {
-      this.currentrow = currentRow['id']
+      this.currentrow.id = currentRow['id']
+      this.currentrow.person = currentRow.person
+      this.currentrow.name = currentRow.name
+      this.currentrow.phone = currentRow.phone
+      this.currentrow.remark = currentRow.remark
+      if(this.dataList==0){
+        this.modifySupplierId = this.currentrow.id
+        this.modifySupplierName = this.currentrow.name
+        this.modifySupplierPhone = this.currentrow.phone
+        this.modifyPersonName = this.currentrow.person
+        this.modifyRemark = this.currentrow.remark
+      }
       this.$http({
         url: '/getMaterialsBySupplier',
         method: 'GET',
@@ -409,6 +468,10 @@ export default {
         function(res) {
           this.$Message.success('添加成功')
           this.table_data = res.body
+          this.addSupplierName = ''
+          this.addSupplierPhone = ''
+          this.addPersonName = ''
+          this.addRemark = ''
           // 返回总记录
           //this.$router.push({path: '/hello', query:{data: res.body}})
         },
@@ -418,7 +481,7 @@ export default {
       )
     },
     supplier_modify:function(){
-      if (this.dataList.length == 0) {
+      if (this.dataList.length == 0 && this.currentrow.id == '') {
          this.$Message.warning('请选择需要修改的供应商')
        }else if (this.dataList.length > 1){
          this.$Message.warning('需要修改的供应商个数必须是一个')
@@ -435,11 +498,17 @@ export default {
        }else if(this.modifyPersonName == ''){
          this.$Message.warning('请选择需要修改的供应商负责人')
        }else{
+         var supplier_id = ''
+        if(this.dataList.length != 0){
+          supplier_id = this.dataList[0]
+        }else{
+          supplier_id = this.currentrow.id
+        }
          this.$http({
         url: '/updateSupplierById',
         method: 'GET',
         params:{
-          id: this.dataList[0],
+          id: supplier_id,
           name: this.modifySupplierName,
           phone: this.modifySupplierPhone,
           person: this.modifyPersonName,
@@ -459,7 +528,7 @@ export default {
        }
     },
     addmaterial:function(){
-      if(this.currentrow == ''){
+      if(this.currentrow.id == ''){
         this.$Message.warning('请选择需要添加的物料的供应商')
         return
       }
@@ -486,7 +555,7 @@ export default {
           url: '/addMaterialsToSupplier',
           method: 'GET',
           params:{
-            id: this.currentrow,
+            id: this.currentrow.id,
             materialid: this.addmaterialId,
             quantity: this.addmaterialMinorder,
           }
@@ -500,6 +569,8 @@ export default {
             }else{
               this.$Message.success('添加成功')
               this.material_data = res.body[0]
+              this.addmaterialId = ''
+              this.addmaterialMinorder = ''
             }
             // 返回总记录
             //this.$router.push({path: '/hello', query:{data: res.body}})
@@ -511,7 +582,7 @@ export default {
        }
     },
     material_modify:function(){
-      if(this.currentrow == ''){
+      if(this.currentrow.id == ''){
         this.$Message.warning('请选择需要修改物料起定点的供应商')
         return
       }
@@ -530,7 +601,7 @@ export default {
           url: '/setMinOrder',
           method: 'GET',
           params:{
-            id: this.currentrow,
+            id: this.currentrow.id,
             materialid: this.material_list,
             quantity: this.modifymaterialMinorder,
           }

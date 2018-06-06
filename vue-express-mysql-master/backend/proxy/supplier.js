@@ -129,14 +129,18 @@ exports.addMaterialsToSupplier = async function(id, material_id, quantity, callb
 
 exports.removeMaterialsFromSupplier = async function(id, material_id,callback){
   supplier = await Supplier.findById(id)
-  material = await Material.findById(material_id)
+  material = await Material.findAll({
+    where:{
+      id:material_id
+    }
+  })
   supplier.removeMaterial(material).then(function(result){
     callback(result)
   })
 }
 
 exports.setMinOrder = async function (supplier_id, material_id, quantity,callback) {
-  var sqlquery1="update suppliers,min_orders,materials set min_orders.quantity = "+ quantity +" WHERE min_orders.materialId = materials.id and min_orders.supplierId = suppliers.id and suppliers.id = "+ supplier_id +" and materials.id = "+ material_id + ";"
+  var sqlquery1="update suppliers,min_orders,materials set min_orders.quantity = "+ quantity +" WHERE min_orders.materialId = materials.id and min_orders.supplierId = suppliers.id and suppliers.id = "+ supplier_id +" and materials.id in ("+ material_id + ");"
     db.query(sqlquery1).then(function(data){
         callback(data)
     })

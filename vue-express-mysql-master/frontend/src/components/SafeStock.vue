@@ -1,6 +1,7 @@
 <template>
     <div style="height: 500px;">
         <div class="content">
+          <i-col span="20">
             <div class="query">
                 <label class="top-label">编号</label>
                 <i-input v-model="id" placeholder="请输入编号" style="width: 70%"></i-input>
@@ -20,16 +21,26 @@
             <div class="query">
                 <i-button class="purchase-module-btn search" type="ghost" icon="ios-search" shape="circle" @click="search()">搜索</i-button>
             </div>
-            
-        </div>
-        <div class="content">
-            <div class="query"  style="width: 20%">
-                <label class="top-label">安全库存</label>
-                <i-input v-model="quantity" placeholder="请输入安全库存" style="width: 70%"></i-input>
-            </div>
+          </i-col>
+          <i-col span="4">
             <div class="query">
-                <i-button class="purchase-module-btn calculate" type="ghost" shape="circle" @click="setquantity()">设置安全库存</i-button>
+                <i-button class="purchase-module-btn calculate" type="ghost" shape="circle" @click="setquantity">设置安全库存</i-button>
+                <Modal v-model="setquantity1" title="修改安全库存" @on-ok="setquantity_ok" @on-cancel="cancel">
+                  <Form :model="formRight" label-position="right" :label-width="100">
+                  <FormItem label="物料编号">
+                      <input disabled v-model="modifymaterialId" style="width:200px">
+                    </FormItem>
+                  <FormItem label="物料名称">
+                      <input disabled v-model="modifymaterialName" style="width:200px">
+                    </FormItem>
+                  <Form :model="formRight" label-position="right" :label-width="100">
+                    <FormItem label="安全库存">
+                      <input type="number" v-model="modifymaterialQuantity" style="width:200px">
+                    </FormItem>
+                  </Form>
+                </Modal>
             </div>
+          </i-col>
         </div>
         <div style="margin-top: 20px">
             <i-table @on-selection-change='selectionClick' border :height="400" :columns="columns" :data="table_data"></i-table>
@@ -48,7 +59,6 @@ export default {
       category: '',
       property: '',
       table_data: [],
-      quantity: '',
       columns: [
         {
           type: 'selection',
@@ -79,7 +89,11 @@ export default {
         //   title: '单价(元)',
         //   key: 'price'
         // }
-      ]
+      ],
+      setquantity1 : false,
+      modifymaterialId : '',
+      modifymaterialName : '',
+      modifymaterialQuantity : ''
     }
   },
   created() {
@@ -126,16 +140,32 @@ export default {
       for (var i = 0; i < arr.length; i++) {
         this.dataList.push(arr[i]['id'])
       }
+      if(arr.length == 1)
+      {
+        this.modifymaterialId = arr[0].id,
+        this.modifymaterialName = arr[0].name,
+        this.modifymaterialQuantity = arr[0].safe_quantity
+      }else{
+        this.modifymaterialId = '',
+        this.modifymaterialName = '',
+        this.modifymaterialQuantity = ''
+      }
     },
-    setquantity: function() {
-      if (this.dataList.length != 0) {
-        if (this.quantity) {
+    setquantity:function(){
+      if (this.dataList.length == 0) {
+         this.$Message.warning('请选择需要更改安全库存的物料')
+      }else{
+        this.setquantity1 = true
+      }
+    },
+    setquantity_ok: function() {
+        if (this.modifymaterialQuantity) {
           this.$http({
             url: '/setSafeQuantity',
             method: 'GET',
             params: {
               id: this.dataList,
-              quantity: this.quantity
+              quantity: this.modifymaterialQuantity
             }
           }).then(
             function(res) {
@@ -152,9 +182,6 @@ export default {
             
             this.$Message.warning('安全库存不能为空')
         }
-      } else {
-          this.$Message.warning('请选择需要更改安全库存的物料')
-      }
     }
   }
 }

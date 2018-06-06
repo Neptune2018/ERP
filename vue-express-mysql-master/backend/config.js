@@ -16,8 +16,8 @@ var config = {
   db: {
     host: 'localhost',
     dialect: 'mysql',
-    user: 'wenbin',
-    password: '137139',
+    user: 'hyk',
+    password: '123456',
     database: 'development',
     pool: {
       max: 5,    //最大连接数
