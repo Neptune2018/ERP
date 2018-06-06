@@ -1,5 +1,8 @@
+/**
+  在出入库信息的fromPerson 和 toPerson字段中显示
+**/
 var models = require('../models')
-const addMaterials = async function(){
+const addUserforIOList = async function(){
   // await models.Material.destroy({where:{}});
   var material1 = await models.User.create({
     'id': 241,
@@ -18,3 +21,4 @@ const addMaterials = async function(){
     'name': 'Christin'
   });
 }
+addUserforIOList();
