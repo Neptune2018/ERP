@@ -11,3 +11,4 @@ exports.User = require('./user');
 exports.Material = require('./material');
 exports.Purchase = require('./purchase');
 exports.Product = require('./product');
+exports.modifyUserInfo=require('./modifyUserInfo');
