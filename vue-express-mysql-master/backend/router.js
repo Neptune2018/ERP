@@ -32,6 +32,10 @@ router.get('/getgrouponloadapi', getgroup.onloadapi)
 router.get('/getsinglegrouponloadapi', getgroup.singleonloadapi)
 router.post('/searchuserapi', getgroup.searchuserapi)
 router.post('/modifyUINFObyadmin', ModifyUserINFO.updateUserapi)
+router.post('/removeuser', ModifyUserINFO.removeUserapi)
+router.post('/adduser', ModifyUserINFO.addUserapi)
+
+
 var product = require('./api/productapi');
 
 

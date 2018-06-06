@@ -20,3 +20,23 @@ exports.updateUserapi = function(req, res) {
 	res.send(req.query);
 }
 
+
+exports.removeUserapi = function(req, res) {
+    console.log(req.body.new_data);
+    
+    modifyUserInfo.RemoveUser(req.body.new_data);
+    if(req.body.new_data[4]!='Staff'){modifyUserInfo.RemovePass(req.body.new_data);}
+   
+   
+	res.send(req.query);
+}
+
+exports.addUserapi = function(req, res) {
+    console.log(req.body.new_data);
+    
+    modifyUserInfo.addUser(req.body.new_data);
+    
+   
+   
+	res.send(req.query);
+}
