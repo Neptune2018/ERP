@@ -65,12 +65,24 @@ exports.wareAvail = function(req,res){
 exports.insertIO = function(req,res){
     for(var i = 0;i<req.body.length;i++){
         var tmp = start.toString()   
-        console.log(tmp)    
+        //console.log(tmp)    
         IO.insertIO(tmp,req.body[i])
         IO.insertPM(tmp,req.body[i])
-        console.log(req.body[i].style)
+        //console.log(req.body[i].style)
         IO.insertStock(req.body[i],tmp,tmp)  
         start = start+1
+    }
+    res.send("success")
+}
+
+exports.exportWare = function(req,res){
+    for(var i = 0;i<req.body.data.length;i++){
+        IO.findRemain(function(data,i){
+            if(data[0][0].remain>=req.body.data[i].remain){
+                IO.updateRemain(data[0][0].remain-req.body.data[i].remain,req.body.data[i].id)
+            } 
+        },req.body.data[i].id,i)
+        IO.exportIO(req.body.data[i].goodsId,req.body.fromPerson,req.body.toPerson)
     }
     res.send("success")
 }

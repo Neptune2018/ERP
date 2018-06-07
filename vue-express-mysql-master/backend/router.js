@@ -110,4 +110,5 @@ router.get('/stations', stations.Stations)
 router.get('/iorecord', iorecord.IORecord)
 router.post('/findPerson',io_events.findPerson)
 router.post('/findStockId',io_events.findStockid)
+router.post('/exportWare',io_events.exportWare)
 module.exports = router;

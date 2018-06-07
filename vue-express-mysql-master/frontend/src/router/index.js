@@ -16,7 +16,6 @@ import MatrialLack from '@/components/MatrialLack'
 import SafeStock from '@/components/SafeStock'
 import Stocks from '@/components/Stocks'
 import ImportWare from '@/components/ImportWare'
-import ExportWare from '@/components/ExportWare'
 import IOList from '@/components/IOList'
 Vue.use(Router)
 
@@ -90,11 +89,6 @@ export default new Router({
       path:'/ImportWare',
       name: 'ImportWare',
       component: ImportWare
-    },
-    {
-      path:'/ExportWare',
-      name: 'ExportWare',
-      component: ExportWare
     },
     {
       path: '/ioinfo',

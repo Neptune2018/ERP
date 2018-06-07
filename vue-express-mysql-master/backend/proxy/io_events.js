@@ -5,7 +5,7 @@ var Repertory = require('../models').Repertory;
 var Material = require('../models').Material;
 var Product = require('../models').Product;
 var db = require('../models').DB;
-var t
+
 //搜索仓库名并且返回
 exports.searchRepertory = function(dosomething){
     db.query('select name from repertories;')
@@ -123,4 +123,40 @@ exports.insertIO = function(id,info){
         toPersonId:info.toPerson
     })
 
+}
+exports.findRemain = function(dosomething,id,k){
+    db.query('select remain from stocks where id = '+id)
+    .then(function(rows){
+        dosomething(rows,k);
+    }) 
+}
+exports.updateRemain=function(remain,id){
+    db.query("update stocks set remain = '"+remain+"' where id = "+id)
+    .then(function(rows,err){
+        if(err){
+            console.log('修改失败')
+        }
+    })
+}
+//找到出库人
+exports.findPMId = function(dosomething,info){
+    if(info.style == 1) {
+        db.query('select productId from stocks where id = '+info.id)
+        .then(function(rows){
+            dosomething(rows)
+        })
+    } else if(info.style == 0){
+        db.query('select materialId from stocks where id = '+info.id)
+        .then(function(rows){
+            dosomething(rows)
+        })
+    }
+}
+exports.exportIO = function(id,fromPerson,toPerson){
+    IoList.create({
+        id:10000+id,
+        style:0,//表示出操作
+        fromPersonId:fromPerson,
+        toPersonId:toPerson
+    })
 }
