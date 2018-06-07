@@ -65,6 +65,7 @@ router.post('/searchuserapi', getgroup.searchuserapi)
 router.post('/modifyUINFObyadmin', ModifyUserINFO.updateUserapi)
 router.post('/removeuser', ModifyUserINFO.removeUserapi)
 router.post('/adduser', ModifyUserINFO.addUserapi)
+router.post('/upload', ModifyUserINFO.uploadapi)
 
 
 var product = require('./api/productapi');

@@ -63,6 +63,12 @@ exports.RemovePass = function( data) {
 
 exports.addUser = async function( data) {
     
+	var testuser = await models.User.findOne({
+		where: {phone: data[3]}
+	});
+	console.log(testuser)
+	if(testuser!=null)return;
+	
 	var role = await models.Role.findOne({
 		where: {name: data[4]}
 	});
@@ -75,12 +81,14 @@ exports.addUser = async function( data) {
 		'job': data[5],
 		'roleId':role.id
 	});
+
+	console.log('create user '+data[1])
 	
 	if(data[4]!='Staff'){await newUser.createAdmin({'password': data[6]});}
 	
 	
 	
-	console.log('create user '+data[1])
+	console.log('create admin '+data[1])
     
 }
 

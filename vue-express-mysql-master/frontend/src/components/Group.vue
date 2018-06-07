@@ -6,11 +6,13 @@
         <div class='select_bar'>
         <!-- <i-input v-model="value4" icon="search" placeholder="搜索" style="width: 200px"></i-input> -->
 
-        <i-select v-model="model1" placeholder="请选择职位"  @on-change="selectGroup" style="width:200px">
+        <i-select  class="gb" v-model="model1" placeholder="请选择职位"  @on-change="selectGroup" style="width:200px">
             <i-option v-for="item in cityList" :value="item.value" :key="item.value" >{{ item.label }}</i-option>
         </i-select>
 
-        <Button  type="info"   @click="modalnew=true">添加用户</Button>
+        <Button  class="gb" type="info"   @click="modalnew=true">添加用户</Button>
+
+        <Button class="gb" type="ghost" icon="ios-cloud-upload-outline" @click="modalexcel=true">excel导入用户</Button>
 
 
             
@@ -49,7 +51,7 @@
                                 
                                 <p><font color="#FF7F00">{{this.name_valid_text}}</font></p>
 
-                                <Icon type="checkmark-circled" size="20"  color="#9BCD9B" v-if=namevalid></Icon>
+                                <Icon type="checkmark-circled" size="20"  color="#18b566" v-if=namevalid></Icon>
                             </div>
 
 
@@ -68,7 +70,7 @@
                             <div  class="row-invalid-text">
                                 
                                 <p><font color="#FF7F00">{{this.phone_valid_text}}</font></p>
-                                <Icon type="checkmark-circled" size="20"  color="#9BCD9B" v-if=phonevalid></Icon>
+                                <Icon type="checkmark-circled" size="20"  color="#18b566" v-if=phonevalid></Icon>
                             </div>
 
                         </div>
@@ -84,7 +86,7 @@
                             <div  class="row-invalid-text">
                                 
                                 <p><font color="#FF7F00">{{this.email_valid_text}}</font></p>
-                                <Icon type="checkmark-circled" size="20"  color="#9BCD9B" v-if=emailvalid></Icon>
+                                <Icon type="checkmark-circled" size="20"  color="#18b566" v-if=emailvalid></Icon>
                             </div>
 
                         </div>
@@ -103,7 +105,7 @@
                             <div  class="row-invalid-text">
                                 
                                 <p><font color="#FF7F00">{{this.worktype_valid_text}}</font></p>
-                                <Icon type="checkmark-circled" size="20"  color="#9BCD9B" v-if=worktypevalid></Icon>
+                                <Icon type="checkmark-circled" size="20"  color="#18b566" v-if=worktypevalid></Icon>
                             </div>
 
                             
@@ -120,7 +122,7 @@
                             <div  class="row-invalid-text">
                                 
                                 <p><font color="#FF7F00">{{this.job_valid_text}}</font></p>
-                                <Icon type="checkmark-circled" size="20"  color="#9BCD9B" v-if=jobvalid></Icon>
+                                <Icon type="checkmark-circled" size="20"  color="#18b566" v-if=jobvalid></Icon>
                             </div>
 
                             
@@ -138,7 +140,7 @@
                             <div  class="row-invalid-text">
                                 
                                 <p><font color="#FF7F00">{{this.password_valid_text}}</font></p>
-                                <Icon type="checkmark-circled" size="20"  color="#9BCD9B" v-if=passwordvalid></Icon>
+                                <Icon type="checkmark-circled" size="20"  color="#18b566" v-if=passwordvalid></Icon>
                             </div>
 
                             
@@ -155,7 +157,7 @@
                             <div  class="row-invalid-text">
                                 
                                 <p><font color="#FF7F00">{{this.password2_valid_text}}</font></p>
-                                <Icon type="checkmark-circled" size="20"  color="#9BCD9B" v-if=password2valid></Icon>
+                                <Icon type="checkmark-circled" size="20"  color="#18b566" v-if=password2valid></Icon>
                             </div>
 
                             
@@ -170,6 +172,25 @@
                         
                 </div>
         
+            </Modal>
+
+            <Modal v-model="modalexcel" width=360px>
+                    
+                    <Upload
+                        type="drag"
+                        action="/upload" :on-success="uploadexcel" :on-error="handleUploadError" :on-format-error="handleFormatError"
+                        :format="['xlsx','xls','png']" ref="upload">
+                        <div style="padding: 20px 0">
+                            <Icon type="ios-cloud-upload" size="60" style="color: #3399ff"></Icon>
+                            <p>上传excel以添加用户</p>
+                        </div>
+                    </Upload>
+                    
+                    <div slot="footer">
+                        <p><p>
+                    </div>
+
+                    
             </Modal>
         </div>
         
@@ -226,6 +247,7 @@ export default {
 
         model1: '',
         
+        modalexcel:false,
         modalnew:false,
         grouprestr:'',
         textrestr:'',
@@ -520,6 +542,19 @@ export default {
                 
                 this.paramsSetNull()
                 this.modalnew=true
+            },
+            uploadexcel(){
+                this.modalexcel=false;
+                this.$Message.success('添加成功');
+                this.$refs.upload.clearFiles();
+
+            },
+            handleUploadError(){
+                this.$Message.error('文件内容有误有毒');
+                // this.$refs.upload.clearFiles();
+            },
+            handleFormatError(){
+                this.$Message.error('只支持excel文件');
             }
   },
   created:function(){
@@ -559,11 +594,12 @@ h1, h2 {
 .main-background{
     padding: 1em;
 }
-i-select{
-    margin: 0.5em 0 0 0;
+
+.gb{
+     margin: 0 0.4em 0 0;
 }
 .select_bar{
-    margin: 0 0 0.5em  0;
+    margin: 0 0 0.9em  0;
 }
 
 .trow{

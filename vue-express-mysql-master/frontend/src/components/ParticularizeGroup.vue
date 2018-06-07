@@ -2,20 +2,32 @@
 <div class="main-background">
 
     <div class="select_bar">
-    <Poptip trigger="hover"  content="  点击返回分组页面" >
-    <Button type="ghost" shape="circle" icon="ios-arrow-thin-left" @click="backtogroup"></Button>
-    
-    
-    </Poptip>
-    <i-input v-model="value4" icon="search" @on-enter="searchuser" @on-click="searchuser" placeholder="用户名,电话,邮箱" style="width: 200px"></i-input>
 
-    <i-select v-model="model1" @on-change="searchuser" style="width:200px">
-        <i-option v-for="item in cityList" :value="item.value" :key="item.value">{{ item.label }}</i-option>
-    </i-select>
+        <div class="select_block">
+            <Poptip trigger="hover"  content="  点击返回分组页面" >
+            <Button type="ghost" shape="circle" icon="ios-arrow-thin-left" @click="backtogroup"></Button>
+            </Poptip>
+        </div>
 
+        <div class="select_block">
+            <i-input v-model="value4" icon="search" @on-enter="searchuser" @on-click="searchuser" placeholder="用户名,电话,邮箱" style="width: 200px"></i-input>
+        </div>
 
+        <div class="select_block"> 
+            <i-select v-model="model1" @on-change="searchuser" style="width:120px">
+                <i-option v-for="item in cityList" :value="item.value" :key="item.value">{{ item.label }}</i-option>
+            </i-select>
+        </div>
 
-    <Button  type="info"   @click="click_on_newusr">添加用户</Button>
+        <div class="select_block">
+            <Button  type="info"   @click="click_on_newusr" >添加用户</Button>
+        </div>
+
+        <div class="select_block">
+           
+            <Button type="ghost" icon="ios-cloud-upload-outline" @click="modalexcel=true">excel导入用户</Button>
+            
+        </div>
 
     </div>
 
@@ -60,7 +72,7 @@
                                 
                                 <p><font color="#FF7F00">{{this.name_valid_text}}</font></p>
 
-                                <Icon type="checkmark-circled" size="20"  color="#9BCD9B" v-if=namevalid></Icon>
+                                <Icon type="checkmark-circled" size="20"  color="#18b566" v-if=namevalid></Icon>
                             </div>
 
 
@@ -79,7 +91,7 @@
                             <div  class="row-invalid-text">
                                 
                                 <p><font color="#FF7F00">{{this.phone_valid_text}}</font></p>
-                                <Icon type="checkmark-circled" size="20"  color="#9BCD9B" v-if=phonevalid></Icon>
+                                <Icon type="checkmark-circled" size="20"  color="#18b566" v-if=phonevalid></Icon>
                             </div>
 
                         </div>
@@ -95,7 +107,7 @@
                             <div  class="row-invalid-text">
                                 
                                 <p><font color="#FF7F00">{{this.email_valid_text}}</font></p>
-                                <Icon type="checkmark-circled" size="20"  color="#9BCD9B" v-if=emailvalid></Icon>
+                                <Icon type="checkmark-circled" size="20"  color="#18b566" v-if=emailvalid></Icon>
                             </div>
 
                         </div>
@@ -114,7 +126,7 @@
                             <div  class="row-invalid-text">
                                 
                                 <p><font color="#FF7F00">{{this.worktype_valid_text}}</font></p>
-                                <Icon type="checkmark-circled" size="20"  color="#9BCD9B" v-if=worktypevalid></Icon>
+                                <Icon type="checkmark-circled" size="20"  color="#18b566" v-if=worktypevalid></Icon>
                             </div>
 
                             
@@ -131,7 +143,7 @@
                             <div  class="row-invalid-text">
                                 
                                 <p><font color="#FF7F00">{{this.job_valid_text}}</font></p>
-                                <Icon type="checkmark-circled" size="20"  color="#9BCD9B" v-if=jobvalid></Icon>
+                                <Icon type="checkmark-circled" size="20"  color="#18b566" v-if=jobvalid></Icon>
                             </div>
 
                             
@@ -149,7 +161,7 @@
                             <div  class="row-invalid-text">
                                 
                                 <p><font color="#FF7F00">{{this.password_valid_text}}</font></p>
-                                <Icon type="checkmark-circled" size="20"  color="#9BCD9B" v-if=passwordvalid></Icon>
+                                <Icon type="checkmark-circled" size="20"  color="#18b566" v-if=passwordvalid></Icon>
                             </div>
 
                             
@@ -166,7 +178,7 @@
                             <div  class="row-invalid-text">
                                 
                                 <p><font color="#FF7F00">{{this.password2_valid_text}}</font></p>
-                                <Icon type="checkmark-circled" size="20"  color="#9BCD9B" v-if=password2valid></Icon>
+                                <Icon type="checkmark-circled" size="20"  color="#18b566" v-if=password2valid></Icon>
                             </div>
 
                             
@@ -290,6 +302,25 @@
                         <Button type="error" size="large" long :loading="modal_loading" @click="RemoveUser">删除</Button>
                     </div>
     </Modal>
+
+    <Modal v-model="modalexcel" width=360px>
+                    
+                    <Upload
+                        type="drag"
+                        action="/upload" :on-success="uploadexcel" :on-error="handleUploadError" :on-format-error="handleFormatError"
+                        :format="['xlsx','xls','png']" ref="upload">
+                        <div style="padding: 20px 0">
+                            <Icon type="ios-cloud-upload" size="60" style="color: #3399ff"></Icon>
+                            <p>上传excel以添加用户</p>
+                        </div>
+                    </Upload>
+                    
+                    <div slot="footer">
+                        <p><p>
+                    </div>
+
+                    
+    </Modal>
 </div>
 </template>
 
@@ -308,6 +339,8 @@ export default {
         modifypassword:'',
         modifyjob:'',
         user_id:'',
+
+        modalexcel:false,
 
         model1: '',
         modalx:false,
@@ -409,17 +442,19 @@ export default {
                      {
                         title: '修删',
                         key: 'action',
-                        width: 120,
+                        width: 150,
                         align: 'center',
                         render: (h, params) => {
                             return h('div', [
                                 h('Button', {
                                     props: {
                                         type: 'primary',
-                                        size: 'small'
+                                        size: 'small',
+                                        icon:'edit'
                                     },
                                     style: {
-                                        marginRight: '1px'
+                                        marginRight: '3px',
+                                        // background: '#999'
                                     },
                                     on: {
                                         click: () => {
@@ -434,12 +469,14 @@ export default {
 
                                         }
                                     }
-                                }, '修改'),
+                                }, '改'),
 
                                 h('Button', {
                                     props: {
                                         type: 'error',
-                                        size: 'small'
+                                        size: 'small',
+                                        icon:"android-delete"
+                                        
                                     },
                                     on: {
                                         click: () => {
@@ -450,7 +487,7 @@ export default {
                                             
                                         }
                                     }
-                                }, '刪除')
+                                }, '删')
                             
                                
                             ]);
@@ -770,6 +807,19 @@ export default {
                 
                 this.paramsSetNull()
                 this.modalnew=true
+            },
+            uploadexcel(){
+                this.modalexcel=false;
+                this.$Message.success('添加成功');
+                this.$refs.upload.clearFiles();
+
+            },
+            handleUploadError(){
+                this.$Message.error('文件内容有误有毒');
+                // this.$refs.upload.clearFiles();
+            },
+            handleFormatError(){
+                this.$Message.error('只支持excel文件');
             }
       
       
@@ -800,6 +850,9 @@ export default {
         this.password2valid&&
         this.jobvalid&&
         this.worktypevalid )
+        },
+        isRed: function() {
+            return this.newname === '';
         }
     }
 
@@ -822,6 +875,10 @@ i-select{
 }
 .select_bar{
     margin: 0 0 0.5em  0;
+    display:flex; flex-direction:row;
+}
+.select_block{
+    margin:0  0.5em 0 0;
 }
 .ml{
     margin:5px;
@@ -875,4 +932,5 @@ table{
 icon{
     size:30px;
 }
+
 </style>
