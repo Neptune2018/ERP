@@ -4,15 +4,15 @@
       <div class="search-form">
         <row class="query">
           <label class="top-label">编号</label>
-          <i-input v-model="id" placeholder="请输入编号" style="width: 70%"></i-input>
+          <i-input @on-enter="search()" v-model="id" placeholder="请输入编号" style="width: 70%"></i-input>
         </row>
         <row class="query">
           <label class="top-label">供应商</label>
-          <i-input v-model="name" placeholder="请输入名称" style="width: 60%"></i-input>
+          <i-input @on-enter="search()" v-model="name" placeholder="请输入名称" style="width: 60%"></i-input>
         </row>
         <row class="query">
           <label class="top-label">负责人</label>
-          <i-input v-model="person" placeholder="请输入负责人" style="width: 70%"></i-input>
+          <i-input @on-enter="search()" v-model="person" placeholder="请输入负责人" style="width: 70%"></i-input>
         </row>
         <row class="search">
           <i-button class="cost-module-btn" type="ghost" icon="ios-search" shape="circle" @click="search()">搜索</i-button>
@@ -68,15 +68,15 @@
       <div class="search-form">
         <row class="query">
           <label class="top-label">编号</label>
-          <i-input v-model="matrerial_id" placeholder="请输入编号" style="width: 70%"></i-input>
+          <i-input @on-enter="materialsearch()" v-model="matrerial_id" placeholder="请输入编号" style="width: 70%"></i-input>
         </row>
         <row class="query">
           <label class="top-label">名称</label>
-          <i-input v-model="matrerial_name" placeholder="请输入名称" style="width: 70%"></i-input>
+          <i-input @on-enter="materialsearch()" v-model="matrerial_name" placeholder="请输入名称" style="width: 70%"></i-input>
         </row>
         <row class="query">
           <label class="top-label">批次</label>
-          <i-input v-model="matrerial_batch" placeholder="请输入批次" style="width: 70%"></i-input>
+          <i-input @on-enter="materialsearch()" v-model="matrerial_batch" placeholder="请输入批次" style="width: 70%"></i-input>
         </row>
         <row class="search">
           <i-button class="cost-module-btn" type="ghost" icon="ios-search" shape="circle" @click="materialsearch()">搜索</i-button>

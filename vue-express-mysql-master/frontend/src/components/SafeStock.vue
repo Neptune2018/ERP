@@ -4,19 +4,19 @@
           <i-col span="20">
             <div class="query">
                 <label class="top-label">编号</label>
-                <i-input v-model="id" placeholder="请输入编号" style="width: 70%"></i-input>
+                <i-input @on-enter="search()" v-model="id" placeholder="请输入编号" style="width: 70%"></i-input>
             </div>
             <div class="query">
                 <label class="top-label">名称</label>
-                <i-input v-model="name" placeholder="请输入名称" style="width: 70%"></i-input>
+                <i-input @on-enter="search()" v-model="name" placeholder="请输入名称" style="width: 70%"></i-input>
             </div>
             <div class="query">
                 <label class="top-label">性质</label>
-                <i-input v-model="property" placeholder="请输入性质" style="width: 70%"></i-input>
+                <i-input @on-enter="search()" v-model="property" placeholder="请输入性质" style="width: 70%"></i-input>
             </div>
             <div class="query">
                 <label class="top-label">分类</label>
-                <i-input v-model="category" placeholder="请输入分类" style="width: 70%"></i-input>
+                <i-input @on-enter="search()" v-model="category" placeholder="请输入分类" style="width: 70%"></i-input>
             </div>
             <div class="query">
                 <i-button class="purchase-module-btn search" type="ghost" icon="ios-search" shape="circle" @click="search()">搜索</i-button>
