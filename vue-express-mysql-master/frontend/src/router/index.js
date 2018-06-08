@@ -14,6 +14,7 @@ import Signin from '@/components/Signin'
 import Generate from '@/components/Generate'
 import MatrialLack from '@/components/MatrialLack'
 import SafeStock from '@/components/SafeStock'
+import State from '@/components/State'
 
 import ThresholdWarning from '@/components/ThresholdWarning'
 import ImportWare from '@/components/ImportWare'
@@ -77,6 +78,11 @@ export default new Router({
       path: '/generate',
       name: 'Generate',
       component: Generate
+    },
+    {
+      path: '/state',
+      name: 'State',
+      component: State
     },
     {
       path: '/starving',
