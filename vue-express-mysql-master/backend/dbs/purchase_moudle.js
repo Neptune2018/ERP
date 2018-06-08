@@ -1,17 +1,121 @@
 var models = require('../models')
 
 //使用方法
-//在当前文件夹中 采用命令 node role_feature.js就能把权限数据插入到数据表中
+//在当前文件夹中 采用命令 node purchase_moudle.js就能把采购管理的数据插入到数据表中
 
-const addSupplier = async function () {
-    await models.MinOrder.destroy({where:{}});
-    await models.MaterCate.destroy({where:{}});
-    await models.Stock.destroy({where:{}});
-    await models.Offer.destroy({where:{}});
-    await models.Material.destroy({where:{}});
-    await models.Supplier.destroy({where:{}});
-    await models.OfferList.destroy({where:{}});
+//采购管理部分主要修改8个表
+//缺料浏览涉及Material、MaterCate、Stock
+//安全库存涉及Material、MaterCate
+//供应商管理涉及Material、MaterCate、User、Supplier、MinOrder
+//报价单管理涉及Material、Supplier、Offer、OfferList、Supplier
 
+
+// 必须设置的属性有：  Material--name、status、property、safe_quantity
+//                    MaterCate--name
+//                    Stock--style、remain
+//                    User--name
+//                    Supplier--name、phone、person、remark
+//                    MinOrder--quantity
+//                    OfferList--time
+//                    Offer--quantity、batch、price、total_price
+
+//OfferList中所有offer中的物料必须是Supplier提供的物料,细节请看413行
+
+const addPurchase = async function () {
+    // await models.User.destroy({where:{}});
+    // await models.MinOrder.destroy({where:{}});
+    // await models.MaterCate.destroy({where:{}});
+    // await models.Stock.destroy({where:{}});
+    // await models.Offer.destroy({where:{}});
+    // await models.Material.destroy({where:{}});
+    // await models.Supplier.destroy({where:{}});
+    // await models.OfferList.destroy({where:{}});
+
+
+    var User2 = await models.User.create({
+		'name': '郭杰瑞',
+		'phone': '15822004840',
+		'email': 'guo97HBK@outlook.com',
+		'job': '生产总监'
+	});
+
+    var User3 = await models.User.create({
+		'name': '张龙',
+		'phone': '13002338561',
+		'email': '730040709@qq.com',
+		'job': '生产运营师'
+	});
+
+	var User4 = await models.User.create({
+		'name': 'Mickel',
+		'phone': '18343405677',
+		'email': 'iloveHB@126.com',
+		'job': '生产经理'
+	});
+
+	var User13 = await models.User.create({
+		'name': '郭牛',
+		'phone': '18885023188',
+		'email': '10407307@qq.com',
+		'job': '生产运营师'
+	});
+	
+	var User5 = await models.User.create({
+		'name': 'Vincy',
+		'phone': '18297345666',
+		'email': 'Neptune2018@outlook.com',
+		'job': '财务总监'
+	});
+
+	var User12 = await models.User.create({
+		'name': 'Bo Yeung',
+		'phone': '17290233633',
+		'email': 'freeme12@163.com',
+		'job': '财务分析师'
+	});
+	
+	var User6 = await models.User.create({
+		'name': '号号',
+		'phone': '13046557893',
+		'email': 'haohaoYY@163.com',
+		'job': '采购总管'
+	});
+	
+	var User7 = await models.User.create({
+		'name': '张小龙',
+		'phone': '13183834563',
+		'email': 'allenzh@qq.com',
+		'job': '采购顾问'
+	});
+
+	var User8 = await models.User.create({
+		'name': 'Lisa',
+		'phone': '18923024876',
+		'email': 'Lisa0109@gmail.com',
+		'job': '法务'
+	});
+	
+	var User9 = await models.User.create({
+		'name': '乔纳森·诺兰',
+		'phone': '15502034577',
+		'email': 'Jonasen@gmail.com',
+		'job': '羊区仓主管'
+	});
+	
+	var User10 = await models.User.create({
+		'name': '汉堡',
+		'phone': '13043235772',
+		'email': '30334617@qq.com',
+		'job': '滨海仓主管'
+	});
+	
+	var User11 = await models.User.create({
+		'name': 'Morty',
+		'phone': '13709872563',
+		'email': 'rickC137@gmail.com',
+		'job': '文员'
+	});
+	
     var material1 = await models.Material.create({
         'name': 'EB38 PCB上线',
         'status': '正常',
@@ -123,7 +227,7 @@ const addSupplier = async function () {
         'batch': '456789'
     });
 
-
+    //每个物料分类包含多个物料
     await materialcate1.addMaterial(material1)
     await materialcate1.addMaterial(material3)
     await materialcate1.addMaterial(material5)
@@ -132,6 +236,7 @@ const addSupplier = async function () {
     await materialcate3.addMaterial(material4)
     await materialcate3.addMaterial(material6)
 
+    //每个物料包含多个Stock
     await material1.addStock(stock1)
     await material1.addStock(stock2)
     await material1.addStock(stock3)
@@ -186,7 +291,7 @@ const addSupplier = async function () {
         'remark': 'xx原料供应商'
     });
     
-    
+    //物料和供应商是多对多的关系，每对靠MinOrder连接
     await material1.addSupplier(supplier1, {'quantity' : 100})
     await material1.addSupplier(supplier2, {'quantity' : 400})
     await material1.addSupplier(supplier3, {'quantity' : 500})
@@ -263,7 +368,7 @@ const addSupplier = async function () {
         'time': '2018-02-15 12:00:00'
     });
 
-
+    //每个offerList绑定一个供应商
     await offerList1.setSupplier(supplier1)
     await offerList2.setSupplier(supplier2)
     await offerList3.setSupplier(supplier3)
@@ -284,31 +389,35 @@ const addSupplier = async function () {
     await offerList18.setSupplier(supplier7)
     await offerList19.setSupplier(supplier7)
 
-    // await offerList1.setUser(User2)
-    // await offerList2.setUser(User3)
-    // await offerList3.setUser(User4)
-    // await offerList4.setUser(User5)
-    // await offerList5.setUser(User5)
-    // await offerList6.setUser(User6)
-    // await offerList7.setUser(User7)
-    // await offerList8.setUser(User8)
-    // await offerList9.setUser(User9)
-    // await offerList10.setUser(User10)
-    // await offerList11.setUser(User11)
-    // await offerList12.setUser(User12)
-    // await offerList13.setUser(User11)
-    // await offerList14.setUser(User13)
-    // await offerList15.setUser(User4)
-    // await offerList16.setUser(User5)
-    // await offerList17.setUser(User6)
-    // await offerList18.setUser(User7)
-    // await offerList19.setUser(User8)
+    //每个offerList包含一个负责人
+    await offerList1.setUser(User2)
+    await offerList2.setUser(User3)
+    await offerList3.setUser(User4)
+    await offerList4.setUser(User5)
+    await offerList5.setUser(User5)
+    await offerList6.setUser(User6)
+    await offerList7.setUser(User7)
+    await offerList8.setUser(User8)
+    await offerList9.setUser(User9)
+    await offerList10.setUser(User10)
+    await offerList11.setUser(User11)
+    await offerList12.setUser(User12)
+    await offerList13.setUser(User11)
+    await offerList14.setUser(User13)
+    await offerList15.setUser(User4)
+    await offerList16.setUser(User5)
+    await offerList17.setUser(User6)
+    await offerList18.setUser(User7)
+    await offerList19.setUser(User8)
 
-
+    //Material与OfferList间多对多的关系处理，每一对靠Offer进行连接
+    //每个offerList增加的物料必须是供应商与物料存在minorder的关系
+    //比如，offerList1绑定的供应商是supplier1，而supplier1提供的物料是material1和material5
+    //所以offerList1只能添加material1和material5
     await offerList1.addMaterial(material1,{'quantity': 100, 'batch': '1-2', 'price': 20, 'total_price': 2000})
     await offerList1.addMaterial(material5,{'quantity': 100, 'batch': '1-2', 'price': 20, 'total_price': 2000})
     await offerList2.addMaterial(material1,{'quantity': 100, 'batch': '1-2', 'price': 20, 'total_price': 2000})
-    await offerList2.addMaterial(material5,{'quantity': 100, 'batch': '1-2', 'price': 20, 'total_price': 2000})
+    await offerList2.addMaterial(material6,{'quantity': 100, 'batch': '1-2', 'price': 20, 'total_price': 2000})
     await offerList3.addMaterial(material1,{'quantity': 100, 'batch': '1-2', 'price': 20, 'total_price': 2000})
     await offerList3.addMaterial(material5,{'quantity': 100, 'batch': '1-2', 'price': 20, 'total_price': 2000})
     await offerList4.addMaterial(material1,{'quantity': 100, 'batch': '1-2', 'price': 20, 'total_price': 2000})
@@ -322,7 +431,7 @@ const addSupplier = async function () {
     await offerList11.addMaterial(material2,{'quantity': 100, 'batch': '1-2', 'price': 20, 'total_price': 2000})
     await offerList12.addMaterial(material5,{'quantity': 100, 'batch': '1-2', 'price': 20, 'total_price': 2000})
     await offerList13.addMaterial(material2,{'quantity': 100, 'batch': '1-2', 'price': 20, 'total_price': 2000})
-    await offerList13.addMaterial(material2,{'quantity': 100, 'batch': '1-2', 'price': 20, 'total_price': 2000})
+    await offerList13.addMaterial(material6,{'quantity': 100, 'batch': '1-2', 'price': 20, 'total_price': 2000})
     await offerList14.addMaterial(material6,{'quantity': 100, 'batch': '1-2', 'price': 20, 'total_price': 2000})
     await offerList15.addMaterial(material6,{'quantity': 100, 'batch': '1-2', 'price': 20, 'total_price': 2000})
     await offerList16.addMaterial(material3,{'quantity': 100, 'batch': '1-2', 'price': 20, 'total_price': 2000})
@@ -336,4 +445,4 @@ const addSupplier = async function () {
 
 }
 
-addSupplier();
+addPurchase();
