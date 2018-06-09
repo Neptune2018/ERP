@@ -160,24 +160,28 @@ export default {
     },
     setquantity_ok: function() {
         if (this.modifymaterialQuantity) {
-          this.$http({
-            url: '/setSafeQuantity',
-            method: 'GET',
-            params: {
-              id: this.dataList,
-              quantity: this.modifymaterialQuantity
-            }
-          }).then(
-            function(res) {
-                this.$Message.success('设置成功')
-              this.table_data = res.body.data
-              // 返回总记录
-              //this.$router.push({path: '/hello', query:{data: res.body}})
-            },
-            function() {
-                this.$Message.error('设置失败')
-            }
-          )
+          if(this.modifymaterialQuantity>0){
+            this.$http({
+              url: '/setSafeQuantity',
+              method: 'GET',
+              params: {
+                id: this.dataList,
+                quantity: this.modifymaterialQuantity
+              }
+            }).then(
+              function(res) {
+                  this.$Message.success('设置成功')
+                this.table_data = res.body.data
+                // 返回总记录
+                //this.$router.push({path: '/hello', query:{data: res.body}})
+              },
+              function() {
+                  this.$Message.error('设置失败')
+              }
+            )
+          }else{
+            this.$Message.warning('安全库存不能为负数')
+          }
         } else {
             
             this.$Message.warning('安全库存不能为空')

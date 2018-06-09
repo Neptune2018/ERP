@@ -210,7 +210,7 @@ export default {
           key: 'person'
         },
         {
-            title: '时间',
+            title: '截止时间',
             key: 'time'
         },
         {
@@ -682,8 +682,12 @@ export default {
          this.$Message.warning('请选择需要添加的物料')
       }else if(this.addmaterialList.quantity == ''){
         this.$Message.warning('请填写订单中物料需要的数量')
+      }else if(this.addmaterialList.quantity < 0){
+        this.$Message.warning('订单中物料需要的数量不能为负')
       }else if(this.addmaterialList.price == ''){
         this.$Message.warning('请填写订单中物料的单价')
+      }else if(this.addmaterialList.price < 0){
+        this.$Message.warning('请填写订单中物料的单价不能为负')
       }else if(this.addmaterialList.batch == ''){
          this.$Message.warning('请填写订单中物料的批次')
        }else{
@@ -739,8 +743,12 @@ export default {
     material_modifyok:function(){
       if(this.modifymaterialList.quantity == ''){
         this.$Message.warning('请填写订单中物料需要的数量')
+      }else if(this.modifymaterialList.quantity < 0){
+        this.$Message.warning('订单中物料需要的数量不能为负')
       }else if(this.modifymaterialList.price == ''){
         this.$Message.warning('请填写订单中物料的单价')
+      }else if(this.modifymaterialList.price < 0){
+        this.$Message.warning('订单中物料的单价不能为负')
       }else if(this.modifymaterialList.batch == ''){
          this.$Message.warning('请填写订单中物料的批次')
        }else{

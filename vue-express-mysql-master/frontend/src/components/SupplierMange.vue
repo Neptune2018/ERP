@@ -92,13 +92,13 @@
                   <Option v-for="item in addmaterialIdList" :value="item.id" :key="item.id">{{ item.name }}</Option>
                 </Select>
               </FormItem>
-              <FormItem label="起定点">
+              <FormItem label="起订点">
                 <input type="number" v-model="addmaterialMinorder" style="width:200px">
               </FormItem>
             </Form>
           </Modal>
-          <i-button class="oper" type="primary" @click="material_modify">修改起定点</i-button>
-          <Modal v-model="material_modify1" title="修改起定点" @on-ok="material_modifyok" @on-cancel="cancel">
+          <i-button class="oper" type="primary" @click="material_modify">修改起订点</i-button>
+          <Modal v-model="material_modify1" title="修改起订点" @on-ok="material_modifyok" @on-cancel="cancel">
             <Form :model="formRight" label-position="right" :label-width="100">
             <FormItem label="物料编号">
                 <input disabled v-model="modifymaterialId" style="width:200px">
@@ -107,7 +107,7 @@
                 <input disabled v-model="modifymaterialName" style="width:200px">
               </FormItem>
             <Form :model="formRight" label-position="right" :label-width="100">
-              <FormItem label="起定点">
+              <FormItem label="起订点">
                 <input type="number" v-model="modifymaterialMinorder" style="width:200px">
               </FormItem>
             </Form>
@@ -216,7 +216,7 @@ export default {
           key: 'category'
         },
         {
-          title: '起定点',
+          title: '起订点',
           key: 'minorder'
         }
         // {
@@ -549,7 +549,9 @@ export default {
       if(this.addmaterialId == ''){
          this.$Message.warning('请选择需要添加的物料编号')
        }else if(this.addmaterialMinorder == ''){
-         this.$Message.warning('请填写需要添加的物料的起定点')
+         this.$Message.warning('请填写需要添加的物料的起订点')
+        }else if(this.addmaterialMinorder< 0){
+         this.$Message.warning('物料的起订点不能为负')
        }else{
          this.$http({
           url: '/addMaterialsToSupplier',
@@ -583,7 +585,7 @@ export default {
     },
     material_modify:function(){
       if(this.currentrow.id == ''){
-        this.$Message.warning('请选择需要修改物料起定点的供应商')
+        this.$Message.warning('请选择需要修改物料起订点的供应商')
         return
       }
       if (this.material_list.length == 0) {
@@ -595,7 +597,9 @@ export default {
     },
     material_modifyok:function(){
       if(this.modifymaterialMinorder == ''){
-         this.$Message.warning('请填写需要修改的物料起定点')
+         this.$Message.warning('请填写需要修改的物料起订点')
+      }else if(this.modifymaterialMinorder< 0){
+         this.$Message.warning('物料的起订点不能为负')
        }else{
           this.$http({
           url: '/setMinOrder',
