@@ -77,12 +77,16 @@ exports.insertIO = function(req,res){
 
 exports.exportWare = function(req,res){
     for(var i = 0;i<req.body.data.length;i++){
+        
         IO.findRemain(function(data,i){
             if(data[0][0].remain>=req.body.data[i].remain){
                 IO.updateRemain(data[0][0].remain-req.body.data[i].remain,req.body.data[i].id)
             } 
         },req.body.data[i].id,i)
-        IO.exportIO(req.body.data[i].goodsId,req.body.fromPerson,req.body.toPerson)
+        var cur_id = Math.floor(Math.random()*10000)
+        IO.exportIO(cur_id,req.body.fromPerson,req.body.toPerson)
+        IO.addIOitem(cur_id,req.body.data[i].goodsId,req.body.data[i].style,req.body.data[i].remain,req.body.data[i].unit,req.body.data[i].batch)
+        console.log("success~!")  
     }
     res.send("success")
 }

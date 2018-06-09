@@ -118,7 +118,7 @@ exports.insertStock = function(info,ioid,pmid){
 exports.insertIO = function(id,info){
     IoList.create({
         id:id,
-        style:1,//表示入库操作
+        style:false,//表示入库操作
         fromPersonId:info.fromPerson,
         toPersonId:info.toPerson
     })
@@ -154,9 +154,31 @@ exports.findPMId = function(dosomething,info){
 }
 exports.exportIO = function(id,fromPerson,toPerson){
     IoList.create({
-        id:10000+id,
-        style:0,//表示出操作
+        id:id,
+        style:true,//表示出操作
         fromPersonId:fromPerson,
         toPersonId:toPerson
     })
+}
+exports.addIOitem=function(ioid,pmid,style,remain,unit,batch){
+    //console.log(style)
+    if(style=="原料"){
+        IoItem.create({
+            style:0,
+            quantity:remain,
+            unit:unit,
+            batch:batch,
+            ioListId:ioid,
+            materialId:pmid        
+        })
+    } else if(style == "商品"){
+        IoItem.create({
+            style:1,
+            quantity:remain,
+            unit:unit,
+            batch:batch,
+            ioListId:ioid,
+            productId:pmid   
+        })     
+    }
 }

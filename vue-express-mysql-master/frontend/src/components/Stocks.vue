@@ -21,8 +21,10 @@
               <Input v-model="formItem.toPerson" placeholder="" style="width:200px"></Input>
             </FormItem>
         </Form>
+        <div slot="footer">
+          <Button type="primary" size="large" long  @click="exportWare()">完成出库</Button>
+        </div>
     </Modal>
-    <Button @click="exportWare()">完成出库</Button>
   </div>
 </template>
 <script>
@@ -279,18 +281,24 @@
                     toPerson:this.formItem.toPerson,
                     data:this.data2
                 }
-                //console.log(this.data2)
-                this.$http.post('/exportWare',info).then(function (res) {
-
-                if(res.body == "success"){
-                this.$Message.success('出库成功')
-                this.removeAll()
-                } else if (res.body == "fail"){
-                    this.$Message.error('余量不足，请重新检测')
-                }
-            }, function () {
-                this.$Message.error('出库失败')
-            }) 
+                this.$refs['formItem'].validate((valid) => {
+                    if(valid){
+                        this.$http.post('/exportWare',info).then(function (res) {
+                            if(res.body == "success"){
+                            this.$Message.success('出库成功')
+                            this.removeAll()
+                            } else if (res.body == "fail"){
+                                this.$Message.error('余量不足，请重新检测')
+                            }
+                        }, function () {
+                            this.$Message.error('出库失败')
+                        })
+                        this.addPerson = false;
+                    }
+                    else{  
+                        this.$Message.error('请完善负责人信息！')
+                    }
+                })
             },
             clearData(){
                 this.$refs['formItem'].resetFields()
