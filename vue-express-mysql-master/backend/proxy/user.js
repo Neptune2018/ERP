@@ -10,7 +10,9 @@ exports.signin = function(username, password, suss, fail) {
 			fail();
 		}else {
 			user.getAdmin().then(function(admin){
+				console.log("key", utils.makePassword(password))
 				if(admin['password'] == utils.makePassword(password)) {
+
 					console.log(user);
 					suss(user);
 				}

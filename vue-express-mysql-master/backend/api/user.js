@@ -5,7 +5,7 @@ exports.signin = function(req, res) {
 	var username = req.body.username;
 	var key = req.body.key;
 	var password = utils.aesDecrypt(req.body.password, key);
-	console.log(password);
+	console.log("psd", password);
 	User.signin(username, password, function(user){
 		data = {};
 		req.session.user = user;

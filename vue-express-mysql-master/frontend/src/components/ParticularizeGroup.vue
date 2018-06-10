@@ -3,30 +3,57 @@
 
     <div class="select_bar">
 
+        <div class="select-l">
+        <Tooltip   content="  点击返回分组页面" placement="top-start" >
         <div class="select_block">
-            <Poptip trigger="hover"  content="  点击返回分组页面" >
+            
             <Button type="ghost" shape="circle" icon="ios-arrow-thin-left" @click="backtogroup"></Button>
-            </Poptip>
+            
         </div>
+        </Tooltip>
 
+        <Tooltip   content="对用户名,电话,email进行简单搜索" placement="top-start" >
         <div class="select_block">
-            <i-input v-model="value4" icon="search" @on-enter="searchuser" @on-click="searchuser" placeholder="用户名,电话,邮箱" style="width: 200px"></i-input>
+        
+            <div  class="row-r rowdiv">
+                
+                <input class="guolovesburgerinput" type=text v-model="value4" placeholder="简单搜索" 
+                                    clearable  @keyup.enter="searchuser"><span class="focus-border"><i></i>
+		            </span>
+                <Icon class="gsicon" type="search"  color="#3399FF" size=20></Icon>
+            </div>
         </div>
+        </Tooltip>
 
+        
+
+        <!-- <div class="select_block">
+            <i-input  v-model="value4" icon="search" @on-enter="searchuser" @on-click="searchuser" placeholder="用户名,电话,邮箱" style="width: 200px">
+            
+        </div> -->
+
+        <Tooltip   content=" 当前角色分类" placement="top" >
         <div class="select_block"> 
             <i-select v-model="model1" @on-change="searchuser" style="width:120px">
                 <i-option v-for="item in cityList" :value="item.value" :key="item.value">{{ item.label }}</i-option>
             </i-select>
         </div>
-
-        <div class="select_block">
-            <Button  type="info"   @click="click_on_newusr" >添加用户</Button>
+        </Tooltip>
         </div>
 
-        <div class="select_block">
-           
-            <Button type="ghost" icon="ios-cloud-upload-outline" @click="modalexcel=true">excel导入用户</Button>
-            
+        <div class="select-r" style="float:right;">
+        <Tooltip   content=" 添加用户" placement="top" >
+            <div class="select_block"> 
+            <Button  type="info"  shape="circle"  @click="click_on_newusr" style=""><Icon type="person-add" size=16></Icon></Button>
+            </div>
+        </Tooltip>
+        <Tooltip   content="excel导入用户" placement="top-start"   >
+        
+            <div class="select_block"> 
+            <Button type="ghost"  shape="circle" @click="modalexcel=true"><Icon type="ios-cloud-upload-outline"  size=16></Icon></Button>
+            </div>
+        
+        </Tooltip>
         </div>
 
     </div>
@@ -37,40 +64,27 @@
    
     
     
-            <Modal v-model="modalnew" title="增加新用户" >
+            <Modal v-model="modalnew" title="添加新用户"  >
 
             
 
                 <div>
 
-                    <div>
-                        <div class="trow-title">
-                            <div class="row-l-t">
-                                <Icon type="person" size="35"  color="#999"></Icon>
-                            </div>
-                            <div>
-                                <h1>新成员！</h1>
-                            </div>
-                            <div>
-                                <h5><font color="#87CEFA">{{this.newworktype}}</font></h5>
-                            </div>
-                            
-                        </div>
+                   
+                        
 
                         <div class="trow">
                             <div class="row-l">
-                                <b>{{this.columns1[1].title}}</b>
+                                <p>{{this.columns1[1].title}}</p>
                             </div>
                             <div  class="row-r">
-                                <i-input v-model="newname" placeholder="Enter something..." 
-                                
-                                clearable style="width: 200px;height:30px;" @on-blur="nameblur"></i-input> 
-                                
+                                <input class="guoloveshamburgerinput" type=text v-model="newname" placeholder="New name" 
+                                clearable  @blur="nameblur"><span class="focus-border"></span>
                             </div>
 
                             <div  class="row-invalid-text">
                                 
-                                <p><font color="#FF7F00">{{this.name_valid_text}}</font></p>
+                                <p><font color="#3399FF">{{this.name_valid_text}}</font></p>
 
                                 <Icon type="checkmark-circled" size="20"  color="#18b566" v-if=namevalid></Icon>
                             </div>
@@ -82,15 +96,16 @@
 
                         <div class="trow">
                             <div class="row-l">
-                                <b>{{this.columns1[2].title}}</b>
+                                <p>{{this.columns1[2].title}}</p>
                             </div>
                             <div  class="row-r">
-                                <i-input v-model="newphone" placeholder="Enter something..." clearable style="width: 200px;height:15px;" @on-blur="phoneblur"></i-input>
+                                <input class="guoloveshamburgerinput" type=text v-model="newphone" placeholder="Phone number" clearable  @blur="phoneblur">
+                                <span class="focus-border"></span>
                             </div>
 
                             <div  class="row-invalid-text">
                                 
-                                <p><font color="#FF7F00">{{this.phone_valid_text}}</font></p>
+                                <p><font color="#3399FF">{{this.phone_valid_text}}</font></p>
                                 <Icon type="checkmark-circled" size="20"  color="#18b566" v-if=phonevalid></Icon>
                             </div>
 
@@ -98,15 +113,16 @@
 
                         <div class="trow">
                             <div class="row-l">
-                                <b>{{this.columns1[3].title}}</b>
+                                <p>{{this.columns1[3].title}}</p>
                             </div>
                             <div class="row-r">
-                                <i-input v-model="newemail" placeholder="Enter something..." clearable style="width: 200px;height:15px;" @on-blur="emailblur"></i-input>
+                                <input class="guoloveshamburgerinput" type=text  v-model="newemail" placeholder="Email-address" clearable  @blur="emailblur">
+                                <span class="focus-border"></span>
                             </div>
 
                             <div  class="row-invalid-text">
                                 
-                                <p><font color="#FF7F00">{{this.email_valid_text}}</font></p>
+                                <p><font color="#3399FF">{{this.email_valid_text}}</font></p>
                                 <Icon type="checkmark-circled" size="20"  color="#18b566" v-if=emailvalid></Icon>
                             </div>
 
@@ -114,10 +130,10 @@
                         
                         <div class="trow">
                             <div class="row-l">
-                                <b>角色</b>
+                                <p>角色</p>
                             </div>
                             <div class="row-r">
-                                <i-select v-model="newworktype"  style="width:200px ;height:15px;" @on-open-change="worktypeblur">
+                                <i-select v-model="newworktype"  style="width:100px ;height:15px;" @on-open-change="worktypeblur">
                                 <i-option v-for="item in cityList" :value="item.value" :key="item.value">{{ item.label }}</i-option>
                                 </i-select>
                                 
@@ -125,7 +141,7 @@
 
                             <div  class="row-invalid-text">
                                 
-                                <p><font color="#FF7F00">{{this.worktype_valid_text}}</font></p>
+                                <p><font color="#3399FF">{{this.worktype_valid_text}}</font></p>
                                 <Icon type="checkmark-circled" size="20"  color="#18b566" v-if=worktypevalid></Icon>
                             </div>
 
@@ -134,15 +150,15 @@
 
                         <div class="trow">
                             <div class="row-l">
-                                <b>职位</b>
+                                <p>职位</p>
                             </div>
                             <div class="row-r">
-                                <i-input v-model="newjob" placeholder="具体职位"  style="width: 200px;height:15px;" @on-blur="jobblur"></i-input >
+                                <input  class="guoloveshamburgerinput" type=text v-model="newjob" placeholder="具体职位"    @blur="jobblur">
+                                <span class="focus-border"></span>
                             </div>
-
                             <div  class="row-invalid-text">
                                 
-                                <p><font color="#FF7F00">{{this.job_valid_text}}</font></p>
+                                <p><font color="#3399FF">{{this.job_valid_text}}</font></p>
                                 <Icon type="checkmark-circled" size="20"  color="#18b566" v-if=jobvalid></Icon>
                             </div>
 
@@ -152,15 +168,16 @@
 
                         <div class="trow" v-if="newworktype != 'Staff'">
                             <div class="row-l">
-                                <b>用户密码</b>
+                                <p>用户密码</p>
                             </div>
                             <div class="row-r">
-                                <i-input  type=password v-model="newpassword" placeholder="请输入密码"  style="width: 200px;height:15px;" @on-blur="passwordblur">
+                                <input class="guoloveshamburgerinput"  type=password v-model="newpassword" placeholder="请输入密码"     @blur="passwordblur">
+                                <span class="focus-border"></span>
                             </div>
 
                             <div  class="row-invalid-text">
                                 
-                                <p><font color="#FF7F00">{{this.password_valid_text}}</font></p>
+                                <p><font color="#3399FF">{{this.password_valid_text}}</font></p>
                                 <Icon type="checkmark-circled" size="20"  color="#18b566" v-if=passwordvalid></Icon>
                             </div>
 
@@ -169,22 +186,27 @@
 
                         <div class="trow" v-if="newworktype != 'Staff'">
                             <div class="row-l">
-                                <b>确认密码</b>
+                                <p>确认密码</p>
                             </div>
                             <div class="row-r">
-                                <i-input  type=password v-model="newpassword2" placeholder="请再次输入密码"  style="width: 200px;height:15px;" @on-blur="password2blur">
+                                <input   class="guoloveshamburgerinput" type=password v-model="newpassword2" placeholder="请再次输入密码"    @blur="password2blur">
+                                <span class="focus-border"></span>
                             </div>
 
                             <div  class="row-invalid-text">
                                 
-                                <p><font color="#FF7F00">{{this.password2_valid_text}}</font></p>
+                                <p><font color="#3399FF">{{this.password2_valid_text}}</font></p>
                                 <Icon type="checkmark-circled" size="20"  color="#18b566" v-if=password2valid></Icon>
                             </div>
 
                             
                         </div>
 
-                </div>
+                        
+
+
+                        
+                    
                     
                 </div>
 
@@ -220,30 +242,32 @@
 
                 <div class="trow">
                     <div class="row-l">
-                        <b>{{this.columns1[2].title}}</b>
+                        <p>{{this.columns1[2].title}}</p>
                     </div>
                     <div  class="row-r">
-                        <i-input v-model="modifyphone" placeholder="Enter something..." clearable style="width: 200px;"></i-input>
+                        <input class="guoloveshamburgerinput" type=text  v-model="modifyphone" placeholder="Enter something..." clearable style="width: 200px;">
+                        <span class="focus-border"></span>
                     </div>
 
                 </div>
 
                 <div class="trow">
                     <div class="row-l">
-                        <b>{{this.columns1[3].title}}</b>
+                        <p>{{this.columns1[3].title}}</p>
                     </div>
                     <div class="row-r">
-                        <i-input v-model="modifyemail" placeholder="Enter something..." clearable style="width: 200px;"></i-input>
+                        <input class="guoloveshamburgerinput" type=text  v-model="modifyemail" placeholder="Enter something..." clearable style="width: 200px;">
+                        <span class="focus-border"></span>
                     </div>
 
                 </div>
                 
                 <div class="trow">
                     <div class="row-l">
-                        <b>角色</b>
+                        <p>角色</p>
                     </div>
                     <div class="row-r">
-                        <i-select v-model="work_type_value"  style="width:200px">
+                        <i-select v-model="work_type_value"  style="width:120px">
                         <i-option v-for="item in cityList" :value="item.value" :key="item.value">{{ item.label }}</i-option>
                         </i-select>
                     </div>
@@ -253,10 +277,11 @@
 
                 <div class="trow">
                     <div class="row-l">
-                        <b>职位</b>
+                        <p>职位</p>
                     </div>
                     <div class="row-r">
-                         <i-input v-model="modifyjob" placeholder="具体职位" clearable style="width: 200px;"></i-input>
+                         <input class="guoloveshamburgerinput" type=text  v-model="modifyjob" placeholder="具体职位" clearable style="width: 200px;">
+                         <span class="focus-border"></span>
                     </div>
 
                     
@@ -265,10 +290,11 @@
 
                  <div class="trow" v-if="work_type_value != 'Staff'">
                     <div class="row-l">
-                        <b>用户密码</b>
+                        <p>用户密码</p>
                     </div>
                     <div class="row-r">
-                         <i-input  type=password v-model="modifypassword" placeholder="输入为空默认为原始密码" clearable style="width: 200px;">
+                         <input class="guoloveshamburgerinput"   type=password v-model="modifypassword" placeholder="输入为空默认为原始密码" clearable style="width: 200px;">
+                         <span class="focus-border"></span>
                     </div>
 
                     
@@ -448,7 +474,7 @@ export default {
                             return h('div', [
                                 h('Button', {
                                     props: {
-                                        type: 'primary',
+                                        type: 'info',
                                         size: 'small',
                                         icon:'edit'
                                     },
@@ -560,7 +586,7 @@ export default {
                 this.modify_data[3]=this.modifyphone;
                 this.modify_data[4]=this.work_type_value;
                 this.modify_data[5]=this.modifyjob;
-                this.modify_data[6]=this.newpassword;
+                this.modify_data[6]=this.modifypassword;
 
                 
                
@@ -812,6 +838,7 @@ export default {
                 this.modalexcel=false;
                 this.$Message.success('添加成功');
                 this.$refs.upload.clearFiles();
+                this.applyforData(this.model1)
 
             },
             handleUploadError(){
@@ -843,13 +870,21 @@ export default {
     },
     computed:{
         hasInvalid:function(){
-            return !(this.phonevalid&&
-        this.emailvalid&&
-        this.namevalid&&
-       this.passwordvalid&&
-        this.password2valid&&
-        this.jobvalid&&
-        this.worktypevalid )
+            if(this.worktypevalid){
+            if(this.newworktype!='Staff'){return !( this.phonevalid&&
+                                                    this.emailvalid&&
+                                                    this.namevalid&&
+                                                    this.passwordvalid&&
+                                                    this.password2valid&&
+                                                    this.jobvalid&&
+                                                    this.worktypevalid )}
+            else    return                      !(this.phonevalid&&
+                                                    this.emailvalid&&
+                                                    this.namevalid&&
+                                                    this.jobvalid&&
+                                                    this.worktypevalid )
+                                                    }
+            else return !this.worktypevalid
         },
         isRed: function() {
             return this.newname === '';
@@ -865,7 +900,13 @@ export default {
 <style scoped>
 h1, h2 {
   font-weight: normal;
+  font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","微软雅黑",Arial,sans-serif;
 }
+p{
+    color: #999;
+    font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","微软雅黑",Arial,sans-serif;
+}
+:focus{outline: none;}
 
 .main-background{
     padding: 1em;
@@ -877,8 +918,12 @@ i-select{
     margin: 0 0 0.5em  0;
     display:flex; flex-direction:row;
 }
+.rowdiv{
+    display:flex; flex-direction:row;
+}
 .select_block{
     margin:0  0.5em 0 0;
+    
 }
 .ml{
     margin:5px;
@@ -898,7 +943,7 @@ table{
 
 .trow{
     display:flex; flex-direction:row;
-    margin:17px;  
+    margin:16px;  
 }
 .trow-title{
     display:flex; flex-direction:row;
@@ -907,19 +952,32 @@ table{
 .row-l{
     width:90px;
     text-align: right;
-    padding:6px;
+    padding:9px 8px 5px 6px;
     margin:0 10px;
 
+}
+.select-r{
+    display:flex; flex-direction:row;
+    text-align: right;
+    
+    /* margin:0 10px 0 45%; */
+}
+.select-l{
+    display:flex; flex-direction:row;
+    text-align: left;
+    /* width:40%; */
+    
+    
 }
 .row-l-t{
     width:90px;
     text-align: right;
-    padding:5px;
+    padding:9px 8px 5px 6px;
     margin:0 10px;
 
 }
 .row-r{
-
+    position: relative;
 
 }
 .row-invalid-text{
@@ -932,5 +990,37 @@ table{
 icon{
     size:30px;
 }
+input[type="text"]{
+  font: 12px/20px "Lato", Arial, sans-serif;
+  color: #333;
+  width: 100%;
+  box-sizing: border-box;
+  letter-spacing: 1px;
+}      
+input[type="password"]{
+  font: 12px/20px "Lato", Arial, sans-serif;
+  color: #333;
+  width: 100%;
+  box-sizing: border-box;
+  letter-spacing: 1px;
+}      
+.gsicon{border: 0; padding: 6px 10px 7px 0 ; border: 1px solid transparent; 
+border-top-color: #57c5f7;
+border-right-color: #57c5f7;
+border-bottom-color:#57c5f7; 
+border-left:0; transition: 0.4s;}
+.guoloveshamburgerinput{border: 0; padding: 6px 0 7px ; border: 1px solid transparent; border-bottom-color: #ccc;  transition: 0.4s;}
+.guoloveshamburgerinput:focus{padding: 6px 14px 7px ; transition: 0.4s;}     
+.guoloveshamburgerinput ~ .focus-border{position: absolute; height: 35px; bottom: 0; left: 0; width: 0; transition: 0.4s;}
+.guoloveshamburgerinput:focus ~ .focus-border{width: 100%; transition: 0.4s; border: 2px solid #3399FF;}  
+
+.guolovesburgerinput{border: 0; padding: 6px 6px 7px 12px; border: 1px solid #57c5f7;
+border-right: 0;
+ transition: 0.4s;}
+.guolovesburgerinput:focus{padding: 6px 20px 7px ; transition: 0.4s;}     
+.guolovesburgerinput ~ .focus-border{position: absolute; height: 35px; bottom: 0; left: 0; width: 0; transition: 0.4s;}
+.guolovesburgerinput:focus ~ .focus-border{width: 100%; transition: 0.4s; border: 2px solid #3399FF;}  
+
+
 
 </style>

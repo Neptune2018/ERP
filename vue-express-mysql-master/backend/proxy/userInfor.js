@@ -1,5 +1,6 @@
 var User = require('../models').User;
 var Admin = require('../models').Admin;
+var utils = require('../utils');
 
 
 // 通过用户名查找用户
@@ -24,13 +25,13 @@ exports.updateUser = function(id, data) {
 
 // 修改密码
 exports.changePass = function(id, indata, dosomething) {
-	Admin.findAll({where: {userId: id, password: indata.oldPass}}).then(function(data){
+	Admin.findAll({where: {userId: id, password: utils.makePassword(indata.oldPass)}}).then(function(data){
     	dosomething(data);
     });
 	Admin.update({
 		'password': indata.newPass
 	},
 	{
-		where: {userId: id, password: indata.oldPass}
+		where: {userId: id, password: utils.makePassword(indata.oldPass)}
 	});
 }

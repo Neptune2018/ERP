@@ -2,7 +2,8 @@ const crypto = require('crypto');
 
 exports.makePassword = function(str) {
 	password_salt = "REWUIQYDBFAFJHASFGJSAKDF";
-	const hmac = crypto.createHmac('sha256', password_salt);
+    const hmac = crypto.createHmac('sha256', password_salt);
+    str = str +'';
 	hmac.update(str);
 	return hmac.digest('hex');
 }

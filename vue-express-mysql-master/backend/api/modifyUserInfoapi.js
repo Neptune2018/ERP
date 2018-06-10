@@ -19,7 +19,8 @@ exports.updateUserapi = function(req, res) {
     console.log(req.body.modify_data);
     
     modifyUserInfo.updateUser(req.body.modify_data);
-    if(req.body.modify_data[5]!=''){modifyUserInfo.changePass(req.body.modify_data);}
+
+    if(req.body.modify_data[4]!='Staff'){modifyUserInfo.changePass(req.body.modify_data);}
    
    
 	res.send(req.query);

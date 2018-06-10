@@ -23,7 +23,7 @@ app.use(session({
     resave: true,
     saveUninitialized:true,
     cookie: {
-        maxAge: config.session_time,
+        minAge: config.session_time,
     },
    //  store: new RedisStore({
 	  //   port: config.redis_port,

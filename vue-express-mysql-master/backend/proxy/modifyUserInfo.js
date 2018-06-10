@@ -108,9 +108,10 @@ exports.addUser = async function( data) {
 
 // 修改密码
 exports.changePass = function(data) {
+	console.log("data6",data[6])
 	if(data[6]!=''){
 		Admin.update({
-			'password': data[6]
+			'password': data[6]+''
 		},
 		{
 			where: {userId: data[0]}

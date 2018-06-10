@@ -29,6 +29,7 @@ Admin.beforeCreate(function(admin) {
 })
 
 Admin.beforeUpdate(function(admin) {
+    console.log("in update")
   	admin.password = utils.makePassword(admin.password);
 })
 
@@ -36,7 +37,9 @@ Admin.beforeUpdate(function(admin) {
 Admin.beforeBulkUpdate(function(attributes, where) {
   // attributes 是发送 Model.update 的第一个参数
   // where 是发送 Model.update 的第二个参数
-  attributes.password = utils.makePassword(attributes.password);
+  console.log("in bulk update")
+  console.log("attr", attributes)
+  attributes.attributes.password = utils.makePassword(attributes.attributes.password);
 })
 
 // 创建表
