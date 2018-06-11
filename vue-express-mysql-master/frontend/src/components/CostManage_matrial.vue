@@ -4,16 +4,16 @@
          <Tab-pane label="物料库存信息">
              <div style = "display: inline-block">
                 <div class="query">
-                    <label class="top-label">编号</label><i-input v-model="matrial_number" placeholder="请输入编号" style="width: 70%"></i-input>
+                    <label class="top-label">编号</label><i-input @on-enter="matrial_search()" v-model="matrial_number" placeholder="请输入编号" style="width: 70%"></i-input>
                 </div>
                 <div class="query">
-                    <label class="top-label">名称</label><i-input v-model="matrial_name" placeholder="请输入名称" style="width: 70%"></i-input>
+                    <label class="top-label">名称</label><i-input @on-enter="matrial_search()" v-model="matrial_name" placeholder="请输入名称" style="width: 70%"></i-input>
                 </div>
                 <div class="query">
-                    <label class="top-label">批次</label><i-input v-model="matrial_batch" placeholder="请输入批次" style="width: 70%"></i-input>
+                    <label class="top-label">批次</label><i-input @on-enter="matrial_search()" v-model="matrial_batch" placeholder="请输入批次" style="width: 70%"></i-input>
                 </div>
                 <div class="query">
-                    <label class="top-label">仓库</label><i-input v-model="matrial_warehouse" placeholder="请输入仓库" style="width: 70%"></i-input>
+                    <label class="top-label">仓库</label><i-input @on-enter="matrial_search()" v-model="matrial_warehouse" placeholder="请输入仓库" style="width: 70%"></i-input>
                 </div>
                 <div class="query">
                     <i-button class="cost-module-btn search" type="ghost" icon="ios-search" shape="circle" @click="matrial_search()">搜索</i-button>
@@ -99,9 +99,9 @@ export default {
             this.sqlSearch+=this.matrial_number
         }
         if(this.matrial_name!=''){
-            this.sqlSearch+=" and material.name='"
+            this.sqlSearch+=" and material.name like '%"
             this.sqlSearch+=this.matrial_name
-            this.sqlSearch+="'"
+            this.sqlSearch+="%'"
         }
         if(this.matrial_batch!=''){
             this.sqlSearch+=" and stock.batch='"
@@ -112,6 +112,7 @@ export default {
             this.sqlSearch+=" and stock.repertoryId="
             this.sqlSearch+=this.matrial_warehouse
         }
+        this.sqlSearch = this.sqlSearch.replace(/\%/g, "%25")
         this.$http({
             url: '/cmmaterialquery?sql='+this.sqlSearch,
             method: 'GET',
@@ -154,7 +155,7 @@ export default {
       }, function () {
           alert("ajax failure")
       })
-    },   
+    },  
   },
   created () {
       this.onload()

@@ -4,16 +4,16 @@
         <Tab-pane label="货品库存信息">
              <div style = "display: inline-block">
                 <div class="query">
-                    <label class="top-label">编号</label><i-input v-model="product_number" placeholder="请输入编号" style="width: 70%"></i-input>
+                    <label class="top-label">编号</label><i-input @on-enter="product_search()" v-model="product_number" placeholder="请输入编号" style="width: 70%"></i-input>
                 </div>
                 <div class="query">
-                    <label class="top-label">名称</label><i-input v-model="product_name" placeholder="请输入名称" style="width: 70%"></i-input>
+                    <label class="top-label">名称</label><i-input @on-enter="product_search()" v-model="product_name" placeholder="请输入名称" style="width: 70%"></i-input>
                 </div>
                 <div class="query">
-                    <label class="top-label">批次</label><i-input v-model="product_batch" placeholder="请输入批次" style="width: 70%"></i-input>
+                    <label class="top-label">批次</label><i-input @on-enter="product_search()" v-model="product_batch" placeholder="请输入批次" style="width: 70%"></i-input>
                 </div>
                 <div class="query">
-                    <label class="top-label">仓库</label><i-input v-model="product_warehouse" placeholder="请输入仓库" style="width: 70%"></i-input>
+                    <label class="top-label">仓库</label><i-input @on-enter="product_search()" v-model="product_warehouse" placeholder="请输入仓库" style="width: 70%"></i-input>
                 </div>
                 <div class="query">
                     <i-button class="cost-module-btn search" type="ghost" icon="ios-search" shape="circle" @click="product_search()">搜索</i-button>
@@ -96,9 +96,9 @@ export default {
             console.log(this.sqlSearch)
         }
         if(this.product_name!=''){
-            this.sqlSearch+=" and product.name='"
+            this.sqlSearch+=" and product.name LIKE '%"
             this.sqlSearch+=this.product_name
-            this.sqlSearch+="'"
+            this.sqlSearch+="%'"
             console.log(this.sqlSearch)
         }
         if(this.product_batch!=''){
@@ -112,7 +112,7 @@ export default {
             this.sqlSearch+=this.product_warehouse
             console.log(this.sqlSearch)
         }
-
+        this.sqlSearch = this.sqlSearch.replace(/\%/g, "%25")
         this.$http({
             url: '/cmproductquery?sql='+this.sqlSearch,
             method: 'GET',
