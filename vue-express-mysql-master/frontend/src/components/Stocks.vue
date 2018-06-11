@@ -41,7 +41,7 @@
                 this.$http.post('/findPerson',info).then(function (res) {
                     console.log(res.body)
                     if(res.body === 'success'){
-                    callback() 
+                    callback()
                     } else {
                     callback(new Error('id不存在！'))
                     }
@@ -78,7 +78,7 @@
                                     },
                                     style: {
                                         marginRight: '5px',
-                                        width:'60px',                                   
+                                        width:'60px',
                                     },
                                     on: {
                                         input: (val) => {
@@ -119,7 +119,7 @@
                                 }, '删除')
                             ]);
                         }
-                    }                   
+                    }
                 ],
                 columns0:[
                     {
@@ -133,12 +133,12 @@
                         sortable: true
                     },
                     {
-                        title:'货品编号',
+                        title:'编号',
                         key:'goodsId',
                         sortable: true
                     },
                     {
-                        title:'物料名称',
+                        title:'名称',
                         key:'name'
                     },
                     {
@@ -180,26 +180,18 @@
                     }
                 ],
                 columns1: [
-                    {
-                        title: '仓库编码',
-                        key: 'id'
-                    },
-                    {
-                        title: '仓库名称',
-                        key: 'name'
-                    },
-                    {
-                        title: '标记',
-                        key: 'remark'
-                    },
-                    {
-                        title:'管理员',
-                        key:'user1name'
-                    },
-                    {
-                        title:'负责人',
-                        key:'user2name'
-                    }
+                  {
+                      title: '仓库编码',
+                      key: 'id'
+                  },
+                  {
+                      title: '仓库名称',
+                      key: 'name'
+                  },
+                  {
+                      title: '最大库存量',
+                      key: 'max'
+                  }
                 ],
                 data0:[],
                 data1: [],
@@ -237,7 +229,7 @@
                 method: 'GET',
             }).then(function (res) {
                 //console.log(res.body);
-                this.data0 = res.body;
+                this.data1 = res.body;
             }, function () {
                 alert("ajax failure")
             });
@@ -255,7 +247,7 @@
             show(index){
                 this.$Modal.info({
                 title: '详细信息',
-                content: `序号: ${this.data0[index].id}<br>货品编号:${this.data0[index].goodsId}<br>物料名称:${this.data0[index].name}<br>数量:${this.data0[index].remain}<br>单位:${this.data0[index].unit}<br>性质:${this.data0[index].style}<br>批次:${this.data0[index].batch}<br>仓库ID:${this.data0[index].repertoryId}`
+                content: `序号: ${this.data0[index].id}<br>编号:${this.data0[index].goodsId}<br>名称:${this.data0[index].name}<br>数量:${this.data0[index].remain}<br>单位:${this.data0[index].unit}<br>性质:${this.data0[index].style}<br>批次:${this.data0[index].batch}<br>仓库ID:${this.data0[index].repertoryId}`
                 })
             },
             remove (index) {
@@ -295,7 +287,7 @@
                         })
                         this.addPerson = false;
                     }
-                    else{  
+                    else{
                         this.$Message.error('请完善负责人信息！')
                     }
                 })
@@ -303,7 +295,7 @@
             clearData(){
                 this.$refs['formItem'].resetFields()
                 this.addPerson = true
-            } 
+            }
         }
     }
 </script>
