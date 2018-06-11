@@ -16,13 +16,8 @@ var config = {
   db: {
     host: 'localhost',
     dialect: 'mysql',
-<<<<<<< HEAD
     user: 'wdyiwdwd',
     password: '',
-=======
-    user: 'tsy',
-    password: '654321',
->>>>>>> d40693b2c791e8633d951e87c7d5281aff70f62e
     database: 'development',
     pool: {
       max: 5,    //最大连接数
