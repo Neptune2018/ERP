@@ -1,5 +1,5 @@
 <template>
-  <div style="height: 520px;">
+  <div style="height: 600px;">
     <row class="content">
       <div class="search-form">
         <row class="query">
@@ -62,7 +62,7 @@
       </div>
     </row>
     <div style="margin-top: 20px;">
-      <i-table highlight-row @on-current-change='currentchange' @on-selection-change='selectionClick' border :height="150" :columns="offerListColumns" :data="offerList_data"></i-table>
+      <i-table highlight-row @on-current-change='currentchange' @on-selection-change='selectionClick' border :height="200" :columns="offerListColumns" :data="offerList_data"></i-table>
     </div>
     <row class="content">
       <div class="search-form">
@@ -131,7 +131,7 @@
       </div>
     </row>
     <div style="margin-top: 20px">
-      <i-table @on-selection-change='materialSelectionClick' border :height="200" :columns="material_columns" :data="material_data"></i-table>
+      <i-table @on-selection-change='materialSelectionClick' border :height="240" :columns="material_columns" :data="material_data"></i-table>
     </div>
   </div>
 </template>
