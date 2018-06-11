@@ -2,16 +2,16 @@
     <div style="height: 500px;">
         <div class="content">
             <div class="query">
-                <label class="top-label">编号</label><i-input v-model="id" placeholder="请输入编号" style="width: 70%"></i-input>
+                <label class="top-label">编号</label><i-input @on-enter="search()" v-model="id" placeholder="请输入编号" style="width: 70%"></i-input>
             </div>
             <div class="query">
-                <label class="top-label">名称</label><i-input v-model="name" placeholder="请输入名称" style="width: 70%"></i-input>
+                <label class="top-label">名称</label><i-input @on-enter="search()" v-model="name" placeholder="请输入名称" style="width: 70%"></i-input>
             </div>
             <div class="query">
-                <label class="top-label">性质</label><i-input v-model="property" placeholder="请输入性质" style="width: 70%"></i-input>
+                <label class="top-label">性质</label><i-input @on-enter="search()" v-model="property" placeholder="请输入性质" style="width: 70%"></i-input>
             </div>
             <div class="query">
-                <label class="top-label">分类</label><i-input v-model="category" placeholder="请输入分类" style="width: 70%"></i-input>
+                <label class="top-label">分类</label><i-input @on-enter="search()" v-model="category" placeholder="请输入分类" style="width: 70%"></i-input>
             </div>
             <div class="query">
                 <i-button class="cost-module-btn search" type="ghost" icon="ios-search" shape="circle" @click="search()">搜索</i-button>
@@ -72,7 +72,6 @@ export default {
         method: 'GET',
         }).then(
         function(res) {
-          this.$Message.success('获取数据成功')
           this.table_data=res.body.data
           // 返回总记录
           //this.$router.push({path: '/hello', query:{data: res.body}})
@@ -114,7 +113,7 @@ export default {
     width: 100%;
 }
 .query {
-  
+  width: 15%;
   margin-left: 2%;
   margin-right: 2%;
   display: inline-block;
@@ -133,7 +132,7 @@ export default {
 }
 
 .search {
-  margin-left: 50%;
+  margin-left: 20%;
 }
 
 .top-label {

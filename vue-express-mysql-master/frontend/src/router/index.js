@@ -2,9 +2,13 @@ import Vue from 'vue';
 import Router from 'vue-router';
 import HelloWorld from '@/components/HelloWorld'
 import SecondPage from '@/components/SecondPage'
+<<<<<<< HEAD
 import Goods from '@/components/Goods'
 import Material from '@/components/Material'
 import Category from '@/components/Category'
+=======
+
+>>>>>>> a0252fec244141370d4e2012e346ade9817e56d2
 import CostManageProduct from '@/components/CostManage_product'
 import CostManageMatrial from '@/components/CostManage_matrial'
 import Group from '@/components/Group'
@@ -14,7 +18,15 @@ import Signin from '@/components/Signin'
 import Generate from '@/components/Generate'
 import MatrialLack from '@/components/MatrialLack'
 import SafeStock from '@/components/SafeStock'
+<<<<<<< HEAD
 import State from '@/components/State'
+=======
+import Supplier from '@/components/SupplierMange'
+import OfferList from '@/components/OfferList'
+import ImportWare from '@/components/ImportWare'
+import ExportWare from '@/components/ExportWare'
+
+>>>>>>> a0252fec244141370d4e2012e346ade9817e56d2
 
 import ThresholdWarning from '@/components/ThresholdWarning'
 import ImportWare from '@/components/ImportWare'
@@ -150,6 +162,7 @@ const router = new Router({
     {
       path: '/starving',
       name: 'MatrialLack',
+<<<<<<< HEAD
       component: MatrialLack,
       beforeEnter: (to, from, next) => {
         store.dispatch('hasFeature', 'Purchase').then(function(){
@@ -224,6 +237,34 @@ const router = new Router({
         })
       }
     }
+=======
+      component: MatrialLack
+    },
+    {
+      path: '/safeStock',
+      name: 'SafeStock',
+      component: SafeStock
+    },
+    {
+      path: '/offerlist',
+      name: 'OfferList',
+      component: OfferList
+    },
+    {
+      path: '/supplier',
+      name: 'supplier',
+      component: Supplier
+    },
+    {
+      path:'/ImportWare',
+      name: 'ImportWare',
+      component: ImportWare
+    },
+    {
+      path:'/ExportWare',
+      name: 'ExportWare',
+      component: ExportWare},
+>>>>>>> a0252fec244141370d4e2012e346ade9817e56d2
   ]
 })
 

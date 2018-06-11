@@ -20,8 +20,7 @@ var OfferList = db.define('offer_list', {
 Supplier.hasMany(OfferList);
 
 // 前者将拥有后者的get/set/add方法,后者id是前者外键
-OfferList.belongsTo(User, {as: 'from_person'});
-OfferList.belongsTo(User, {as: 'to_person'});
+OfferList.belongsTo(User);
 OfferList.belongsTo(Supplier);
 
 // 创建表

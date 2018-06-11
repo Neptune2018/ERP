@@ -46,7 +46,9 @@ var costmoduleonload = require('./api/costmoduleonloadapi');
 var costmoduleonloadmtr = require('./api/costmoduleonloadmtrapi');
 var cmproductquery = require('./api/cmproductqueryapi')
 var cmmaterialquery = require('./api/cmmaterialqueryapi')
-
+var supplier = require('./api/supplierapi');
+var offerlist = require('./api/offerlistapi');
+var offer = require('./api/offerapi');
 var purchase = require('./api/purchaseapi');
 var threshold_warning = require('./api/threshold_warning_api');
 var io_events = require('./api/ioapi');
@@ -113,25 +115,31 @@ router.get('/toGet', product.toGet);
 router.get('/updateGetList', product.updateGetList);
 router.get('/findNewGetList', product.findNewGetList);
 
+router.get('/getAllUserIdAndName',supplier.getAllUserIdAndName);
+router.get('/addSupplier',supplier.addSupplier);
+router.get('/getSupplier',supplier.getSupplier);
+router.get('/getSupplierById',supplier.getSupplierById);
+router.get('/deleteSupplierById',supplier.deleteSupplierById);
+router.get('/updateSupplierById',supplier.updateSupplierById);
+router.get('/setMinOrder',supplier.setMinOrder);
+router.get('/addMaterialsToSupplier',supplier.addMaterialsToSupplier);
+router.get('/removeMaterialsFromSupplier',supplier.removeMaterialsFromSupplier);
 
-router.get('/addSupplier',purchase.addSupplier);
-router.get('/getSupplier',purchase.getSupplier);
-router.get('/getSupplierByName',purchase.getSupplierByName);
-router.get('/getSupplierById',purchase.getSupplierById);
-router.get('/deleteSupplierByName',purchase.deleteSupplierByName);
-router.get('/updateSupplierByName',purchase.updateSupplierByName);
-router.get('/deleteSupplierById',purchase.deleteSupplierById);
-router.get('/updateSupplierById',purchase.updateSupplierById);
+router.get('/getOfferByOfferList',offer.getOfferByOfferList);
+router.get('/deleteOffer',offer.deleteOffer);
+router.get('/addOffer',offer.addOffer);
+router.get('/updateOffer',offer.updateOffer);
 
-router.get('/getOfferList',purchase.getOfferList);
-router.get('/getOfferListById',purchase.getOfferListById);
-router.get('/getOfferListBySupplier',purchase.getOfferListBySupplier);
-router.get('/addOfferList',purchase.addOfferList);
-router.get('/updateOfferList',purchase.updateOfferList);
-router.get('/deleteOfferList',purchase.deleteOfferList);
-router.get('/setMinOrder',purchase.setMinOrder);
+
+router.get('/getOfferList',offerlist.getOfferList);
+router.get('/getOfferListById',offerlist.getOfferListById);
+router.get('/getOfferListBySupplier',offerlist.getOfferListBySupplier);
+router.get('/addOfferList',offerlist.addOfferList);
+router.get('/updateOfferList',offerlist.updateOfferList);
+router.get('/deleteOfferList',offerlist.deleteOfferList);
 
 router.get('/getMaterials',purchase.getMaterials);
+router.get('/getAllMaterialsId',purchase.getAllMaterialsId);
 router.get('/getAllMaterials',purchase.getAllMaterials);
 router.get('/getMaterialsBySupplier',purchase.getMaterialsBySupplier);
 router.get('/setSafeQuantity',purchase.setSafeQuantity);
@@ -139,7 +147,6 @@ router.get('/getStarve',purchase.getStarve);
 router.get('/getAllStarve',purchase.getAllStarve);
 
 
-module.exports = router;
 router.get('/threshold_warning', threshold_warning.ThresholdWarning)
 router.get('/getRepertory',io_events.getRepertory)
 router.post('/stockAvail',io_events.stockAvail)
