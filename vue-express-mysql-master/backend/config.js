@@ -4,8 +4,8 @@ var config = {
   // debug 为 true 时，用于本地调试
   debug: true,
 
-  name: '企业级应用开发', // 名字
-  description: '125', // 描述
+  name: 'tsy', // 名字
+  description: '654321', // 描述
   keywords: 'nodejs, node, express, connect',
 
   static: '../frontend/dist', // 静态文件存储域名
@@ -16,8 +16,13 @@ var config = {
   db: {
     host: 'localhost',
     dialect: 'mysql',
+<<<<<<< HEAD
     user: 'wdyiwdwd',
     password: '',
+=======
+    user: 'tsy',
+    password: '654321',
+>>>>>>> d40693b2c791e8633d951e87c7d5281aff70f62e
     database: 'development',
     pool: {
       max: 5,    //最大连接数

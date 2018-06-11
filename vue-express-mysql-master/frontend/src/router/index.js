@@ -4,7 +4,7 @@ import HelloWorld from '@/components/HelloWorld'
 import SecondPage from '@/components/SecondPage'
 import Goods from '@/components/Goods'
 import Material from '@/components/Material'
-
+import Category from '@/components/Category'
 import CostManageProduct from '@/components/CostManage_product'
 import CostManageMatrial from '@/components/CostManage_matrial'
 import Group from '@/components/Group'
@@ -60,6 +60,11 @@ const router = new Router({
             next('/userInfor')
         })
       }
+    },
+    {
+      path: '/category',
+      name: 'Category',
+      component: Category
     },
     {
       path: '/costmanage_product',

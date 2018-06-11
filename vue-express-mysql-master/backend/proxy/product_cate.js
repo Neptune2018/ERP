@@ -29,10 +29,10 @@ exports.listallProduct_cates = function(callback) {
 
 
 // 列出指定父分类下的所有子分类
-exports.listallProduct_catesbyProduct_catename = function (productCateId,callback) {
+exports.listallProduct_catesbyProduct_cateid = function (id,callback) {
   ProductCate.findAll({
     'where': {
-        'name': name
+        'productCateId': id
     }
   }).then(function(result){
     console.log(result)
@@ -41,14 +41,11 @@ exports.listallProduct_catesbyProduct_catename = function (productCateId,callbac
 };
 
 // 列出指定父分类下的所有物料
-exports.listallProductbyProduct_catename = function (name,callback) {
+exports.listallProductbyProduct_cateid = function (id,callback) {
   Product.findAll({
-    include: [{
-      model: ProductCate,
       where: {
-        name: name
+         productCateId: id
       }
-    }]
   }).then(function(data){
     callback(data);
   });

@@ -75,9 +75,21 @@ exports.updateBOM_materByid = function(req,res){
     console.log(req.session.sess);
     req.session.sess = 'yes';
     var params = url.parse(req.url, true).query;
-    BOM_mater.updateBOM_materById(params.id,params.name,params.property,params.materCateId,function(){
+    BOM_mater.updateBOM_materById(params.id,params.status,params.name,params.property,params.materCateId,function(){
         BOM_mater.listallBOM_mater(function(data) {
             res.send(data)
         });
     });
+}
+
+
+//返回：productid,quantity,materialid,name,price,remark,materCateId
+exports.findproducts = function(req, res) {
+    console.log(req.session.sess)
+    req.session.sess = 'yes';
+    var params = url.parse(req.url, true).query;
+    BOM_mater.findproducts(params.id,function(data) {
+        console.log(data);
+        res.send(JSON.stringify(data))
+    })
 }
