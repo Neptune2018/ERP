@@ -29,7 +29,6 @@ import ThresholdWarning from '@/components/ThresholdWarning'
 import Stocks from '@/components/Stocks'
 
 import ImportWare from '@/components/ImportWare'
-import ExportWare from '@/components/ExportWare'
 import IOList from '@/components/IOList'
 
 import store from '../store'

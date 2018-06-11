@@ -2,6 +2,8 @@ var IoItem = require('../models').IOItem;
 var IoList = require('../models').IOList;
 var Stock = require('../models').Stock;
 var Repertory = require('../models').Repertory;
+var Material = require('../models').Material;
+var Product = require('../models').Product;
 var db = require('../models').DB;
 
 //搜索仓库名并且返回
@@ -47,27 +49,136 @@ exports.placeAvailable = function(dosomething,place,id){
         dosomething(rows);
     })   
 }
-//插入仓库
-exports.insertIO = function(info){
-    for(var i = 0;i<info.length;i++){
-        if (info[i].style == "物料"){
-            info[i].style = 0
-        } else {
-            info[i].style = 1
-        }
-        IoList.create({
-            //id:1232,
-            time:info[i].time,
-            style:info[i].style,
-            fromPersonId:info[i].fromPerson,
-            toPersonId:info[i].toPerson
-        });
+//入库数据操作
+exports.insertPM = function(id,info){
+    if (info.style == "物料" || info.style == 0){
+        info.style = 0
+    } else {
+        info.style = 1
+    }
+    if(info.style == 1) {
+        Product.create({
+            id:id,
+            name:info.goodName,
+            price:500
+        })
+    } else {
+        Material.create({
+            id:id,
+            name:info.goodName,
+            safe_quantity:500
+        })
+    }
+}
+exports.insertStock = function(info,ioid,pmid){
+    if (info.style == "物料" || info.style == 0){
+        info.style = 0
+    } else {
+        info.style = 1
+    } 
+    console.log(info.style)
+    if(info.style == 1) {
         IoItem.create({
-            //id:321,
-            style:info[i].style,
-            quantity:info[i].quantity,
-            unit:info[i].unit,
-            batch:info[i].batch
-        });
+            style:info.style,
+            quantity:info.quantity,
+            unit:info.unit,
+            batch:info.batch,
+            ioListId:ioid,
+            productId:pmid
+        })
+        Stock.create({
+            style:info.style,
+            place:info.stockPlace,
+            remain:info.quantity,
+            unit:info.unit,
+            batch:info.batch,
+            repertoryId:info.stockId,
+            productId:pmid,               
+        })
+    } else if(info.style == 0) {
+        IoItem.create({
+            style:info.style,
+            quantity:info.quantity,
+            unit:info.unit,
+            batch:info.batch,
+            ioListId:ioid,
+            materialId:pmid
+        })
+        Stock.create({
+            style:info.style,
+            place:info.stockPlace,
+            remain:info.quantity,
+            unit:info.unit,
+            batch:info.batch,
+            repertoryId:info.stockId,
+            materialId:pmid,               
+        })
+    } 
+}
+exports.insertIO = function(id,info){
+    IoList.create({
+        id:id,
+        style:false,//表示入库操作
+        fromPersonId:info.fromPerson,
+        toPersonId:info.toPerson
+    })
+
+}
+exports.findRemain = function(dosomething,id,k){
+    db.query('select remain from stocks where id = '+id)
+    .then(function(rows){
+        dosomething(rows,k);
+    }) 
+}
+exports.updateRemain=function(remain,id){
+    db.query("update stocks set remain = '"+remain+"' where id = "+id)
+    .then(function(rows,err){
+        if(err){
+            console.log('修改失败')
+        }
+    })
+}
+//找到出库人
+exports.findPMId = function(dosomething,info){
+    if(info.style == 1) {
+        db.query('select productId from stocks where id = '+info.id)
+        .then(function(rows){
+            dosomething(rows)
+        })
+    } else if(info.style == 0){
+        db.query('select materialId from stocks where id = '+info.id)
+        .then(function(rows){
+            dosomething(rows)
+        })
+    }
+}
+exports.exportIO = function(id,fromPerson,toPerson){
+    IoList.create({
+        id:id,
+        style:true,//表示出操作
+        fromPersonId:fromPerson,
+        toPersonId:toPerson
+    })
+}
+exports.addIOitem=function(ioid,pmid,style,remain,unit,batch){
+    //console.log(style)
+    if(style=="原料"){
+        IoItem.create({
+            style:0,
+            quantity:remain,
+            unit:unit,
+            batch:batch,
+            ioListId:ioid,
+            materialId:pmid        
+        })
+    } else if(style == "商品"){
+        IoItem.create({
+            style:1,
+            quantity:remain,
+            unit:unit,
+            batch:batch,
+            ioListId:ioid,
+            productId:pmid   
+        })     
     }
 }

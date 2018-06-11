@@ -40,7 +40,6 @@
                 <span class='main-text'>仓库管理</span>
               </template>
               <Menu-item name='ImportWare'>入库管理</Menu-item>
-              <Menu-item name='ExportWare'>出库管理</Menu-item>
               <Menu-item name='ioinfo'>出入库信息</Menu-item>
               <Menu-item name='inventory'>库存情况管理</Menu-item>
             </Submenu>
@@ -189,9 +188,6 @@ export default {
       }else if(name === 'ImportWare'){
         this.bigPos = '仓库管理'
         this.samllPos = '入库管理'
-      }else if(name === 'ExportWare'){
-        this.bigPos = '仓库管理'
-        this.samllPos = '出库管理'
       }else if(name === 'ioinfo'){
         this.bigPos = '仓库管理'
         this.smallPos = '出入库信息'
