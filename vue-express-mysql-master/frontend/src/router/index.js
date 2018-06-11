@@ -14,6 +14,7 @@ import Signin from '@/components/Signin'
 import Generate from '@/components/Generate'
 import MatrialLack from '@/components/MatrialLack'
 import SafeStock from '@/components/SafeStock'
+import State from '@/components/State'
 
 import ThresholdWarning from '@/components/ThresholdWarning'
 import ImportWare from '@/components/ImportWare'
@@ -140,6 +141,11 @@ const router = new Router({
             next('/userInfor')
         })
       }
+    },
+    {
+      path: '/state',
+      name: 'State',
+      component: State
     },
     {
       path: '/starving',

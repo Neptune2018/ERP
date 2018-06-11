@@ -94,6 +94,24 @@ router.get('/deleteProduct', product.deleteProduct);
 router.get('/addGetList', product.addGetList);
 router.get('/confirmOrderList', product.confirmOrderList);
 router.get('/findProductQuan', product.findProductQuan);
+router.get('/findGoodOptions', product.findGoodOptions);
+router.get('/findMaterials', product.findMaterials);
+router.get('/findMaterialNum', product.findMaterialNum);
+router.get('/addOrderList', product.addOrderList);
+router.get('/deleteOrderList', product.deleteOrderList);
+router.get('/addBuys', product.addBuys);
+router.get('/addGetLists', product.addGetLists);
+router.get('/findGetLists', product.findGetLists);
+router.get('/deleteGetLists', product.deleteGetLists);
+router.get('/findOrderLists', product.findOrderLists);
+router.get('/findOrderListsByUser', product.findOrderListsByUser);
+router.get('/findProducts', product.findProducts);
+router.get('/findAllMater', product.findAllMater);
+router.get('/updateOrderList', product.updateOrderList);
+router.get('/getMaterStocks', product.getMaterStocks);
+router.get('/toGet', product.toGet);
+router.get('/updateGetList', product.updateGetList);
+router.get('/findNewGetList', product.findNewGetList);
 
 
 router.get('/addSupplier',purchase.addSupplier);

@@ -1,454 +1,643 @@
 <template>
-<div>
-<Row>
-    <i-col span="12">
-        <div style="height: 520px;">
-            <Card style="height: 500px;">
-            <p>生成订单</p>
-                <Table highlight-row ref="currentRowTable" :height="400" :columns="orderListColumns" :data="orderListData"></Table>
-                <i-button type="ghost" style = "margin-top: 20px" @click="isGenerate = true">生成新订单</i-button>
-                <Modal
-                    v-model="isGenerate"
-                    title="创建新订单"
-                    @on-ok="generateOrderListOk"
-                    @on-cancel="generateOrderListCancel">
-                    <Form :model="formRight" label-position="right" :label-width="100">
-                        <FormItem label="客户">
-                            <Input v-model="generateOrderList.buyer"></Input>
-                        </FormItem>
-                        <FormItem label="电话">
-                            <Input v-model="generateOrderList.phone"></Input>
-                        </FormItem>
-                        <FormItem label="邮箱">
-                            <Input v-model="generateOrderList.email"></Input>
-                        </FormItem>
-                        <FormItem label="备注">
-                            <Input v-model="generateOrderList.remark"></Input>
-                        </FormItem>
-                        <FormItem label="经办人">
-                            <Input v-model="generateOrderList.manager"></Input>
-                        </FormItem>
-                    </Form>
-                </Modal>
-                <i-button type="ghost" style = "margin-top: 20px" @click="isAddProductf()">添加货品</i-button>  
-                <Modal
-                    v-model="isAddProduct"
-                    title="添加货品"
-                    @on-ok="addProductOk"
-                    @on-cancel="addProductCancel">
-                    <Form :model="formRight" label-position="right" :label-width="100">
-                        <FormItem label="编号">
-                            <Select v-model="addProductNo" style="width:200px">
-                                <Option v-for="item in addProductNoList" :value="item.value" :key="item.value">{{ item.label }}</Option>
-                            </Select>
-                        </FormItem>
-                        <FormItem label="货品名称">
-                            <Select v-model="addProductName" style="width:200px">
-                                <Option v-for="item in addProductNameList" :value="item.value" :key="item.value">{{ item.label }}</Option>
-                            </Select>
-                        </FormItem>
-                        <FormItem label="生产车间">
-                            <Select v-model="addProductWorkshop" style="width:200px">
-                                <Option v-for="item in addProductWorkshopList" :value="item.value" :key="item.value">{{ item.label }}</Option>
-                            </Select>
-                        </FormItem>
-                        <FormItem label="数量">
-                            <InputNumber :max="1000" :min="1" v-model="addProductNum" style="width:200px"></InputNumber>
-                        </FormItem>
-                        <FormItem label="剩余数目">
-                            <label>{{addProductNums}}</label>
-                        </FormItem>
-                    </Form>
-                </Modal> 
-                <i-button type="ghost" style = "margin-top: 20px" @click="deleteProduct()">删除</i-button>
-                <i-button type="ghost" style = "margin-top: 20px;float:right" @click="isToGenerate=true">生成订单</i-button>
-                <Modal
-                    v-model="isToGenerate"
-                    title="确认生成订单"
-                    @on-ok="isToGenerateOk"
-                    @on-cancel="isToGenerateCancel">
-                    <Form :model="formRight" label-position="right" :label-width="100">
-                        <FormItem label="订单编号">
-                            <label>{{orderListNo}}</label>
-                        </FormItem>
-                        <FormItem label="经办人">
-                            <label>"xxx"</label>
-                        </FormItem>
-                        <FormItem label="截止日期">
-                            <DatePicker type="date" placeholder="Select date" v-model="deadLine" style="width: 200px"></DatePicker>
-                        </FormItem>
-                    </Form>
-                </Modal>
-            </Card>
+<div id="generate-page">
+    <div id="btn-group">
+        <Button id="add-good-btn" type="primary" @click="showModal1">添加货品</Button>
+        <Button id="add-order-btn" type="primary" @click="showModal2">生成订单</Button>
+        <Button id="output-btn" type="primary" @click="output">导出</Button>
+        <Button id="get-list-btn" type="primary" @click="getList">查看领料单</Button>
+        
+    </div>
+
+    <Modal
+        v-model="modal1"
+        title="添加货品"
+        @on-ok="okAddGood"
+        @on-cancel="cancel">
+        <Form :label-width="120">
+            <FormItem label="编号/货品名称：">
+                <Select v-model="goodSelect">
+                    <Option v-for="good in goodOptions" :value="good.id">{{ good.id }} &nbsp;/&nbsp; {{good.name}}</Option>
+                </Select>
+            </FormItem>
+            <FormItem label="生产车间：">
+                <Select v-model="workshopSelect">
+                    <Option v-for="workshop in workshopOptions" :value="workshop.id">{{ workshop.id }}</Option>
+                </Select>
+            </FormItem>
+            <FormItem label="数量：">
+                <Input-number v-model="quantityInput" :min="1" :precision="0"></Input-number>
+            </FormItem>
+        </Form>
+    </Modal>
+    <Modal
+        v-model="modal2"
+        title="订单生成确认"
+        @on-ok="okAddOrder"
+        @on-cancel="cancelAddOrder">
+
+        <Form :label-width="120">
+            <FormItem label="订单编号:">{{ orderList.id }}</FormItem>
+            <FormItem label="客户">
+                <Input v-model="orderList.buyer"></Input>
+            </FormItem>
+            <FormItem label="电话">
+                <Input v-model="orderList.phone"></Input>
+            </FormItem>
+            <FormItem label="邮箱">
+                <Input v-model="orderList.email"></Input>
+            </FormItem>
+            <FormItem label="备注">
+                <Input v-model="orderList.remark"></Input>
+            </FormItem>
+            <FormItem label="办理人:">{{ user }}</FormItem>
+            <FormItem label="截止日期:">
+                <DatePicker type="date" placeholder="选择日期" format="yyyy-MM-dd" :options="timeOptions" :value="orderList.schedule" @on-change="hia"></DatePicker>
+            </FormItem>
+        </Form>
+    </Modal>
+    <Modal
+        v-model="modal3"
+        title="领料单"
+        @on-ok="okOrderList"
+        @on-cancel="cancelOrderList">
+        <div style="width:100%">
+            <Table height="400" border :columns="materStockColumns" :data="materStocks"></Table>
         </div>
-    </i-col>
-    <i-col span="12">
-        <div style="height: 520px;">
-            <Card style="height: 500px;">
-            <p>相关物料</p>
-                <i-table border :height="400" :columns="materListColumns" :data="materListData"></i-table>
-                <i-button type="ghost" style = "margin-top: 20px;float:right" @click="makeGetList()">生成领料单</i-button>
-                <i-button type="ghost" style = "margin-top: 20px;float:right" @click="">导出</i-button> 
-            </Card>   
-        </div>
-    </i-col>
-</Row>
-</div>
+    </Modal>
+        <Row>
+            <Col span="12">
+                <Card>
+                    <Card>货品信息</Card>
+                    <Table height="400" border :columns="goodColumns" :data="goods"></Table>
+                </Card>
+            </Col>
+            <Col span="12">
+                <Card>
+                    <Card>相关物料</Card>
+                    <Table height="400" border :columns="materialsColumns" :data="materials"></Table>
+                </Card>
+            </Col>
+        </Row>
+    <!-- </div> -->
+</div>   
 </template>
 
 <script>
-import { Modal } from 'iview'
+
 export default {
-  name: 'Generate',
-  created () {
-      this.$watch("productConsistInfo", function (newValue, oldValue) {
-          this.materListData = [];
-          for(var i=0;i<this.productConsistInfo.length;i++){
-              if(i==0) {
-                  for(var j=0;j<this.productConsistInfo[i].consistList.length;j++){
-                    this.materListData.push({
-                                mater_list_no: 1,
-                                mater_list_name: this.productConsistInfo[i].materInfoList[j].name,
-                                mater_list_number: this.productConsistInfo[i].materInfoList[j].id,
-                                mater_list_quantity: this.productConsistInfo[i].consistList[j].materNum*this.productConsistInfo[i].ProductInfo.ProductQuantity,
-                                order_list_warehouse: 3
-                            })
-                    }
-              }
-              else {
-                  for(var j=0;j<this.productConsistInfo[i].consistList.length;j++) {
-                      var isEqual = 0;
-                      for(var k=0;k<this.materListData.length;k++) {
-                          if(this.productConsistInfo[i].consistList[j].materId==this.materListData[k].mater_list_number){
-                              isEqual = 1;
-                              this.materListData[k].mater_list_quantity += this.productConsistInfo[i].ProductInfo.ProductQuantity*this.productConsistInfo[i].consistList[j].materNum;
-                          }
-                      }
-                      if(isEqual == 0) {
-                          this.materListData.push({
-                          mater_list_no: 1,
-                          mater_list_name: this.productConsistInfo[i].materInfoList[j].name,
-                          mater_list_number: this.productConsistInfo[i].materInfoList[j].id,
-                          mater_list_quantity: this.productConsistInfo[i].consistList[j].materNum*this.productConsistInfo[i].ProductInfo.ProductQuantity,
-                          order_list_warehouse: 3
-                        })
-                      }
-                  }
-              }
-          }
-      });
-          
-
-      this.$watch("addProductNo", function (newValue, oldValue) {
-          for(var i=0;i<this.addProductNoList.length;i++){
-              if(this.addProductNoList[i].value==this.addProductNo){
-                  this.addProductName = this.addProductNameList[i].value;
-              }
-          }
-          this.$http({
-            url: '/findProductQuan',
-            method: 'GET',
-            params: {
-                productId: this.addProductNo
-            }
-        }).then(function(res){
-            this.addProductNums = res.body.remain;
-        },function(){
-            alert("ajax failure");
-        })
-      });
-
-      this.$watch("addProductName", function (newValue, oldValue) {
-          for(var i=0;i<this.addProductNameList.length;i++){
-              if(this.addProductNameList[i].value==this.addProductName){
-                  this.addProductNo = this.addProductNoList[i].value;
-              }
-          }
-      })
-  },
-  data () {
-    return {
-        user: 'wenbin',
-        addProductNoList: [
-                    {
-                        value: 'New York',
-                        label: 'New York'
-                    }
-                ],
-        addProductNo: '',
-        addProductNameList: [
-                    {
-                        value: 'New York',
-                        label: 'New York'
-                    }
-                ],
-        addProductName: '',
-        addProductWorkshopList: [
-                    {
-                        value: 'New York',
-                        label: 'New York'
-                    }
-                ],
-        addProductWorkshop: '',
-        addProductNum: 1,
-        addProductNums: 0,
-        generateOrderList: {
-                    buyer: '',
-                    phone: '',
-                    email: '',
-                    remark: '',
-                    manager: '',
-                },
-        orderListColumns: [
+    name: 'Generate',
+    data () {
+        return {
+        materStockColumns: [
             {
-                title: '序号',
-                key: 'order_list_no'
-            },
-            {
-                title: '货品名称',
-                key: 'order_list_name'
-            },
-            {
-                title: '货品编号',
-                key: 'order_list_number'
-            },
-            {
-                title: '数量',
-                key: 'order_list_quantity'
-            },
-            {
-                title: '负责车间',
-                key: 'order_list_workshop'
-            }
-        ],
-        orderListData: [
-            {
-                order_list_no: 1,
-                order_list_name: 'hiahia',
-                order_list_number: 100,
-                order_list_quantity: 1000,
-                order_list_workshop:'3'
-            }
-        ],
-        materListColumns: [
-            {
-                title: '序号',
-                key: 'mater_list_no'
+                title: '工位',
+                key: 'workshop'
             },
             {
                 title: '物料名称',
-                key: 'mater_list_name'
+                key: 'name'
             },
             {
                 title: '物料编号',
-                key: 'mater_list_number'
+                key: 'id'
             },
             {
                 title: '数量',
-                key: 'mater_list_quantity'
+                key: 'quantity'
             },
             {
                 title: '仓库',
-                key: 'order_list_warehouse'
+                key: 'stockId'
             }
         ],
-        materListData: [
-        ],
-        materEnough: [],
-        isGenerate: false,
-        isAddProduct: false,
-        isToGenerate: false,
-        orderListNo: 0,
-        productNo: 0,
-        productConsistInfo: [],
-        deadLine: ''
-    }
-  },
- //这两个map是vuex的部分
-  computed: {
-  },
-  methods: {
-    makeGetList() {
-        this.$http({
-            url: '/addGetList',
-            method: 'GET',
-            params: {
-                materials: JSON.stringify({mater:this.materListData}),
-                orderListId: this.orderListNo,
-                count: this.materListData.length
-            }
-        }).then(function(res){
-            alert("succeed");
-        },function(){
-            alert("ajax failure");
-        })
-    },
-    deleteProduct() {
-        var deleteIndex=this.$refs.currentRowTable.cloneData[0];
-        this.$http({
-            url: '/deleteProduct',
-            method: 'GET',
-            params: {
-                productId: deleteIndex.order_list_number,
-                orderListId: this.orderListNo
-            }
-        }).then(function(res){
-            alert("succeed");
-        },function(){
-            alert("ajax failure");
-        })
-        //.order_list_no
-        this.orderListData.splice(deleteIndex-1,1);
-        for(var i=0;i<this.productConsistInfo.length;i++){
-            if(this.productConsistInfo[i].ProductInfo.ProductNumber==deleteIndex.order_list_number)
+        materialsColumns: [
             {
-                this.productConsistInfo.splice(i,1);
+                title: '序号',
+                key: 'no'
+            },
+            {
+                title: '物料名称',
+                key: 'name'
+            },
+            {
+                title: '物料编号',
+                key: 'id'
+            },
+            {
+                title: '数量',
+                key: 'quantity'
+            },
+            {
+                title: '剩余数目',
+                key: 'num'
+            },
+            {
+                title: '操作',
+                key: 'action',
+                align: 'center',
+                render: (h, params) => {
+                    if(this.materials[params.index].quantity>this.materials[params.index].num) {
+                        return h('div', [
+                            h('Button', {
+                                props: {
+                                    type: 'primary',
+                                    size: 'small'
+                                },
+                                style: {
+                                    marginRight: '8px'
+                                },
+                                on: {
+                                    click: () => {
+                                        this.remind(params.index)
+                                    }
+                                }
+                            }, '提醒进货')
+                        ]);
+                    }
+                }
+            }
+        ],
+        goodColumns: [
+            {
+                title: '序号',
+                key: 'no',
+            },
+            {
+                title: '货品编号',
+                key: 'id',
+            },
+            {
+                title: '货品名称',
+                key: 'name',
+            },
+            {
+                title: '数量',
+                key: 'quantity',
+            },
+            {
+                title: '负责车间',
+                key: 'workshop',
+            },
+            {
+                title: '操作',
+                key: 'action',
+                align: 'center',
+                render: (h, params) => {
+                    return h('div', [
+                        h('Button', {
+                            props: {
+                                type: 'primary',
+                                size: 'small'
+                            },
+                            style: {
+                                marginRight: '8px'
+                            },
+                            on: {
+                                click: () => {
+                                    this.removeGood(params.index)
+                                }
+                            }
+                        }, '删除')
+                    ]);
+                }
+            }
+        ],
+            //当前操作进度
+            process: 0,
+            //用户ID
+            user: 1,
+            //记录订单信息
+            orderList: {
+                id: '',
+                schedule: '',
+                start: '',
+                buyer: '',
+                phone: '',
+                email: '',
+                remark: ''
+            },
+            //是否显示货品
+            modal1: false,
+            //是否显示生成订单
+            modal2: false,
+            modal3: false,
+            //存储所有订单已填加货品
+            goods: [],
+            //为订单列表添加的goods
+            goodsOrder: [],
+            //存储所有所需物料
+            materials: [],
+            //添加货品选中的货品id
+            goodSelect: '',
+            //添加货品选中的车间id
+            workshopSelect: '',
+            //所有货品
+            goodOptions: [],
+            //所有车间
+            workshopOptions: [],
+            //该货品数量
+            quantityInput: 1,
+            materialNum: 0,
+            //记录按工位分别的material数量信息
+            materStations: [],
+            //记录领料单信息
+            materStocks: [],
+            timeOptions: {
+                disabledDate (date) {
+                    return date && date.valueOf() < Date.now() - 86400000;
+                }
             }
         }
     },
-    isAddProductf(){
+    created: function () {
+        //监听materials，判断原料是否充足
+        this.$watch("materials", function (newValue, oldValue) {
+                this.$http({
+                    url: '/findMaterialNum',
+                    method: 'GET',
+                    params: {
+                        materialsId: JSON.stringify({maters:this.materials}),
+                        count: this.materials.length
+                    }
+                }).then(function(res){
+                    for(var i=0;i<this.materials.length;i++) {
+                        this.materials[i].num = res.body.data[i].remain;
+                        this.materials[i].stocks = res.body.data[i].stocks;
+                    }
+                var linshi = this.materials[0]
+                },function(){
+                    this.$Message.info('Get MaterialNum Failed');
+                })
+        })
+
+        //监听goods内容，修改materials信息
+        this.$watch("goods", function (newValue, oldValue) {
+            this.materials = [];
+            for(var i=0;i<this.goods.length;i++) {
+                for(var j=0;j<this.goods[i].materials.length;j++) {
+                    var isEqual = false;
+                    for(var k=0;k<this.materials.length;k++) {
+                        if(this.goods[i].materials[j].materialId==this.materials[k].id) {
+                            isEqual = true;
+                            this.materials[k].quantity += this.goods[i].quantity * this.goods[i].materials[j].quantity
+                        }
+                    }
+                    if(!isEqual) {
+                        this.materials.push({
+                            no: this.materials.length + 1,
+                            name: this.goods[i].materials[j].materialName,
+                            id: this.goods[i].materials[j].materialId,
+                            quantity: this.goods[i].quantity * this.goods[i].materials[j].quantity,
+                            warehouse: 1,
+                            num: 0,
+                            stocks: []
+                        })
+                    }
+                }
+            }
+        })
+        // 从后端获取所有product信息
         this.$http({
-            url: '/findAllProduct',
+            url: '/findGoodOptions',
             method: 'GET'
         }).then(function(res){
-            this.addProductNoList = res.body.addProductNoList;
-            this.addProductNameList = res.body.addProductNameList;
-            //alert("succeed");
+            this.goodOptions = res.body.goodOptions;
+            this.workshopOptions = res.body.stations;
+            //this.$Message.info('Product Succeed');
         },function(){
-            alert("ajax failure");
+            this.$Message.info('Product Failed');
         })
         this.isAddProduct = true;
     },
-    isToGenerateOk(){
-        this.$http({
-            url: '/confirmOrderList',
-            method: 'GET',
-            params: {
-                materials: JSON.stringify({
-                    mater:this.materListData,
-                    orderList:this.orderListNo
+    methods: {
+        hia(time) {
+            this.orderList.schedule = time;       
+        },
+        okOrderList() {
+            this.$http({
+                    url: '/findGetLists',
+                    method: 'GET',
+                    params: {
+                        orderListId: this.orderList.id,
+                        materStock: JSON.stringify({materStocks:this.materStocks}),
+                        count: this.materStocks.length
+                    }
+                }).then(function(res){
+                    this.$Message.info('Add GetList succeed');                    
+                },function(){
+                    this.$Message.info('Add GetList Failed');
+                })
+                this.process=2;
+        },
+        cancelOrderList() {
+            this.$http({
+                url: '/deleteGetLists',
+                method: 'GET',
+                params: {
+                    orderListId: this.orderList.id,
+                    materStock: JSON.stringify({materStocks:this.materStocks}),
+                    count: this.materStocks.length
+                }
+            }).then(function(res){                 
+            },function(){
+                this.$Message.info('delete GetList Failed');
+            })
+        },
+        getList() {
+            if(this.process==1) {
+                this.materStations=[];
+                this.materStocks=[];
+                for(var i=0;i<this.goods.length;i++) {
+                    for(var j=0;j<this.goods[i].materials.length;j++) {
+                        var isEqual = false;
+                        for(var k=0;k<this.materStations.length;k++) {
+                            if(this.goods[i].workshop == this.materStations[k].workshop && this.goods[i].materials[j].materialId == this.materStations[k].id) {
+                                this.materStations[k].quantity += this.goods[i].quantity*this.goods[i].materials[j].quantity;
+                                isEqual = true;
+                            }
+                        }
+                        if(!isEqual) {
+                            this.materStations.push({
+                                name: this.goods[i].materials[j].materialName,
+                                id: this.goods[i].materials[j].materialId,
+                                quantity: this.goods[i].quantity*this.goods[i].materials[j].quantity,
+                                workshop: this.goods[i].workshop
+                            })
+                        }
+                    }
+                }
+                for(var i=0;i<this.materStations.length;i++) {
+                    for(var j=0;j<this.materials.length;j++) {
+                        if(this.materStations[i].id==this.materials[j].id) {
+                            var quantityNeed = this.materStations[i].quantity;
+                            for(var k=0;k<this.materials[j].stocks.length;k++) {
+                                if(quantityNeed<=this.materials[j].stocks[k].remain) {
+                                    this.materStocks.push({
+                                        id: this.materStations[i].id,
+                                        name: this.materStations[i].name,
+                                        workshop: this.materStations[i].workshop,
+                                        quantity: quantityNeed,
+                                        stockId: this.materials[j].stocks[k].id
+                                    })
+                                    this.materials[j].stocks[k].remain -= quantityNeed;
+                                    quantityNeed = 0;
+                                    break;
+                                }
+                                else {
+                                    this.materStocks.push({
+                                        id: this.materStations[i].id,
+                                        name: this.materStations[i].name,
+                                        workshop: this.materStations[i].workshop,
+                                        quantity: this.materials[j].stocks[k].remain,
+                                        stockId: this.materials[j].stocks[k].id
+                                    })
+                                    quantityNeed -= this.materials[j].stocks[k].remain;
+                                    this.materials[j].stocks[k].remain = 0;
+                                    break;
+                                }
+                            }
+                            if(quantityNeed != 0) {
+                                this.materStocks.push({
+                                        id: this.materStations[i].id,
+                                        name: this.materStations[i].name,
+                                        workshop: this.materStations[i].workshop,
+                                        quantity: quantityNeed,
+                                        stockId: -1
+                                    })
+                            }
+                        }
+                    }
+                }
+                this.$http({
+                    url: '/addGetLists',
+                    method: 'GET',
+                    params: {
+                        orderListId: this.orderList.id,
+                        materStock: JSON.stringify({materStocks:this.materStocks}),
+                        count: this.materStocks.length
+                    }
+                }).then(function(res){
+                    //this.$Message.info('Get GetList succeed');                    
+                },function(){
+                    this.$Message.info('Add GetList Failed');
+                })
+                this.modal3 = true;
+            }
+            else if(this.process<1) {
+                this.$Message.info('请先生成订单');
+            }
+            else if(this.process>1) {
+                this.$Message.info('您已生成过领料单');
+            }
+        },
+
+        remind(index) {
+            this.$Message.info('缺货');  
+        },
+
+        removeGood(index) {
+            if(this.process==0){
+                for ( var i = 0; i < this.goods.length; i++ ) {
+                    this.goods[i].no = i + 1;
+                }
+            }
+            else {
+                this.$Message.info('订单已提交，无法更改');
+            }
+        },
+
+        // 当quantity为负数时即为增加
+        removeMaterial(id, quantity) {
+            for( var i = 0; i < this.materials.length; i++ ) {
+                if ( id == this.materials[i].id ) {
+                    this.materials[i].quantity -= quantity;
+                    if ( this.materials[i].quantity == 0 ) {
+                        this.materials.splice(i, 1);
+                    }
+                }
+            }
+        },
+        okAddGood() {
+            var found = false;
+            var goodsOrderFound = false;
+            for ( var i = 0; i < this.goods.length; i++ ) {
+                if ( this.goodSelect == this.goods[i].id && this.workshopSelect == this.goods[i].workshop ) {
+                    this.goods[i].quantity += this.quantityInput;
+                    found = true;
+                }
+            }
+            if ( !found ) {
+                var nameSelect = '';
+                for ( var i = 0; i < this.goodOptions.length; i++ ) {
+                    if ( this.goodSelect == this.goodOptions[i].id ) {
+                        nameSelect = this.goodOptions[i].name;
+                    }
+                }
+                this.$http({
+                    url: '/findMaterials',
+                    method: 'GET',
+                    params: {
+                        productId: this.goodSelect
+                    }
+                }).then(function(res){
+                    this.goods.push({
+                        no: this.goods.length + 1,
+                        id: this.goodSelect,
+                        name: nameSelect,
+                        quantity: this.quantityInput,
+                        workshop: this.workshopSelect,
+                        materials: res.body.data
+                    })
+                    this.$Message.info('Add Product Succeed');
+                },function(){
+                    this.$Message.info('Add Product Failed');
                 })
             }
-        }).then(function(res){
-            this.materEnough = res.body.materEnough;
-            this.productEnough = res.body.productEnough;
-            if(!res.body.productEnough){
-                alert("缺料");
+            else {
+                this.goods.push(1);
+                this.goods.splice(this.goods.length-1,1);
             }
-        },function(){
-            alert("ajax failure");
-        })
-    },
-    isToGenerateCancel(){
-
-    },
-    addProductOk(){
-        this.$http({
-            url: '/addBuy',
-            method: 'GET',
-            params: {
-                quantity: this.addProductNum-this.addProductNums,
-                productId: this.addProductNo,
-                orderListId: this.orderListNo
+        },
+        cancel() {
+            console.log('cancel');
+        },
+        showModal1() {
+            if(this.process==0) {
+                this.modal1 = true
+            }
+            else {
+                this.$Message.info('订单已提交，无法添加');
+            }
+        },
+        showModal2() {
+            if(this.process==0) {
+                this.modal2 = true;                                
+                this.$http({
+                    url: '/addOrderList',
+                    method: 'GET'
+                }).then(function(res){
+                    this.orderList.id = res.body.id;
+                },function(){
+                    this.$Message.info('Add OrderList Failed');
+                })
+            }
+            else {
+                this.$Message.info('已生成过订单');
+            }
+            // 生成订单编号
+            // 请后端补充代码
+        },
+        okAddOrder() {
+            // 将最终的订单添加到数据库中
+            // 请后端补充代码
+            var date = new Date();
+            var year = date.getFullYear();
+            var month = date.getMonth()+1;
+            var day = date.getDate();
+            if(month<10) {
+                month = '0'+month;
+            }
+            if(day<10) {
+                day = '0'+day;
+            }
+            this.orderList.start = year + '-' + month + '-' + day;
+            var products = [];
+            for(var i=0;i<this.goods.length;i++) {
+                var isHave = false;
+                for(var j=0;j<products.length;j++) {
+                    if(this.goods[i].id==products[j].id) {
+                        isHave = true;
+                        products[j].quantity += this.goods[i].quantity;
+                    }
                 }
-        }).then(function(res){
-            this.orderListData.push({
-                order_list_no: 1,
-                order_list_name: res.body.data[0].name,
-                order_list_number: res.body.data[0].id,
-                order_list_quantity: res.body.quantity,
-                order_list_workshop:'3'
-            })
-            for(var i=0;i<this.orderListData.length;i++){
-                this.orderListData.order_list_no = i+1;
-            }
-            this.productNo = res.body.data[0].id;
-            this.productConsistInfo.push({
-                ProductInfo: {
-                    productNo: 1,
-                    productName: res.body.data[0].name,
-                    ProductNumber: res.body.data[0].id,
-                    ProductQuantity: res.body.quantity,
-                    ProductRemain: this.addProductNums,
-                    ProductWorkshop:'3'
-                },
-                consistList: res.body.consistList,
-                materInfoList: res.body.materInfoList
-            })
-            alert("succeed");
-        },function(){
-            alert("ajax failure");
-        })
-        //this.$Message.info(this.addProductNum+1);
-    },
-    addProductCancel(){
-        this.$Message.info('Clicked cancel');
-    },
-    //生成订单ok
-    generateOrderListOk () {
-        this.$http({
-            url: '/product',
-            method: 'GET',
-            params: {
-                user: this.user,
-                buyer: this.generateOrderList.buyer,
-                phone: this.generateOrderList.phone,
-                email: this.generateOrderList.email,
-                remark: this.generateOrderList.remark,
-                manager: this.generateOrderList.manager
+                if(!isHave) {
+                    products.push({
+                        id: this.goods[i].id,
+                        quantity: this.goods[i].quantity
+                    })
                 }
-        }).then(function(res){
-            this.orderListNo = res.body.orderListNum;
-            this.orderListData = res.body.data;
-            for(var i=0;i<this.orderListData.length;i++){
-                this.orderListData.order_list_no = i+1;
             }
-            alert("succeed");
-        },function(){
-            alert("ajax failure");
-        })
-    },
-    //生成订单cancel
-    generateOrderListCancel () {
-        this.$Message.info('Clicked cancel');
-    },
-    test(){
-      this.$http({
-          url: '/test',
-          method: 'GET',
-      }).then(function (res) {
-          this.returnData = res.body;
-          //this.$router.push({path: '/hello', query:{data: res.body}})
-      }, function () {
-          alert("ajax failure")
-      })
-    },
-  }
+            this.$http({
+                url: '/addBuys',
+                method: 'GET',
+                params: {
+                    user: this.user,
+                    orderListId: this.orderList.id,
+                    schedule: this.orderList.schedule,
+                    start: this.orderList.start,
+                    buyer: this.orderList.buyer,
+                    phone: this.orderList.phone,
+                    email: this.orderList.email,
+                    remark: this.orderList.remark,
+                    products: JSON.stringify({products: products}),
+                    count: products.length
+                }
+            }).then(function(res){
+                this.$Message.info('Add Buys succeed');                
+            },function(){
+                this.$Message.info('Add Buys Failed');
+            })
+            this.process = 1;
+        },
+        cancelAddOrder() {
+            this.$http({
+                url: '/deleteOrderList',
+                method: 'GET',
+                params: {
+                    id: this.orderList.id
+                }
+            }).then(function(res){
+            },function(){
+                this.$Message.info('delete OrderList Failed');
+            })
+        },
+        output() {
+            // 导出？？？？
+            // 请前端补充代码
+            this.$Message.info('导出成功');
+        }
+    }
 }
 </script>
-
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-.query {
-    width: 12%;
-    margin-left: 2%;
-    margin-right: 2%;
+#good-table, #material-table {
+    text-align: center;
+    width: 48%;
     display: inline-block;
+    height: 100%;
+    margin: 0 5px;
+    vertical-align: top;
+    border-collapse:collapse；
 }
-.cost-module-btn {
-    color: white;
-    background-color: #4169E1;
-    border-color: #4169E1;
+#good-table {
+    border-right: 1px solid #eee;
+
 }
-.cost-module-btn:hover {
-    color: white;
-    background-color: #4169E1;
-    border-color: #4169E1;
+.table-title {
+    border-collapse: collapse;
+    background: #f1f1f1;
+    line-height: 25px;
 }
-.search {
-    margin-left:50%;
+#generate-page table {
+    width: 100%;
 }
-.top-label {
-    margin-right:5%;
+#generate-page {
+    height: 100%;
 }
+#generate-page button {
+    background-color: #464c5b;
+    border: none;
+
+}
+#btn-group {
+    margin: 5px 15px;
+}
+#generate-page .ivu-modal-header, .ivu-modal-footer {
+    border: none;
+}
+.del-good {
+    color: blue;
+    cursor: pointer;
+}
+
 </style>
