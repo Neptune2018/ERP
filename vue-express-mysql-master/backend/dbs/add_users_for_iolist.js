@@ -21,4 +21,6 @@ const addUserforIOList = async function(){
     'name': 'Christin'
   });
 }
-addUserforIOList();
+module.exports = {
+	addUserforIOList: addUserforIOList
+}

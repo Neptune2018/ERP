@@ -47,42 +47,42 @@ const addStocks = async function(){
     'remain': 550,
     'batch': '456789'
   });
-  var material1 = await models.Material.create({
+  var material1 = await models.Stock.create({
     'id': 2241,
     'style':0,
     'materialId': 241,
     'remain':20,
 		'batch': '456789'
 	});
-  var material2 = await models.Material.create({
+  var material2 = await models.Stock.create({
     'id': 2242,
     'style':0,
     'materialId': 242,
     'remain':202,
     'batch': '456789'
   });
-  var material3 = await models.Material.create({
+  var material3 = await models.Stock.create({
     'id': 2243,
     'style':0,
     'materialId': 243,
     'remain':40,
     'batch': '456789'
   });
-  var material4 = await models.Material.create({
+  var material4 = await models.Stock.create({
     'id': 2244,
     'style':0,
     'materialId': 244,
     'remain':520,
     'batch': '456789'
   });
-  var material5 = await models.Material.create({
+  var material5 = await models.Stock.create({
     'id': 2245,
     'style':0,
     'materialId': 245,
     'remain':880,
     'batch': '456789'
   });
-  var material6 = await models.Material.create({
+  var material6 = await models.Stock.create({
     'id': 2246,
     'style':0,
     'materialId': 246,
@@ -90,4 +90,7 @@ const addStocks = async function(){
     'batch': '456789'
   });
 }
-addStocks();
+
+module.exports = {
+	addStocks: addStocks
+}

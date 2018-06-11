@@ -84,7 +84,7 @@ const CMdata = async function(){
         'batch': 'B2',
     });
 
-    var material1 = await models.Material.create({
+    /* var material1 = await models.Material.create({
 		'name': '物料1',
         'status': '',
         'property': '',
@@ -103,9 +103,9 @@ const CMdata = async function(){
         'status': '',
         'property': '',
         'safe_quantity': 6,
-    });
+    }); */
 
-    var stock4 = await models.Stock.create({
+    /* var stock4 = await models.Stock.create({
 		'style': false,
         'status': '',
         'remain': 1,
@@ -127,7 +127,7 @@ const CMdata = async function(){
         'remain': 3,
         'unit': '千个',
         'batch': 'B2',
-    });
+    }); */
 
     var repertory1 = await models.Repertory.create({
         'name': '仓库1'
@@ -137,7 +137,7 @@ const CMdata = async function(){
         'name': '仓库2'
     });
 
-    var supplier1 = await models.Supplier.create({
+    /* var supplier1 = await models.Supplier.create({
         'name': '供应商1'
     });
 
@@ -148,31 +148,31 @@ const CMdata = async function(){
     var offerlist1 = await models.OfferList.create({
         'time': new Date('2018-5-30 12:00:00')
     });
-
+ */
     //该部分为Material与OfferList间多对多的关系处理，每一对靠Offer进行连接
     //主要注意Offer中的batch信息要与Material中添加的batch信息相对应，因需要用batch进行表连接
-    await offerlist1.addMaterial(material1, {'quantity': 4,'batch':'B1','price':1000});
+    /* await offerlist1.addMaterial(material1, {'quantity': 4,'batch':'B1','price':1000});
     await offerlist1.addMaterial(material2, {'quantity': 4,'batch':'B2','price':1000});
     await offerlist1.addMaterial(material3, {'quantity': 4,'batch':'B2','price':1000});
-
+ */
     //一个OfferList绑定一个供应商
-    await offerlist1.setSupplier(supplier1);
+   /*  await offerlist1.setSupplier(supplier1); */
 
     //一定要将Stock的style属性为true的项对应Product，为false的对应Material
     await stock1.setProduct(product1);
     await stock2.setProduct(product2);
     await stock3.setProduct(product3);
-    await stock4.setMaterial(material1);
+    /* await stock4.setMaterial(material1);
     await stock5.setMaterial(material2);
-    await stock6.setMaterial(material3);
+    await stock6.setMaterial(material3); */
 
     //Stock对应的仓库可随意选择
     await stock1.setRepertory(repertory1);
     await stock2.setRepertory(repertory1);
-    await stock4.setRepertory(repertory1);
+    /* await stock4.setRepertory(repertory1); */
     await stock3.setRepertory(repertory2);
-    await stock5.setRepertory(repertory2);
-    await stock6.setRepertory(repertory2);
+    /* await stock5.setRepertory(repertory2);
+    await stock6.setRepertory(repertory2); */
 
 
 }

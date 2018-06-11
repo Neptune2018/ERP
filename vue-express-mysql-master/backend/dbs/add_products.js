@@ -43,4 +43,6 @@ const addProducts = async function(){
   });
 
 }
-addProducts();
+module.exports = {
+	addProducts: addProducts
+}

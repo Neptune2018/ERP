@@ -20,15 +20,14 @@ import State from '@/components/State'
 import Supplier from '@/components/SupplierMange'
 import OfferList from '@/components/OfferList'
 import ImportWare from '@/components/ImportWare'
-import ExportWare from '@/components/ExportWare'
+//import ExportWare from '@/components/ExportWare'
 
 
 
-import ThresholdWarning from '@/components/ThresholdWarning'
+//import ThresholdWarning from '@/components/ThresholdWarning'
 
 import Stocks from '@/components/Stocks'
 
-import ImportWare from '@/components/ImportWare'
 import IOList from '@/components/IOList'
 
 import store from '../store'
@@ -196,7 +195,7 @@ const router = new Router({
         })
       }
     },
-    {
+    /* {
       path:'/ExportWare',
       name: 'ExportWare',
       component: ExportWare,
@@ -208,8 +207,8 @@ const router = new Router({
             next('/userInfor')
         })
       }
-    },
-    {
+    }, */
+    /* {
       path: '/inventory',
       name: 'IOList',
       component: IOList,
@@ -221,8 +220,8 @@ const router = new Router({
             next('/userInfor')
         })
       }
-    },
-    {
+    }, */
+    /* {
       path: '/inventory/stocks',
       name: 'ThresholdWarning',
       component: ThresholdWarning,
@@ -234,7 +233,7 @@ const router = new Router({
             next('/userInfor')
         })
       }
-    },
+    }, */
     {
       path: '/offerlist',
       name: 'OfferList',

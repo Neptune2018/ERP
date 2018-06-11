@@ -30,4 +30,7 @@ const addIOList = async function(){
     'toPersonId':244
   });
 }
-addIOList();
+module.exports = {
+	addIOList: addIOList
+}
+

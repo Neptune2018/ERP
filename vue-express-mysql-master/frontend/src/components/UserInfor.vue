@@ -8,8 +8,7 @@
         <span>用户名：&emsp;&emsp;</span>
         <span>{{name}}</span><br />
         <span>联系电话：&emsp;
-        <Input class="input" v-if="edited" v-model="phone" clearable size="large"></Input>
-        <span v-else>{{phone}}</span><br />
+        <span>{{phone}}</span><br />
         <span>电子邮箱：&emsp;
         <Input class="input" v-if="edited" v-model="email" clearable size="large"></Input>
         <span v-else>{{email}}</span><br />
@@ -132,7 +131,7 @@
 <style scoped>
 .user-card {
     width: 50%;
-    margin-top: 15%;
+    margin-top: 5%;
     margin-left: auto;
     margin-right: auto;
 }

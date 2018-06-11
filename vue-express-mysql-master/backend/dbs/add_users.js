@@ -1,7 +1,6 @@
 var models = require('../models')
 
-//使用方法
-//在当前文件夹中 采用命令 node role_feature.js就能把权限数据插入到数据表中
+//admin_module
 
 const addUser = async function(){
 	/* await models.User.destroy({where:{}});
@@ -84,9 +83,9 @@ const addUser = async function(){
 
 	var firstUser = await models.User.create({
 		'name': '梁晨',
-		'phone': '1341450526',
+		'phone': '11111111111',
 		'email': '32225003@qq.com',
-		'job': 'CTO'
+		'job': '日志管理员'
 	});
 	await firstUser.createAdmin({'password': '123456'});
 	await firstUser.setRole(admin);
@@ -210,4 +209,6 @@ const addUser = async function(){
 
 }
 
-addUser();
+module.exports = {
+	addUser: addUser
+}

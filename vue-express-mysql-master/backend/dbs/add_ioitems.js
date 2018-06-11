@@ -34,4 +34,6 @@ const addIOItem = async function(){
     'materialId':246
   });
 }
-addIOItem();
+module.exports = {
+	addIOItem: addIOItem
+}
