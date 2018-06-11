@@ -1,5 +1,9 @@
+/**
+  在出入库信息中显示
+  【注意！！】需要先于add_ioitem.js文件执行
+**/
 var models = require('../models')
-const addMaterials = async function(){
+const addIOList = async function(){
   // await models.Material.destroy({where:{}});
   var material1 = await models.IOList.create({
     'id': 241,
@@ -26,5 +30,4 @@ const addMaterials = async function(){
     'toPersonId':244
   });
 }
-
-addMaterials();
+addIOList();

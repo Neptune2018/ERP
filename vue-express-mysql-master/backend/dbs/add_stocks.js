@@ -1,5 +1,8 @@
+/**
+  在库存情况列表中显示
+**/
 var models = require('../models')
-const addMaterials = async function(){
+const addStocks = async function(){
   // await models.Product.destroy({where:{}});
   var product1 = await models.Stock.create({
     'id':241,
@@ -87,5 +90,4 @@ const addMaterials = async function(){
     'batch': '456789'
   });
 }
-
-addMaterials();
+addStocks();

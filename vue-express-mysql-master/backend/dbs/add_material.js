@@ -1,3 +1,7 @@
+/**
+  在出入库信息中显示
+  【注意！！】需要先于ioitem和iolist两个js文件执行
+**/
 var models = require('../models')
 const addMaterials = async function(){
   // await models.Material.destroy({where:{}});
@@ -33,5 +37,4 @@ const addMaterials = async function(){
   });
 
 }
-
 addMaterials();

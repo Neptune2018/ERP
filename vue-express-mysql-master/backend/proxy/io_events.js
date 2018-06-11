@@ -11,6 +11,20 @@ exports.searchRepertory = function(dosomething){
         dosomething(rows);
     })
 }
+//查找是否存在某个验收人
+exports.searchPerson = function(dosomething,id){
+    db.query('select id from users where id = '+id)
+    .then(function(rows){
+        dosomething(rows);
+    })    
+}
+//查找是否存在某个仓库id
+exports.searchStockId = function(dosomething,id){
+    db.query('select id from repertories where id = '+id)
+    .then(function(rows){
+        dosomething(rows);
+    })    
+}
 //查询是否存在某仓库
 exports.repertoryExist = function(dosomething,id,name){
     db.query('select name,id from repertories where id = '+id+' AND name = '+'\''+name+'\'')
@@ -35,26 +49,25 @@ exports.placeAvailable = function(dosomething,place,id){
 }
 //插入仓库
 exports.insertIO = function(info){
-    if (info.style == "物料"){
-        info.style = 0
-    } else {
-        info.style = 1
+    for(var i = 0;i<info.length;i++){
+        if (info[i].style == "物料"){
+            info[i].style = 0
+        } else {
+            info[i].style = 1
+        }
+        IoList.create({
+            //id:1232,
+            time:info[i].time,
+            style:info[i].style,
+            fromPersonId:info[i].fromPerson,
+            toPersonId:info[i].toPerson
+        });
+        IoItem.create({
+            //id:321,
+            style:info[i].style,
+            quantity:info[i].quantity,
+            unit:info[i].unit,
+            batch:info[i].batch
+        });
     }
-    IoList.create({
-        id:1232,
-        time:info.time,
-        style:info.style,
-        createdAt:'2011-01-01 00:01:10',
-        updatedAt:'2011-01-01 00:01:10',
-        fromPersonId:info.fromPerson,
-        toPersonId:info.toPerson
-    });
-    IoItem.create({
-        id:321,
-        style:info.style,
-        createdAt:'2011-01-01 00:01:10',
-        updatedAt:'2011-01-01 00:01:10',
-        quantity:info.quantity,
-        unit:info.unit,
-    });
 }

@@ -1,10 +1,10 @@
 <template>
   <div>
-    <p>仓库基本信息</p>
-    <Table strip height="200" :columns="columns1" :data="data0"></Table>
+    <!-- <p>仓库基本信息</p>
+    <Table strip height="200" :columns="columns1" :data="data0"></Table> -->
     <p>出入库信息</p>
     <Table strip height="450" :columns="columns0" :data="data2"></Table>
-    <Button @click="change2Stocks()">仓库库存</Button>
+    <!-- <Button @click="change2Stocks()">仓库库存</Button> -->
   </div>
 </template>
 <script>
@@ -93,15 +93,15 @@
         },
         created:function()
         {
-            this.$http({
-                url: '/stations',
-                method: 'GET',
-            }).then(function (res) {
-                console.log(res.body);
-                this.data0 = res.body;
-            }, function () {
-                alert("ajax failure")
-            });
+            // this.$http({
+            //     url: '/stations',
+            //     method: 'GET',
+            // }).then(function (res) {
+            //     console.log(res.body);
+            //     this.data0 = res.body;
+            // }, function () {
+            //     alert("ajax failure")
+            // });
             this.$http({
                 url: '/iorecord',
                 method: 'GET',
@@ -118,10 +118,10 @@
               title: '详细信息',
               content: `序号: ${this.data2[index].num}<br>操作类型:${this.data2[index].style}<br>物料名称:${this.data2[index].name}<br>数量:${this.data2[index].quantity}<br>更新日期:${this.data2[index].updatedAt}<br>出入库编号:${this.data2[index].ioListId}<br>货物编号:${this.data2[index].goodsId}<br>负责人from:${this.data2[index].fromName}<br>负责人to:${this.data2[index].toName}`
             })
-          },
-            change2Stocks() {
-              this.$router.push({path: '/inventory/stocks'})
-            }
+          }
+            // change2Stocks() {
+            //   this.$router.push({path: '/inventory/stocks'})
+            // }
         }
     }
 </script>

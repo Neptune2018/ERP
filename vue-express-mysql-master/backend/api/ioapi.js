@@ -6,6 +6,26 @@ exports.getRepertory = function(req,res){
 		res.send(data)
     })
 }
+exports.findPerson = function(req,res){
+    IO.searchPerson(function(data){
+        if(data[0].length>0){
+            res.send("success")
+        }
+        else {
+            res.send("fail")
+        }
+    },req.body.id)
+}
+exports.findStockid = function(req,res){
+    IO.searchStockId(function(data){
+        if(data[0].length>0){
+            res.send("success")
+        }
+        else {
+            res.send("fail")
+        }
+    },req.body.id)
+}
 
 exports.stockAvail = function(req,res){
     IO.searchMax(function(data) {
@@ -25,9 +45,9 @@ exports.placeAvail = function(req,res){
     IO.placeAvailable(function(data) {  
         //console.log(info)
         if(data[0].length>0){
-            res.send({'place':0})
+            res.send("fail")
         } else {
-            res.send({'place':1})
+            res.send("success")
         }
     },req.body.place,req.body.id)
 }
