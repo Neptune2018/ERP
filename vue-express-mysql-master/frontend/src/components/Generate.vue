@@ -49,7 +49,7 @@
             <FormItem label="备注">
                 <Input v-model="orderList.remark"></Input>
             </FormItem>
-            <FormItem label="办理人:">{{ user }}</FormItem>
+            <FormItem label="办理人:">{{ userName }}</FormItem>
             <FormItem label="截止日期:">
                 <DatePicker type="date" placeholder="选择日期" format="yyyy-MM-dd" :options="timeOptions" :value="orderList.schedule" @on-change="hia"></DatePicker>
             </FormItem>
@@ -205,7 +205,8 @@ export default {
             //当前操作进度
             process: 0,
             //用户ID
-            user: 1,
+            userId: 1,
+            userName: '',
             //记录订单信息
             orderList: {
                 id: '',
@@ -250,6 +251,8 @@ export default {
         }
     },
     created: function () {
+        this.makeSchedule();
+        this.showInfor();
         //监听materials，判断原料是否充足
         this.$watch("materials", function (newValue, oldValue) {
                 this.$http({
@@ -266,7 +269,7 @@ export default {
                     }
                 var linshi = this.materials[0]
                 },function(){
-                    this.$Message.info('Get MaterialNum Failed');
+                    this.$Message.info('获取原料数目失败');
                 })
         })
 
@@ -303,13 +306,41 @@ export default {
         }).then(function(res){
             this.goodOptions = res.body.goodOptions;
             this.workshopOptions = res.body.stations;
-            //this.$Message.info('Product Succeed');
+             this.goodSelect = this.goodOptions[0].id;
+             this.workshopSelect = this.workshopOptions[0].id;             
+            //this.$Message.info('获取所有货品成功');
         },function(){
-            this.$Message.info('Product Failed');
+            this.$Message.info('获取所有货品成功');
         })
         this.isAddProduct = true;
     },
     methods: {
+        makeSchedule() {
+            var date = new Date();
+            var year = date.getFullYear();
+            var month = date.getMonth()+1;
+            var day = date.getDate();
+            if(month<10) {
+                month = '0'+month;
+            }
+            if(day<10) {
+                day = '0'+day;
+            }
+            this.orderList.schedule = year + '-' + month + '-' + day;
+        },
+        showInfor(){
+                var that = this;
+                this.$http({
+                    url: '/userInfor',
+                    method: 'GET',
+                }).then(function (res) {
+                    console.log(res.body);
+                    that.userId = res.body[0].id;
+                    that.userName = res.body[0].name;
+                }, function () {
+                    alert("ajax failure")
+                })
+            },
         hia(time) {
             this.orderList.schedule = time;       
         },
@@ -323,9 +354,9 @@ export default {
                         count: this.materStocks.length
                     }
                 }).then(function(res){
-                    this.$Message.info('Add GetList succeed');                    
+                    this.$Message.info('添加领料单成功');                    
                 },function(){
-                    this.$Message.info('Add GetList Failed');
+                    this.$Message.info('添加领料单失败');
                 })
                 this.process=2;
         },
@@ -340,7 +371,7 @@ export default {
                 }
             }).then(function(res){                 
             },function(){
-                this.$Message.info('delete GetList Failed');
+                this.$Message.info('删除领料单失败');
             })
         },
         getList() {
@@ -371,29 +402,31 @@ export default {
                         if(this.materStations[i].id==this.materials[j].id) {
                             var quantityNeed = this.materStations[i].quantity;
                             for(var k=0;k<this.materials[j].stocks.length;k++) {
-                                if(quantityNeed<=this.materials[j].stocks[k].remain) {
-                                    this.materStocks.push({
-                                        id: this.materStations[i].id,
-                                        name: this.materStations[i].name,
-                                        workshop: this.materStations[i].workshop,
-                                        quantity: quantityNeed,
-                                        stockId: this.materials[j].stocks[k].id
-                                    })
-                                    this.materials[j].stocks[k].remain -= quantityNeed;
-                                    quantityNeed = 0;
-                                    break;
-                                }
-                                else {
-                                    this.materStocks.push({
-                                        id: this.materStations[i].id,
-                                        name: this.materStations[i].name,
-                                        workshop: this.materStations[i].workshop,
-                                        quantity: this.materials[j].stocks[k].remain,
-                                        stockId: this.materials[j].stocks[k].id
-                                    })
-                                    quantityNeed -= this.materials[j].stocks[k].remain;
-                                    this.materials[j].stocks[k].remain = 0;
-                                    break;
+                                if(this.materials[j].stocks[k].remain>0){
+                                    if(quantityNeed<=this.materials[j].stocks[k].remain) {
+                                        this.materStocks.push({
+                                            id: this.materStations[i].id,
+                                            name: this.materStations[i].name,
+                                            workshop: this.materStations[i].workshop,
+                                            quantity: quantityNeed,
+                                            stockId: this.materials[j].stocks[k].id
+                                        })
+                                        this.materials[j].stocks[k].remain -= quantityNeed;
+                                        quantityNeed = 0;
+                                        break;
+                                    }
+                                    else {
+                                        this.materStocks.push({
+                                            id: this.materStations[i].id,
+                                            name: this.materStations[i].name,
+                                            workshop: this.materStations[i].workshop,
+                                            quantity: this.materials[j].stocks[k].remain,
+                                            stockId: this.materials[j].stocks[k].id
+                                        })
+                                        quantityNeed -= this.materials[j].stocks[k].remain;
+                                        this.materials[j].stocks[k].remain = 0;
+                                        break;
+                                    }
                                 }
                             }
                             if(quantityNeed != 0) {
@@ -417,9 +450,9 @@ export default {
                         count: this.materStocks.length
                     }
                 }).then(function(res){
-                    //this.$Message.info('Get GetList succeed');                    
+                    //this.$Message.info('添加领料单成功');                    
                 },function(){
-                    this.$Message.info('Add GetList Failed');
+                    this.$Message.info('添加领料单失败');
                 })
                 this.modal3 = true;
             }
@@ -488,9 +521,9 @@ export default {
                         workshop: this.workshopSelect,
                         materials: res.body.data
                     })
-                    this.$Message.info('Add Product Succeed');
+                    this.$Message.info('添加货品成功');
                 },function(){
-                    this.$Message.info('Add Product Failed');
+                    this.$Message.info('添加货品失败');
                 })
             }
             else {
@@ -518,7 +551,7 @@ export default {
                 }).then(function(res){
                     this.orderList.id = res.body.id;
                 },function(){
-                    this.$Message.info('Add OrderList Failed');
+                    this.$Message.info('添加订单列表失败');
                 })
             }
             else {
@@ -573,9 +606,9 @@ export default {
                     count: products.length
                 }
             }).then(function(res){
-                this.$Message.info('Add Buys succeed');                
+                this.$Message.info('添加订购信息成功');                
             },function(){
-                this.$Message.info('Add Buys Failed');
+                this.$Message.info('添加订购信息失败');
             })
             this.process = 1;
         },
@@ -588,7 +621,7 @@ export default {
                 }
             }).then(function(res){
             },function(){
-                this.$Message.info('delete OrderList Failed');
+                this.$Message.info('删除订单失败');
             })
         },
         output() {
