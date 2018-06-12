@@ -19,6 +19,8 @@ Vue.use(iView)
 Vue.config.productionTip = false
 
 /* eslint-disable no-new */
+store.dispatch('resetState').then(function (){
+
 new Vue({
   el: '#app',
   router,
@@ -31,5 +33,8 @@ new Vue({
       //Authorization: 'Basic YXBpOnBhc3N3b3Jk'
     }
   }
-
 })
+
+  
+})
+

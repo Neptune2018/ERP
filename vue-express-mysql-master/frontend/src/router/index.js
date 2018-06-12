@@ -39,17 +39,35 @@ const router = new Router({
       path: '/',
       name: 'HelloWorld',
       component: HelloWorld,
+      beforeEnter: (to, from, next) => {
+        if (store.state.isSignin === false) {
+          next('/signin');
+          return;
+        }
+        next();
+      }
     },
     {
       path: '/second',
       name: 'SecondPage',
-      component: SecondPage
+      component: SecondPage,
+      beforeEnter: (to, from, next) => {
+        if (store.state.isSignin === false) {
+          next('/signin');
+          return;
+        }
+        next();
+      }
     },
     {
       path: '/goods',
       name: 'Goods',
       component: Goods,
       beforeEnter: (to, from, next) => {
+        if (store.state.isSignin === false) {
+          next('/signin');
+          return;
+        }
         store.dispatch('hasFeature', 'Production').then(function(){
             next()
         }, function(){
@@ -63,6 +81,10 @@ const router = new Router({
       name: 'Material',
       component: Material,
       beforeEnter: (to, from, next) => {
+        if (store.state.isSignin === false) {
+          next('/signin');
+          return;
+        }
         store.dispatch('hasFeature', 'Production').then(function(){
             next()
         }, function(){
@@ -74,13 +96,29 @@ const router = new Router({
     {
       path: '/category',
       name: 'Category',
-      component: Category
+      component: Category,
+      beforeEnter: (to, from, next) => {
+        if (store.state.isSignin === false) {
+          next('/signin');
+          return;
+        }
+        store.dispatch('hasFeature', 'Production').then(function(){
+            next()
+        }, function(){
+            alert('You Dont have Authority!')
+            next('/userInfor')
+        })
+      }
     },
     {
       path: '/costmanage_product',
       name: 'CostManageProduct',
       component: CostManageProduct,
       beforeEnter: (to, from, next) => {
+        if (store.state.isSignin === false) {
+          next('/signin');
+          return;
+        }
         store.dispatch('hasFeature', 'Cost').then(function(){
             next()
         }, function(){
@@ -94,6 +132,10 @@ const router = new Router({
       name: 'CostManageMatrial',
       component: CostManageMatrial,
       beforeEnter: (to, from, next) => {
+        if (store.state.isSignin === false) {
+          next('/signin');
+          return;
+        }
         store.dispatch('hasFeature', 'Cost').then(function(){
             next()
         }, function(){
@@ -107,6 +149,10 @@ const router = new Router({
       name: 'Group',
       component: Group,
       beforeEnter: (to, from, next) => {
+        if (store.state.isSignin === false) {
+          next('/signin');
+          return;
+        }
         store.dispatch('hasFeature', 'User').then(function(){
             next()
         }, function(){
@@ -120,6 +166,10 @@ const router = new Router({
       name: 'ParticularizeGroup',
       component: ParticularizeGroup,
       beforeEnter: (to, from, next) => {
+        if (store.state.isSignin === false) {
+          next('/signin');
+          return;
+        }
         store.dispatch('hasFeature', 'User').then(function(){
             next()
         }, function(){
@@ -131,18 +181,36 @@ const router = new Router({
     {
       path: '/userInfor',
       name: 'UserInfor',
-      component: UserInfor
+      component: UserInfor,
+      beforeEnter: (to, from, next) => {
+        if (store.state.isSignin === false) {
+          next('/signin');
+          return;
+        }
+        next();;
+      }
     },
     {
       path: '/signin',
       name: 'Signin',
-      component: Signin
+      component: Signin,
+      beforeEnter: (to, from, next) => {
+        if (store.state.isSignin === true) {
+          next('/userInfor');
+          return;
+        }
+        next();
+      }
     },
     {
       path: '/generate',
       name: 'Generate',
       component: Generate,
       beforeEnter: (to, from, next) => {
+        if (store.state.isSignin === false) {
+          next('/signin');
+          return;
+        }
         store.dispatch('hasFeature', 'Production').then(function(){
             next()
         }, function(){
@@ -154,14 +222,29 @@ const router = new Router({
     {
       path: '/state',
       name: 'State',
-      component: State
+      component: State,
+      beforeEnter: (to, from, next) => {
+        if (store.state.isSignin === false) {
+          next('/signin');
+          return;
+        }
+        store.dispatch('hasFeature', 'Production').then(function(){
+            next()
+        }, function(){
+            alert('You Dont have Authority!')
+            next('/userInfor')
+        })
+      }
     },
     {
       path: '/starving',
       name: 'MatrialLack',
-
       component: MatrialLack,
       beforeEnter: (to, from, next) => {
+        if (store.state.isSignin === false) {
+          next('/signin');
+          return;
+        }
         store.dispatch('hasFeature', 'Purchase').then(function(){
             next()
         }, function(){
@@ -174,6 +257,10 @@ const router = new Router({
       name: 'SafeStock',
       component: SafeStock,
       beforeEnter: (to, from, next) => {
+        if (store.state.isSignin === false) {
+          next('/signin');
+          return;
+        }
         store.dispatch('hasFeature', 'Purchase').then(function(){
             next()
         }, function(){
@@ -187,6 +274,10 @@ const router = new Router({
       name: 'ImportWare',
       component: ImportWare,
       beforeEnter: (to, from, next) => {
+        if (store.state.isSignin === false) {
+          next('/signin');
+          return;
+        }
         store.dispatch('hasFeature', 'Keep').then(function(){
             next()
         }, function(){
@@ -195,83 +286,92 @@ const router = new Router({
         })
       }
     },
-    /* {
-      path:'/ExportWare',
-      name: 'ExportWare',
-      component: ExportWare,
-      beforeEnter: (to, from, next) => {
-        store.dispatch('hasFeature', 'Keep').then(function(){
-            next()
-        }, function(){
-            alert('You Dont have Authority!')
-            next('/userInfor')
-        })
-      }
-    }, */
-    /* {
-      path: '/inventory',
-      name: 'IOList',
-      component: IOList,
-      beforeEnter: (to, from, next) => {
-        store.dispatch('hasFeature', 'Keep').then(function(){
-            next()
-        }, function(){
-            alert('You Dont have Authority!')
-            next('/userInfor')
-        })
-      }
-    }, */
-    /* {
-      path: '/inventory/stocks',
-      name: 'ThresholdWarning',
-      component: ThresholdWarning,
-      beforeEnter: (to, from, next) => {
-        store.dispatch('hasFeature', 'Keep').then(function(){
-            next()
-        }, function(){
-            alert('You Dont have Authority!')
-            next('/userInfor')
-        })
-      }
-    }, */
     {
       path: '/offerlist',
       name: 'OfferList',
-      component: OfferList
+      component: OfferList,
+      beforeEnter: (to, from, next) => {
+        if (store.state.isSignin === false) {
+          next('/signin');
+          return;
+        }
+        store.dispatch('hasFeature', 'Purchase').then(function(){
+            next()
+        }, function(){
+            alert('You Dont have Authority!')
+            next('/userInfor')
+        })
+      }
     },
     {
       path: '/supplier',
       name: 'supplier',
-      component: Supplier
+      component: Supplier,
+      beforeEnter: (to, from, next) => {
+        if (store.state.isSignin === false) {
+          next('/signin');
+          return;
+        }
+        store.dispatch('hasFeature', 'Purchase').then(function(){
+            next()
+        }, function(){
+            alert('You Dont have Authority!')
+            next('/userInfor')
+        })
+      }
     },
     {
       path: '/ioinfo',
       name: 'IOList',
-      component: IOList
+      component: IOList,
+      beforeEnter: (to, from, next) => {
+        if (store.state.isSignin === false) {
+          next('/signin');
+          return;
+        }
+        store.dispatch('hasFeature', 'Keep').then(function(){
+            next()
+        }, function(){
+            alert('You Dont have Authority!')
+            next('/userInfor')
+        })
+      }
     },
     {
       path: '/inventory',
       name: 'Stocks',
-      component: Stocks
-    }
+      component: Stocks,
+      beforeEnter: (to, from, next) => {
+        if (store.state.isSignin === false) {
+          next('/signin');
+          return;
+        }
+        store.dispatch('hasFeature', 'Keep').then(function(){
+            next()
+        }, function(){
+            alert('You Dont have Authority!')
+            next('/userInfor')
+        })
+      }
+    },
   ]
 })
 
 
-router.beforeResolve((to, from, next) => {
-  if (to.path === '/signin') {
-    next();
-  }
-  else {
-    console.log(store)
-    if (store.state.isSignin === false) {
-      alert('NOT SIGN IN!');
-      next('/signin')
-    }
-    else {
-      next()
-    }
-  }
-})
+// router.beforeResolve((to, from, next) => {
+//   if (to.path === '/signin') {
+//     next();
+//   }
+//   else {
+//     console.log(store)
+//     if (store.state.isSignin === false) {
+//       alert('NOT SIGN IN!');
+//       next('/signin')
+//     }
+//     else {
+//       next()
+//     }
+//   }
+// })
 
 export default router;
