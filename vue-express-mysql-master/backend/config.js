@@ -8,7 +8,7 @@ var config = {
   description: '654321', // 描述
   keywords: 'nodejs, node, express, connect',
 
-  static: '../frontend/dist', // 静态文件存储域名
+  static: '../frontend/dist/', // 静态文件存储域名
   // 社区的域名
   host: 'localhost',
 
@@ -43,10 +43,9 @@ var config = {
   list_topic_count: 20,
 
   // 文件上传配置
-  // 注：如果填写 qn_access，则会上传到 7牛，以下配置无效
   upload: {
-    path: path.join(__dirname, '/upload/'),
-    url: '/upload/'
+    path: path.join(__dirname, '/uploads/'),
+    url: '/uploads/'
   },
 
   file_limit: '1MB',

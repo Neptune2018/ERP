@@ -8,6 +8,7 @@ var cookieParser = require('cookie-parser');
 var RedisStore = require('connect-redis')(session);
 var path = require('path');
 var ejs = require('ejs');  
+var favicon = require('express-favicon');
 var bodyParser = require('body-parser');
 
 var app = express();
@@ -33,12 +34,16 @@ app.use(session({
 	  // }),
 }));
 
+
+
+app.use(express.static(path.join(__dirname, config.static)));
+app.use(favicon(path.join(__dirname, config.static + '/static/Favicon.ico')));
+
 app.set("views", config.static);
 app.engine("html",ejs.__express);
 app.set("view engine","html");
 app.set('env', 'production');
 
-app.use(express.static(path.join(__dirname, config.static)));
 app.get('/', function(req, res){
 	res.render('index');
 })
