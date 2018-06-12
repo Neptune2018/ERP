@@ -448,6 +448,10 @@
         this.data5=this.product_data1
         // console.log(this.data1)
         this.product_data1=[]
+        for(var i=0;i<currentRow.number;i++)
+          {
+            this.product_data1[i]=this.data5[i]
+          }
         this.$http({
             url: '/cateSon',
             method: 'GET',
@@ -455,10 +459,6 @@
               id: currentRow.sortid
             }
         }).then(function(res){
-          for(var i=0;i<currentRow.number;i++)
-          {
-            this.product_data1[i]=this.data5[i]
-          }
           for(var j=0;j<res.body.length;j++)
           {
            this.product_data1.push({
@@ -506,6 +506,10 @@
         this.data6=this.material_data1
         // console.log(this.data1)
         this.material_data1=[]
+        for(var i=0;i<currentRow.number;i++)
+          {
+            this.material_data1[i]=this.data6[i]
+          }
         this.$http({
             url: '/cateSon2',
             method: 'GET',
@@ -513,10 +517,6 @@
               id: currentRow.sortid
             }
         }).then(function(res){
-          for(var i=0;i<currentRow.number;i++)
-          {
-            this.material_data1[i]=this.data6[i]
-          }
           for(var j=0;j<res.body.length;j++)
           {
            this.material_data1.push({

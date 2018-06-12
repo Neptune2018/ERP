@@ -5,6 +5,14 @@ var BOM_product = require('../proxy').BOM_product;
 var url = require('url');
 
 
+//插入Consist数据
+exports.insertConsist = function(req,res) {
+    console.log(req.session.sess)
+    req.session.sess = 'yes';
+    var params = url.parse(req.url, true).query;
+    BOM_product.insertConsist(params.id, params.materid, params.quantity, function(result) {res.send();})
+}
+
 //添加，参数:（id,name,price,remark,materCateId）物料编号名称价格备注和类别名，会返回listallBOM_product（下面函数）的查找结果而非成功失败
 exports.addBOM_product = function(req, res) {
 	console.log(req.session.sess)

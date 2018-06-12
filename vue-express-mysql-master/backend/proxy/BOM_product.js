@@ -1,7 +1,18 @@
 var BOM_product = require('../models').Product;
 var Product = require('../models').Product;
+var Consist = require('../models').Consist;
 var db = require('../models/index').DB;
 
+//插入consists
+exports.insertConsist= function(productId, materId, quantity, callback) {
+  Consist.create({
+    productId: productId,
+    materialId: materId,
+    quantity: quantity
+  }).then(function(data){
+    callback(data)
+  })
+}
 
 //添加函数,函数:
 exports.addBOM_product = function (id,name,price,remark,productCateId,callback) {
