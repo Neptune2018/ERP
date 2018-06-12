@@ -74,7 +74,7 @@
         <i-col :span='spanRight' class='content' :xs="{ span: 16, offset: 0}" :sm="{ span: 18, offset: 0}" :md="{ span: 20, offset: 0}">
            <div class='main-header'>
             <Icon type="ios-arrow-forward"></Icon>
-            <span>当前所在位置为：{{bigPos}} / {{samllPos}}</span>
+            <span>当前所在位置为：{{bigPos}} / {{smallPos}}</span>
           </div>
           <div class='main-content'>
             <router-view></router-view>
@@ -97,8 +97,8 @@ export default {
     return {
       spanLeft: 4,
       spanRight: 20,
-      bigPos:null,
-      samllPos:null
+      // bigPos:null,
+      // samllPos:null
     }
   },
   computed: {
@@ -110,6 +110,8 @@ export default {
     },
     ...mapGetters({
         isLogin: 'isLogin',
+        bigPos: 'getBigPos',
+        smallPos: 'getSmallPos'
     }),
   },
   methods: {
@@ -167,58 +169,58 @@ export default {
       * @description 选择路由，渲染不同组件
       */
     select (name) {
-      if (name === 'outline') {
-        name = ''
-      }
-      if(name === 'goods'){
-        this.bigPos = 'BOM信息维护'
-        this.samllPos = '货品信息管理'
-      }else if(name === 'material'){
-        this.bigPos = 'BOM信息维护'
-        this.samllPos = '物料信息管理'
-      }else if(name === 'category'){
-        this.bigPos = 'BOM信息维护'
-        this.samllPos = '类别信息管理'
-      }else if(name === 'costmanage_product'){
-        this.bigPos = '成本管理'
-        this.samllPos = '货品管理'
-      }else if(name === 'costmanage_matrial'){
-        this.bigPos = '成本管理'
-        this.samllPos = '物料管理'
-      }else if(name === 'ImportWare'){
-        this.bigPos = '仓库管理'
-        this.samllPos = '入库管理'
-      }else if(name === 'ioinfo'){
-        this.bigPos = '仓库管理'
-        this.smallPos = '出入库信息'
-      }else if(name === 'inventory'){
-        this.bigPos = '仓库管理'
-        this.samllPos = '库存情况管理'
-      }else if(name === 'starving'){
-        this.bigPos = '采购辅助管理'
-        this.samllPos = '缺料浏览' 
-      }else if(name === 'offerlist'){
-        this.bigPos = '采购辅助管理'
-        this.samllPos = '报价单管理' 
-      }else if(name === 'supplier'){
-        this.bigPos = '采购辅助管理'
-        this.samllPos = '供应商管理'
-      }else if(name === 'safeStock'){
-        this.bigPos = '采购辅助管理'
-        this.samllPos = '安全库存'
-      }else if(name === 'generate'){
-        this.bigPos = '生产管理'
-        this.samllPos = '生成订单'
-      }else if(name === 'state'){
-        this.bigPos = '生产管理'
-        this.samllPos = '订单状态查询'
-      }else if(name === 'userInfor'){
-        this.bigPos = '个人信息管理'
-        this.samllPos = '个人信息'
-      }else if(name === 'group'){
-        this.bigPos = '个人信息管理'
-        this.samllPos = '分组'
-      }
+      // if (name === 'outline') {
+      //   name = ''
+      // }
+      // if(name === 'goods'){
+      //   this.bigPos = 'BOM信息维护'
+      //   this.samllPos = '货品信息管理'
+      // }else if(name === 'material'){
+      //   this.bigPos = 'BOM信息维护'
+      //   this.samllPos = '物料信息管理'
+      // }else if(name === 'category'){
+      //   this.bigPos = 'BOM信息维护'
+      //   this.samllPos = '类别信息管理'
+      // }else if(name === 'costmanage_product'){
+      //   this.bigPos = '成本管理'
+      //   this.samllPos = '货品管理'
+      // }else if(name === 'costmanage_matrial'){
+      //   this.bigPos = '成本管理'
+      //   this.samllPos = '物料管理'
+      // }else if(name === 'ImportWare'){
+      //   this.bigPos = '仓库管理'
+      //   this.samllPos = '入库管理'
+      // }else if(name === 'ioinfo'){
+      //   this.bigPos = '仓库管理'
+      //   this.smallPos = '出入库信息'
+      // }else if(name === 'inventory'){
+      //   this.bigPos = '仓库管理'
+      //   this.samllPos = '库存情况管理'
+      // }else if(name === 'starving'){
+      //   this.bigPos = '采购辅助管理'
+      //   this.samllPos = '缺料浏览' 
+      // }else if(name === 'offerlist'){
+      //   this.bigPos = '采购辅助管理'
+      //   this.samllPos = '报价单管理' 
+      // }else if(name === 'supplier'){
+      //   this.bigPos = '采购辅助管理'
+      //   this.samllPos = '供应商管理'
+      // }else if(name === 'safeStock'){
+      //   this.bigPos = '采购辅助管理'
+      //   this.samllPos = '安全库存'
+      // }else if(name === 'generate'){
+      //   this.bigPos = '生产管理'
+      //   this.samllPos = '生成订单'
+      // }else if(name === 'state'){
+      //   this.bigPos = '生产管理'
+      //   this.samllPos = '订单状态查询'
+      // }else if(name === 'userInfor'){
+      //   this.bigPos = '个人信息管理'
+      //   this.samllPos = '个人信息'
+      // }else if(name === 'group'){
+      //   this.bigPos = '个人信息管理'
+      //   this.samllPos = '分组'
+      // }
       this.$router.push('/' + name)
     },
   },

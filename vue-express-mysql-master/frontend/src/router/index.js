@@ -357,6 +357,12 @@ const router = new Router({
   ]
 })
 
+router.beforeResolve((to, from, next) => {
+  store.commit('changePath', to.path);
+  console.log("path", to.path);
+  next();
+})
+
 
 // router.beforeResolve((to, from, next) => {
 //   if (to.path === '/signin') {

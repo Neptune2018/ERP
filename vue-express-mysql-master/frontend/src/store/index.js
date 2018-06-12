@@ -8,6 +8,7 @@ import * as getters from './getters'
 import * as states from './states'
 import * as mutations from './mutations'
 import testvuex from './modules/testmodules'
+import path from './modules/path'
 
 Vue.use(Vuex)
 
@@ -29,6 +30,7 @@ export default new Vuex.Store({
   mutations,
   modules: {
     testvuex,
+    path
   },
   strict: debug
 })
