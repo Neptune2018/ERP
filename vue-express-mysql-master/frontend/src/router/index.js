@@ -44,7 +44,7 @@ const router = new Router({
           next('/signin');
           return;
         }
-        next();
+        next('/userInfor');
       }
     },
     {
@@ -56,7 +56,7 @@ const router = new Router({
           next('/signin');
           return;
         }
-        next();
+        next('/userInfor');
       }
     },
     {

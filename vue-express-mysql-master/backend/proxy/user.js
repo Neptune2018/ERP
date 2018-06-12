@@ -42,3 +42,13 @@ exports.getFeatures = function(username, todo) {
 		}
 	})
 }
+
+exports.getUserByPhone = function(username, todo) {
+	User.findOne({where: {phone: username}}).then(function(user){
+		if (!user) {
+			todo({});
+		}else {
+			todo(user);
+		}
+	})
+}

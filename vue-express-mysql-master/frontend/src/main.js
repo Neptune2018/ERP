@@ -19,22 +19,27 @@ Vue.use(iView)
 Vue.config.productionTip = false
 
 /* eslint-disable no-new */
-store.dispatch('resetState').then(function (){
+store.dispatch('initState').then(function (){
+  initVue();
+},function() {
+  initVue();
+});
 
-new Vue({
-  el: '#app',
-  router,
-  store,
-  template: '<App/>',
-  components: { App },
-  http: {
-    root: '/root',
-    headers: {
-      //Authorization: 'Basic YXBpOnBhc3N3b3Jk'
+
+const initVue = () => {
+  new Vue({
+    el: '#app',
+    router,
+    store,
+    template: '<App/>',
+    components: { App },
+    http: {
+      root: '/root',
+      headers: {
+        //Authorization: 'Basic YXBpOnBhc3N3b3Jk'
+      }
     }
-  }
-})
+  })
+}
 
-  
-})
 

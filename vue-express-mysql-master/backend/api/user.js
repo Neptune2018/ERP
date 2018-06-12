@@ -29,3 +29,28 @@ exports.signout = function(req, res) {
 	req.session.role = '';
 	res.send('');
 }
+
+exports.sessionin = function(req, res) {
+	var username = req.body.username;
+	if(username === '') {
+		res.send('fail');
+		return;
+	}
+	if (req.session.user.phone === username) {
+		User.getUserByPhone(username, function(user){
+			data = {};
+			req.session.user = user;
+			data.user = user;
+			User.getFeatures(username, function(role, features) {
+				data.features = features;
+				req.session.features = features;
+				data.role = role.name;
+				req.session.role = role.name;
+				res.send(data);
+			})
+		})
+	}
+	else {
+		res.send('fail');
+	}
+}
