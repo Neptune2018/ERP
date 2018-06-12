@@ -376,22 +376,39 @@ const addPurchase = async function () {
     
     //物料和供应商是多对多的关系，每对靠MinOrder连接
     await material1.addSupplier(supplier1, {'quantity' : 100})
+    await models.MinOrder.update({'quantity': 100},{where:{materialId:241,supplierId:1}});
     await material1.addSupplier(supplier2, {'quantity' : 400})
+    await models.MinOrder.update({'quantity': 100},{where:{materialId:241,supplierId:2}});
     await material1.addSupplier(supplier3, {'quantity' : 500})
+    await models.MinOrder.update({'quantity': 100},{where:{materialId:241,supplierId:3}});
     await material2.addSupplier(supplier4, {'quantity' : 400})
+    await models.MinOrder.update({'quantity': 100},{where:{materialId:242,supplierId:4}});
     await material2.addSupplier(supplier5, {'quantity' : 400})
+    await models.MinOrder.update({'quantity': 100},{where:{materialId:242,supplierId:5}});
     await material2.addSupplier(supplier6, {'quantity' : 700})
+    await models.MinOrder.update({'quantity': 100},{where:{materialId:242,supplierId:6}});
     await material3.addSupplier(supplier7, {'quantity' : 400})
+    await models.MinOrder.update({'quantity': 100},{where:{materialId:243,supplierId:7}});
     await material3.addSupplier(supplier3, {'quantity' : 500})
+    await models.MinOrder.update({'quantity': 100},{where:{materialId:243,supplierId:3}});
     await material3.addSupplier(supplier4, {'quantity' : 300})
+    await models.MinOrder.update({'quantity': 100},{where:{materialId:243,supplierId:4}});
     await material4.addSupplier(supplier4, {'quantity' : 200})
+    await models.MinOrder.update({'quantity': 100},{where:{materialId:244,supplierId:4}});
     await material4.addSupplier(supplier7, {'quantity' : 600})
+    await models.MinOrder.update({'quantity': 100},{where:{materialId:244,supplierId:7}});
     await material5.addSupplier(supplier1, {'quantity' : 200})
+    await models.MinOrder.update({'quantity': 100},{where:{materialId:245,supplierId:1}});
     await material5.addSupplier(supplier3, {'quantity' : 400})
+    await models.MinOrder.update({'quantity': 100},{where:{materialId:245,supplierId:3}});
     await material5.addSupplier(supplier5, {'quantity' : 300})
+    await models.MinOrder.update({'quantity': 100},{where:{materialId:245,supplierId:5}});
     await material6.addSupplier(supplier2, {'quantity' : 100})
+    await models.MinOrder.update({'quantity': 100},{where:{materialId:246,supplierId:2}});
     await material6.addSupplier(supplier3, {'quantity' : 600})
+    await models.MinOrder.update({'quantity': 100},{where:{materialId:246,supplierId:3}});
     await material6.addSupplier(supplier6, {'quantity' : 300})
+    await models.MinOrder.update({'quantity': 100},{where:{materialId:246,supplierId:6}});
 
     var offerList1 = await models.OfferList.create({
         'id': 241,
