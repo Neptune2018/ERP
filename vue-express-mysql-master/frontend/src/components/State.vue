@@ -281,6 +281,20 @@ export default {
         }
     },
     created: function () {
+        this.clear(this.searchResults)
+            // 将查询结果push到结果数组中，查询字符串为 this.searchConName1
+        this.$http({
+            url: '/findOrderLists',
+            method: 'GET',
+            params: {
+                searchName: ''
+            }
+        }).then(function(res){
+            this.searchResults = res.body.data;
+            //this.$Message.info('查询订单成功');                    
+        },function(){
+            this.$Message.info('查询订单失败');
+        })
         // 当前是谁在登录
         // 请后端补充代码
         this.$watch("modal1", function (newValue, oldValue) {
@@ -354,9 +368,9 @@ export default {
                                 orderListId: this.result.id
                             }
                         }).then(function(res){
-                            //this.$Message.info('succeed');                
+                            //this.$Message.info('更新领料单成功');                
                         },function(){
-                            this.$Message.info('Update GetList Failed');
+                            this.$Message.info('更新领料单失败');
                         })
             }
         })
@@ -398,7 +412,7 @@ export default {
                     }
                 }
                 },function(){
-                    this.$Message.info('Get MaterialNum Failed');
+                    this.$Message.info('获取原料数目失败');
                 })
             }
         })
@@ -455,13 +469,13 @@ export default {
                     }).then(function(res){
                         this.goods = res.body.data;
                         this.haveGoods = true;
-                        //this.$Message.info('Find Products succeed');                    
+                        //this.$Message.info('获取货品成功');                    
                     },function(){
-                        this.$Message.info('Find Products Failed');
+                        this.$Message.info('获取货品失败');
                     })
                  
                 },function(){
-                    this.$Message.info('Get MaterStocks Failed');
+                    this.$Message.info('获取领料信息失败');
                 })
         })
 
@@ -507,9 +521,9 @@ export default {
                         }
                     }
                     this.haveMater = true;
-                    //this.$Message.info('Find AllMater succeed');                    
+                    //this.$Message.info('获取所有原料成功');                    
                 },function(){
-                    this.$Message.info('Find AllMater Failed');
+                    this.$Message.info('获取所有原料失败');
                 })
             }
         })
@@ -525,9 +539,9 @@ export default {
                                     orderListId: this.result.id
                                 }
                             }).then(function(res){
-                                this.$Message.info('Update GetList succeed');                    
+                                this.$Message.info('更新领料单成功');                    
                             },function(){
-                                this.$Message.info('Update GetList Failed');
+                                this.$Message.info('更新领料单失败');
                             })   
         },
 
@@ -554,9 +568,9 @@ export default {
                 }
             }).then(function(res){
                 this.searchResults = res.body.data;
-                //this.$Message.info('Find OrderLists succeed');                    
+                //this.$Message.info('获取订单列表成功');                    
             },function(){
-                this.$Message.info('Find OrderLists Failed');
+                this.$Message.info('获取订单列表失败');
             })
             // 请后端补充代码
             // 切换表格
@@ -575,9 +589,9 @@ export default {
                 }
             }).then(function(res){
                 this.searchResults = res.body.data;
-                //this.$Message.info('Get OrderList succeed');                    
+                //this.$Message.info('获取订单列表成功');                    
             },function(){
-                this.$Message.info('Get OrderList Failed');
+                this.$Message.info('获取订单列表失败');
             })
 
             // 切换表格
@@ -656,9 +670,9 @@ export default {
                         operateId: 4
                     })
                 }
-                //this.$Message.info('Get OrderList succeed');                    
+                //this.$Message.info('获取订单列表成功');                    
             },function(){
-                this.$Message.info('Get OrderList Failed');
+                this.$Message.info('获取订单列表失败');
             })
         },
         cancel () {
@@ -681,9 +695,9 @@ export default {
                     id: this.result.id
                 }
                 }).then(function(res){
-                    this.$Message.info('Get succeed');                    
+                    this.$Message.info('领料成功');                    
                 },function(){
-                    this.$Message.info('Get Failed');
+                    this.$Message.info('领料失败');
                 })
             }
             else if(this.states[0].operateId==1) {
@@ -697,9 +711,9 @@ export default {
                         status: 'ProDone'
                     }
                 }).then(function(res){
-                    this.$Message.info('Update State succeed');                    
+                    this.$Message.info('更新状态成功');                    
                 },function(){
-                    this.$Message.info('Update State Failed');
+                    this.$Message.info('更新状态失败');
                 })
             }
             else if(this.states[0].operateId==3) {
@@ -711,9 +725,9 @@ export default {
                         status: 'Done'
                     }
                 }).then(function(res){
-                    this.$Message.info('Update State succeed');                    
+                    this.$Message.info('更新状态成功');                    
                 },function(){
-                    this.$Message.info('Update State Failed');
+                    this.$Message.info('更新状态失败');
                 })
             }
         }

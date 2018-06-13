@@ -262,7 +262,7 @@ exports.findOrderListsByUser = function(req,res) {
     console.log(req.session.sess)
     req.session.sess = 'yes';
     var params = url.parse(req.url, true).query;
-    Product.findOrderListsByUser(params.user,function(result){
+    Product.findOrderListsByUser(req.session.user.id,function(result){
         var data = [];
         for(var i=0;i<result.data.length;i++) {
             data.push({
@@ -280,6 +280,30 @@ exports.findOrderListsByUser = function(req,res) {
         res.send(results)
     })
 }
+
+// //查询所有订单
+// exports.findAllOrderLists = function(req,res) {
+//     console.log(req.session.sess)
+//     req.session.sess = 'yes';
+//     var params = url.parse(req.url, true).query;
+//     Product.findOrderLists(function(result){
+//         var data = [];
+//         for(var i=0;i<result.data.length;i++) {
+//             data.push({
+//                 no: i+1,
+//                 status: result.data[i].dataValues.status,
+//                 id: result.data[i].dataValues.id,
+//                 ddl: result.data[i].dataValues.schedule,
+//                 user: result.data[i].dataValues.managerId,
+//                 client: result.data[i].dataValues.buyer
+//             })
+//         }
+//         results = {
+//             data: data
+//         }
+//         res.send(results)
+//     })
+// }
 
 //查询符合条件的订单
 exports.findOrderLists = function(req,res) {
@@ -401,11 +425,14 @@ exports.addGetLists = function(req,res) {
 
 //添加buys信息
 exports.addBuys = function(req,res) {
+    console.log("qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq");
+	console.log(req.session.user.id);
+	console.log("qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq");
     console.log(req.session.sess)
     req.session.sess = 'yes';
     var params = url.parse(req.url, true).query;
     var products = JSON.parse(params.products);
-    Product.updateOrderList(params.user,params.orderListId,params.schedule,params.start,params.buyer,params.phone,params.email,params.remark)
+    Product.updateOrderList(req.session.user.id,params.orderListId,params.schedule,params.start,params.buyer,params.phone,params.email,params.remark)
     for(var i=0;i<params.count;i++) {
         Product.addBuys(params.orderListId,products.products[i].id,products.products[i].quantity)
     }
