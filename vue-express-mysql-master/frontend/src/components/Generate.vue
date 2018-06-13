@@ -470,6 +470,7 @@ export default {
 
         removeGood(index) {
             if(this.process==0){
+                this.goods.splice(index, 1);
                 for ( var i = 0; i < this.goods.length; i++ ) {
                     this.goods[i].no = i + 1;
                 }
