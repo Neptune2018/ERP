@@ -92,7 +92,7 @@ const addUser = async function(){
 
 	var User3 = await models.User.create({
 		'name': '魏文竹',
-		'phone': '13002338561',
+		'phone': '22222222222',
 		'email': '730040709@qq.com',
 		'job': '生产运营师'
 	});
@@ -134,7 +134,7 @@ const addUser = async function(){
 
 	var User5 = await models.User.create({
 		'name': 'Vincy',
-		'phone': '18297345666',
+		'phone': '33333333333',
 		'email': 'Neptune2018@outlook.com',
 		'job': '财务总监'
 	});
@@ -152,7 +152,7 @@ const addUser = async function(){
 
 	var User6 = await models.User.create({
 		'name': '号号',
-		'phone': '13046557893',
+		'phone': '44444444444',
 		'email': 'haohaoYY@163.com',
 		'job': '采购总管'
 	});
@@ -172,7 +172,7 @@ const addUser = async function(){
 
 	var User8 = await models.User.create({
 		'name': 'Lisa',
-		'phone': '18923024876',
+		'phone': '55555555555',
 		'email': 'Lisa0109@gmail.com',
 		'job': '法务'
 	});
@@ -181,7 +181,7 @@ const addUser = async function(){
 
 	var User9 = await models.User.create({
 		'name': '乔纳森·诺兰',
-		'phone': '15502034577',
+		'phone': '66666666666',
 		'email': 'Jonasen@gmail.com',
 		'job': '羊区仓主管'
 	});
