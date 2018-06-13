@@ -12,6 +12,7 @@ var router = express.Router();
 
 router.get('/test2', Mater_cate.listallMater_cates)
 router.get('/getProducts',BOM_product.listallBOM_product)
+router.get('/insertConsist',BOM_product.insertConsist)
 router.get('/getProductcates',Product_cate.listallProduct_cates)
 router.get('/productSearch',BOM_product.queryBOM_product)
 router.get('/cateProduct',Product_cate.listallProductbyProductCateid)
@@ -115,6 +116,7 @@ router.get('/getMaterStocks', product.getMaterStocks);
 router.get('/toGet', product.toGet);
 router.get('/updateGetList', product.updateGetList);
 router.get('/findNewGetList', product.findNewGetList);
+// router.get('/findAllOrderLists', product.findAllOrderLists);
 
 router.get('/getAllUserIdAndName',supplier.getAllUserIdAndName);
 router.get('/addSupplier',supplier.addSupplier);
