@@ -143,16 +143,14 @@
           @on-ok="insertmat"
           @on-cancel="cancel">
           <div class="q">
-          <Form :model="formRight" label-position="rigtht" :label-width="100">
-            <FormItem label="物料编号">
+          <label class="model1">物料编号</label>
           <Select v-model="addMatid" style="width: 60%" >
               <Option v-for="item in addMatidList" :value="item.value" :key="item.value">{{ item.label }}</Option>
             </Select>
-          </FormItem>
-          </Form>
+         
           </div>
           <div class="q">
-            <label class="model1">数目</label><i-input v-model="add_matnum" placeholder="请输入物料数目" style="width: 60%"></i-input>
+            <label class="model1">物料数目</label><i-input v-model="add_matnum" placeholder="请输入物料数目" style="width: 60%"></i-input>
           </div>
           <!-- <div class="q">
             <label class="model1">货品分类</label><i-input v-model="add_productcateid" placeholder="请输入货品分类" style="width: 60%"></i-input>
@@ -432,7 +430,7 @@
             }
         }).then(function (res) {
             console.log(res.body)
-            for(var i=0;i<res.body.length;i++){
+            for(var i=0;i<res.body[0].length;i++){
             if(res.body[0][i].status==0){
             this.data3.push({
               num: i+1,
@@ -472,7 +470,7 @@
             }
         }).then(function (res) {
             console.log(res.body)
-            for(var i=0;i<res.body.length;i++){
+            for(var i=0;i<res.body[0].length;i++){
             if(res.body[0][i].status=="0"){
             this.data3.push({
               num: i+1,
