@@ -26,12 +26,12 @@ app.use(session({
     cookie: {
         minAge: config.session_time,
     },
-   //  store: new RedisStore({
-	  //   port: config.redis_port,
-	  //   host: config.redis_host,
-	  //   db: config.redis_db,
-	  //   pass: config.redis_password,
-	  // }),
+    store: new RedisStore({
+	   port: config.redis_port,
+	   host: config.redis_host,
+	   db: config.redis_db,
+	   pass: config.redis_password,
+	 }),
 }));
 
 

@@ -36,7 +36,7 @@ exports.findAllMaterialsId = function (callback) {
 }
 
 exports.findAllMaterial = function (id,name,property,category,callback) {
-    var where = "material.status = '正常'";
+    var where = "material.status = '0'";
     if(id){
         where += " and material.id =" + id; 
     }
@@ -97,7 +97,7 @@ exports.setSafeQuantity = function (material_id, quantity,callback) {
 }
 
 exports.findNOStarve = function (id,name,property,category,callback) {
-    var where = "stocks.id is NULL and material.status = '正常'";
+    var where = "stocks.id is NULL and material.status = '0'";
     if(id){
         where += " and material.id =" + id; 
     }
@@ -137,7 +137,7 @@ exports.findNOStarve = function (id,name,property,category,callback) {
 }
 
 exports.findStarve = function (id,name,property,category,callback) {
-    var where = "material.status = '正常'";
+    var where = "material.status = '0'";
     if(id){
         where += " and material.id =" + id; 
     }
@@ -166,7 +166,7 @@ exports.findStarve = function (id,name,property,category,callback) {
         attributes:['id','name','property','safe_quantity',[Sequelize.fn('SUM', Sequelize.col('remain')), 'sum_quantity']], 
         where: Sequelize.literal(where),
         group:'stocks.materialId', 
-        having:Sequelize.literal("SUM(remain) < Material.safe_quantity"), 
+        having:Sequelize.literal("SUM(remain) < material.safe_quantity"), 
         raw:true,
     }).then(function(result){
         

@@ -87,6 +87,7 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
+import store from './store'
 
 export default {
   name: 'app',
@@ -109,7 +110,7 @@ export default {
       return this.spanLeft === 4 ? 14 : 24
     },
     ...mapGetters({
-        isLogin: 'isLogin',
+        user: 'getUser',
         bigPos: 'getBigPos',
         smallPos: 'getSmallPos'
     }),
@@ -140,7 +141,7 @@ export default {
       * @description 登出接口
       */
     logout () {
-      if (!this.isLogin) {
+      if (!store.state.isSignin) {
         this.$Message.warning("Not Sign In!")
       }
       else {

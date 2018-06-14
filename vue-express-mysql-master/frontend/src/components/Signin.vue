@@ -4,17 +4,17 @@
             <br>
             <Form ref="form" :model="form" :rules="rule">
             <Form-item prop="username">
-            <h3>Username</h3>
+            <h3>用户名</h3>
             <Input  v-model="form.username" placeholder="Username" style="width: 300px"></Input>
             </Form-item>
             <Form-item prop="password">
-            <h3>Password</h3>
+            <h3>密码</h3>
             <Input  v-model="form.password" placeholder="Password" style="width: 300px" type="password"></Input>
             </Form-item>
             <br>
             </Form>
 
-            <Button type="success" long  v-on:click="signin()">Sign in</Button>
+            <Button type="primary" long  v-on:click="signin()">登录</Button>
         </div>
     </Card>
 </template>

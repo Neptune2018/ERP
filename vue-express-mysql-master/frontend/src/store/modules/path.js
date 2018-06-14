@@ -42,6 +42,8 @@ const getters = {
         return '个人信息管理'
       }else if(state.path === '/group'){
         return '个人信息管理'
+      }else if(state.path === '/group/ParticularizeGroup'){
+        return '个人信息管理'
       }else if (state.path === '/' || state.path === '/signin') {
         return '登录'
       }
@@ -82,6 +84,8 @@ const getters = {
         return '个人信息'
       }else if(state.path === '/group'){
         return '分组'
+      }else if(state.path === '/group/ParticularizeGroup'){
+        return '分组信息'
       }else if (state.path === '/' || state.path === '/signin') {
         return ''
       }

@@ -659,7 +659,6 @@ export default {
     height: 100%;
 }
 #generate-page button {
-    background-color: #464c5b;
     border: none;
 
 }

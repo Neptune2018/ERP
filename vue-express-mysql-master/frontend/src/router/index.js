@@ -41,6 +41,7 @@ const router = new Router({
       component: HelloWorld,
       beforeEnter: (to, from, next) => {
         if (store.state.isSignin === false) {
+          Vue.prototype.$Message.error('您还没有登录');
           next('/signin');
           return;
         }
@@ -53,6 +54,7 @@ const router = new Router({
       component: SecondPage,
       beforeEnter: (to, from, next) => {
         if (store.state.isSignin === false) {
+          Vue.prototype.$Message.error('您还没有登录');
           next('/signin');
           return;
         }
@@ -65,14 +67,16 @@ const router = new Router({
       component: Goods,
       beforeEnter: (to, from, next) => {
         if (store.state.isSignin === false) {
+          console.log(Vue.prototype);
+          Vue.prototype.$Message.error('您还没有登录');
           next('/signin');
           return;
         }
         store.dispatch('hasFeature', 'Production').then(function(){
             next()
         }, function(){
-            alert('You Dont have Authority!')
-            next('/userInfor')
+            Vue.prototype.$Message.error('您没有权限查看这个页面');
+            next(from.path)
         })
       }
     },
@@ -82,14 +86,15 @@ const router = new Router({
       component: Material,
       beforeEnter: (to, from, next) => {
         if (store.state.isSignin === false) {
+          Vue.prototype.$Message.error('您还没有登录');
           next('/signin');
           return;
         }
         store.dispatch('hasFeature', 'Production').then(function(){
             next()
         }, function(){
-            alert('You Dont have Authority!')
-            next('/userInfor')
+            Vue.prototype.$Message.error('您没有权限查看这个页面');
+            next(from.path)
         })
       }
     },
@@ -99,14 +104,15 @@ const router = new Router({
       component: Category,
       beforeEnter: (to, from, next) => {
         if (store.state.isSignin === false) {
+          Vue.prototype.$Message.error('您还没有登录');
           next('/signin');
           return;
         }
         store.dispatch('hasFeature', 'Production').then(function(){
             next()
         }, function(){
-            alert('You Dont have Authority!')
-            next('/userInfor')
+            Vue.prototype.$Message.error('您没有权限查看这个页面');
+            next(from.path)
         })
       }
     },
@@ -116,14 +122,15 @@ const router = new Router({
       component: CostManageProduct,
       beforeEnter: (to, from, next) => {
         if (store.state.isSignin === false) {
+          Vue.prototype.$Message.error('您还没有登录');
           next('/signin');
           return;
         }
         store.dispatch('hasFeature', 'Cost').then(function(){
             next()
         }, function(){
-            alert('You Dont have Authority!')
-            next('/userInfor')
+            Vue.prototype.$Message.error('您没有权限查看这个页面');
+            next(from.path)
         })
       }
     },
@@ -133,14 +140,15 @@ const router = new Router({
       component: CostManageMatrial,
       beforeEnter: (to, from, next) => {
         if (store.state.isSignin === false) {
+          Vue.prototype.$Message.error('您还没有登录');
           next('/signin');
           return;
         }
         store.dispatch('hasFeature', 'Cost').then(function(){
             next()
         }, function(){
-            alert('You Dont have Authority!')
-            next('/userInfor')
+            Vue.prototype.$Message.error('您没有权限查看这个页面');
+            next(from.path)
         })
       }
     },
@@ -150,14 +158,15 @@ const router = new Router({
       component: Group,
       beforeEnter: (to, from, next) => {
         if (store.state.isSignin === false) {
+          Vue.prototype.$Message.error('您还没有登录');
           next('/signin');
           return;
         }
         store.dispatch('hasFeature', 'User').then(function(){
             next()
         }, function(){
-            alert('You Dont have Authority!')
-            next('/userInfor')
+            Vue.prototype.$Message.error('您没有权限查看这个页面');
+            next(from.path)
         })
       }
     },
@@ -167,14 +176,15 @@ const router = new Router({
       component: ParticularizeGroup,
       beforeEnter: (to, from, next) => {
         if (store.state.isSignin === false) {
+          Vue.prototype.$Message.error('您还没有登录');
           next('/signin');
           return;
         }
         store.dispatch('hasFeature', 'User').then(function(){
             next()
         }, function(){
-            alert('You Dont have Authority!')
-            next('/userInfor')
+            Vue.prototype.$Message.error('您没有权限查看这个页面');
+            next(from.path)
         })
       }
     },
@@ -184,6 +194,7 @@ const router = new Router({
       component: UserInfor,
       beforeEnter: (to, from, next) => {
         if (store.state.isSignin === false) {
+          Vue.prototype.$Message.error('您还没有登录');
           next('/signin');
           return;
         }
@@ -196,6 +207,7 @@ const router = new Router({
       component: Signin,
       beforeEnter: (to, from, next) => {
         if (store.state.isSignin === true) {
+          Vue.prototype.$Message.error('您已经登录');
           next('/userInfor');
           return;
         }
@@ -208,14 +220,15 @@ const router = new Router({
       component: Generate,
       beforeEnter: (to, from, next) => {
         if (store.state.isSignin === false) {
+          Vue.prototype.$Message.error('您还没有登录');
           next('/signin');
           return;
         }
         store.dispatch('hasFeature', 'Production').then(function(){
             next()
         }, function(){
-            alert('You Dont have Authority!')
-            next('/userInfor')
+            Vue.prototype.$Message.error('您没有权限查看这个页面');
+            next(from.path)
         })
       }
     },
@@ -225,14 +238,15 @@ const router = new Router({
       component: State,
       beforeEnter: (to, from, next) => {
         if (store.state.isSignin === false) {
+          Vue.prototype.$Message.error('您还没有登录');
           next('/signin');
           return;
         }
         store.dispatch('hasFeature', 'Production').then(function(){
             next()
         }, function(){
-            alert('You Dont have Authority!')
-            next('/userInfor')
+            Vue.prototype.$Message.error('您没有权限查看这个页面');
+            next(from.path)
         })
       }
     },
@@ -242,14 +256,15 @@ const router = new Router({
       component: MatrialLack,
       beforeEnter: (to, from, next) => {
         if (store.state.isSignin === false) {
+          Vue.prototype.$Message.error('您还没有登录');
           next('/signin');
           return;
         }
         store.dispatch('hasFeature', 'Purchase').then(function(){
             next()
         }, function(){
-            alert('You Dont have Authority!')
-            next('/userInfor')
+            Vue.prototype.$Message.error('您没有权限查看这个页面');
+            nnext(from.path)
         })
       }
     },{
@@ -258,14 +273,15 @@ const router = new Router({
       component: SafeStock,
       beforeEnter: (to, from, next) => {
         if (store.state.isSignin === false) {
+          Vue.prototype.$Message.error('您还没有登录');
           next('/signin');
           return;
         }
         store.dispatch('hasFeature', 'Purchase').then(function(){
             next()
         }, function(){
-            alert('You Dont have Authority!')
-            next('/userInfor')
+            Vue.prototype.$Message.error('您没有权限查看这个页面');
+            next(from.path)
         })
       }
     },
@@ -275,14 +291,15 @@ const router = new Router({
       component: ImportWare,
       beforeEnter: (to, from, next) => {
         if (store.state.isSignin === false) {
+          Vue.prototype.$Message.error('您还没有登录');
           next('/signin');
           return;
         }
         store.dispatch('hasFeature', 'Keep').then(function(){
             next()
         }, function(){
-            alert('You Dont have Authority!')
-            next('/userInfor')
+            Vue.prototype.$Message.error('您没有权限查看这个页面');
+            next(from.path)
         })
       }
     },
@@ -292,14 +309,15 @@ const router = new Router({
       component: OfferList,
       beforeEnter: (to, from, next) => {
         if (store.state.isSignin === false) {
+          Vue.prototype.$Message.error('您还没有登录');
           next('/signin');
           return;
         }
         store.dispatch('hasFeature', 'Purchase').then(function(){
             next()
         }, function(){
-            alert('You Dont have Authority!')
-            next('/userInfor')
+            Vue.prototype.$Message.error('您没有权限查看这个页面');
+            next(from.path)
         })
       }
     },
@@ -309,14 +327,15 @@ const router = new Router({
       component: Supplier,
       beforeEnter: (to, from, next) => {
         if (store.state.isSignin === false) {
+          Vue.prototype.$Message.error('您还没有登录');
           next('/signin');
           return;
         }
         store.dispatch('hasFeature', 'Purchase').then(function(){
             next()
         }, function(){
-            alert('You Dont have Authority!')
-            next('/userInfor')
+            Vue.prototype.$Message.error('您没有权限查看这个页面');
+            next(from.path)
         })
       }
     },
@@ -326,14 +345,15 @@ const router = new Router({
       component: IOList,
       beforeEnter: (to, from, next) => {
         if (store.state.isSignin === false) {
+          Vue.prototype.$Message.error('您还没有登录');
           next('/signin');
           return;
         }
         store.dispatch('hasFeature', 'Keep').then(function(){
             next()
         }, function(){
-            alert('You Dont have Authority!')
-            next('/userInfor')
+            Vue.prototype.$Message.error('您没有权限查看这个页面');
+            next(from.path)
         })
       }
     },
@@ -343,14 +363,15 @@ const router = new Router({
       component: Stocks,
       beforeEnter: (to, from, next) => {
         if (store.state.isSignin === false) {
+          Vue.prototype.$Message.error('您还没有登录');
           next('/signin');
           return;
         }
         store.dispatch('hasFeature', 'Keep').then(function(){
             next()
         }, function(){
-            alert('You Dont have Authority!')
-            next('/userInfor')
+            Vue.prototype.$Message.error('您没有权限查看这个页面');
+            next(from.path)
         })
       }
     },

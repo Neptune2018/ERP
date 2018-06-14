@@ -761,7 +761,6 @@ export default {
     border-collapse:collapse；
 }
 #state-page button {
-    background-color: #464c5b;
     border: none;
 }
 #state-table table {

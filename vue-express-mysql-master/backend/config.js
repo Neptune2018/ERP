@@ -4,8 +4,8 @@ var config = {
   // debug 为 true 时，用于本地调试
   debug: true,
 
-  name: 'tsy', // 名字
-  description: '654321', // 描述
+  name: 'Neptune ERP', // 名字
+  description: 'Neptune ERP', // 描述
   keywords: 'nodejs, node, express, connect',
 
   static: '../frontend/dist/', // 静态文件存储域名
@@ -16,9 +16,9 @@ var config = {
   db: {
     host: 'localhost',
     dialect: 'mysql',
-    user: 'wdyiwdwd',
-    password: '',
-    database: 'development',
+    user: 'root',
+    password: 'f3b01ef76f',
+    database: 'erp',
     pool: {
       max: 5,    //最大连接数
       min: 0,    //最小

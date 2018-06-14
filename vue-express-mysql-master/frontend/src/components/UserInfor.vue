@@ -84,7 +84,7 @@
                     });
                     that.edited=false;
                 }, function () {
-                    that.$Notice.erro({
+                    that.$Notice.error({
                         title: '个人信息修改失败!'
                     });
                 })

@@ -59,7 +59,7 @@
     </div>
 
     <div>
-        <i-table :columns="columns1" :data="data1"></i-table>
+        <i-table :columns="columns1" :data="data1" :height="450"></i-table>
     </div>
    
     
